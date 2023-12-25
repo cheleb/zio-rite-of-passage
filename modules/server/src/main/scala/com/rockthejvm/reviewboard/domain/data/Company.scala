@@ -16,4 +16,5 @@ final case class Company(
 )
 
 object Company:
-  given codec: JsonCodec[Company] = DeriveJsonCodec.gen
+  def makeSlug(name: String): String = name.toLowerCase.replaceAll(raw"\s+", "-")
+  given codec: JsonCodec[Company]    = DeriveJsonCodec.gen
