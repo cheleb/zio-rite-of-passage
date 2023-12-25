@@ -12,7 +12,7 @@ final case class CreateCompanyRequest(
     tags: List[String] = List.empty
 ):
   def toCompany(id: Long): Company =
-    Company(id, name, url, Company.makeSlug(name), location, country, industry, image, tags)
+    Company(id, Company.makeSlug(name), name, url, location, country, industry, image, tags)
 
 object CreateCompanyRequest:
   import zio.json.JsonCodec

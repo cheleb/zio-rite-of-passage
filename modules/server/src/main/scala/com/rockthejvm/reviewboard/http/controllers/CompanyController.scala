@@ -12,7 +12,7 @@ class CompanyController private extends BaseController with CompanyEndpoints {
 
   val create: ServerEndpoint[Any, Task] = createEndpoint
     .serverLogicSuccess { req =>
-      val id            = db.keys.max + 1
+      val id            = db.keys.maxOption.getOrElse(0L) + 1
       val companyWithId = req.toCompany(id)
       db += (id -> companyWithId)
       ZIO.succeed(companyWithId)
