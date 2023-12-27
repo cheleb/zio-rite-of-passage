@@ -8,6 +8,7 @@ import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpServerOptions
 
 import com.rockthejvm.reviewboard.http.HttpApi
+import com.rockthejvm.reviewboard.services.CompanyService
 
 object Application extends ZIOAppDefault:
 
@@ -23,5 +24,6 @@ object Application extends ZIOAppDefault:
   override def run =
     serrverProgram
       .provide(
-        Server.default
+        Server.default,
+        CompanyService.dummy
       )

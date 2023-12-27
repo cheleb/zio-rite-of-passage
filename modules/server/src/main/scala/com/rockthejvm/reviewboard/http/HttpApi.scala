@@ -9,7 +9,7 @@ object HttpApi {
   def gatherRoutes(controllers: List[BaseController]): List[ServerEndpoint[Any, Task]] =
     controllers.flatMap(_.routes)
 
-  def makeControllers: UIO[List[BaseController]] = for
+  def makeControllers = for
     healthController  <- HealthController.makeZIO
     companyController <- CompanyController.makeZIO
   yield List(healthController, companyController)

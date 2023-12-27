@@ -6,29 +6,35 @@ import sttp.tapir.*
 import scala.collection.mutable
 import com.rockthejvm.reviewboard.domain.data.Company
 import sttp.tapir.server.ServerEndpoint
-class CompanyController private extends BaseController with CompanyEndpoints {
+import com.rockthejvm.reviewboard.services.CompanyService
+
+class CompanyController private (companyService: CompanyService)
+    extends BaseController
+    with CompanyEndpoints {
   // implement your company endpoint logic here
-  private val db = mutable.Map.empty[Long, Company]
 
   val create: ServerEndpoint[Any, Task] = createEndpoint
-    .serverLogicSuccess { req =>
-      val id            = db.keys.maxOption.getOrElse(0L) + 1
-      val companyWithId = req.toCompany(id)
-      db += (id -> companyWithId)
-      ZIO.succeed(companyWithId)
-    }
+    .serverLogicSuccess(companyService.create)
 
-  val getAll: ServerEndpoint[Any, Task] = getAllEndpoint.serverLogicSuccess { _ =>
-    ZIO.succeed(db.values.toList)
-  }
+  val getAll: ServerEndpoint[Any, Task] =
+    getAllEndpoint.serverLogicSuccess(_ => companyService.getAll)
 
   val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.serverLogicSuccess { id =>
-    ZIO.succeed(db.values.find(_.slug == id))
+    ZIO
+      .attempt(id.toLong)
+      .flatMap(companyService.getById)
+      .catchSome { case _: NumberFormatException =>
+        companyService.getBySlug(id)
+      }
   }
 
   val routes: List[ServerEndpoint[Any, Task]] = List(create, getAll, findById)
 }
 
 object CompanyController {
-  val makeZIO = ZIO.succeed(new CompanyController)
+  val makeZIO =
+    for {
+      companyService <- ZIO.service[CompanyService]
+    } yield new CompanyController(companyService)
+
 }
