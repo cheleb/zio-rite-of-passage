@@ -9,6 +9,9 @@ import sttp.tapir.server.ziohttp.ZioHttpServerOptions
 
 import com.rockthejvm.reviewboard.http.HttpApi
 import com.rockthejvm.reviewboard.services.CompanyService
+import com.rockthejvm.reviewboard.services.CompanyServiceLive
+import com.rockthejvm.reviewboard.repositories.Repository
+import com.rockthejvm.reviewboard.repositories.CompanyRepositoryLive
 
 object Application extends ZIOAppDefault:
 
@@ -25,5 +28,7 @@ object Application extends ZIOAppDefault:
     serrverProgram
       .provide(
         Server.default,
-        CompanyService.dummy
+        CompanyServiceLive.layer,
+        CompanyRepositoryLive.layer,
+        Repository.dataLayer
       )

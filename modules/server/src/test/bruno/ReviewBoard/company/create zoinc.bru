@@ -1,0 +1,18 @@
+meta {
+  name: create zoinc
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/companies
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "ZO Inc",
+    "url": "https://zoinc.cheleb.dev"
+  }
+}

@@ -7,6 +7,7 @@ import com.rockthejvm.reviewboard.domain.data.Company
 import scala.collection.mutable
 
 import zio.*
+import com.rockthejvm.reviewboard.repositories.CompanyRepository
 
 trait CompanyService {
   def create(req: CreateCompanyRequest): Task[Company]
@@ -17,6 +18,23 @@ trait CompanyService {
 
 object CompanyService {
   val dummy = ZLayer.succeed(new CompanyServiceDummy)
+}
+
+class CompanyServiceLive private (companyRepository: CompanyRepository) extends CompanyService {
+  override def create(req: CreateCompanyRequest): Task[Company] =
+    companyRepository.create(req.toCompany(-1L))
+  override def getById(id: Long): Task[Option[Company]] =
+    companyRepository.getById(id)
+  override def getBySlug(slug: String): Task[Option[Company]] =
+    companyRepository.getBySlug(slug)
+  override def getAll: Task[List[Company]] =
+    companyRepository.getAll
+}
+
+object CompanyServiceLive {
+
+  val layer: URLayer[CompanyRepository, CompanyServiceLive] =
+    ZLayer.fromFunction(CompanyServiceLive(_))
 }
 
 class CompanyServiceDummy extends CompanyService {

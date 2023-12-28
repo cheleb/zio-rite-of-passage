@@ -1,0 +1,18 @@
+meta {
+  name: create rtjvm
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8080/companies
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Rock The JVM",
+    "url": "https://rockthejvm.com"
+  }
+}
