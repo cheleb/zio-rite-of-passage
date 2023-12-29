@@ -7,7 +7,7 @@ import io.getquill.jdbczio.Quill.Postgres
 
 object Repository {
 
-  private def quillLayer = Quill.Postgres.fromNamingStrategy(SnakeCase)
+  def quillLayer = Quill.Postgres.fromNamingStrategy(SnakeCase)
 
   private def datasourceLayer = Quill.DataSource.fromPrefix("rockthejvm.db")
 

@@ -15,7 +15,7 @@ import sttp.tapir.server.ServerEndpoint
 import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
 import com.rockthejvm.reviewboard.domain.data.Company
 import com.rockthejvm.reviewboard.syntax.*
-import com.rockthejvm.reviewboard.services.CompanyServiceDummy
+
 import com.rockthejvm.reviewboard.services.CompanyService
 
 object CompanyControllerSpec extends ZIOSpecDefault {
