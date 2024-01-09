@@ -8,7 +8,7 @@ import com.rockthejvm.reviewboard.domain.data.Company
 import com.rockthejvm.reviewboard.syntax.*
 import java.sql.SQLException
 
-object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec {
+object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec("sql/companies.sql") {
 
   private val rockthejvm = Company(1, "rock-the-jvm", "Rock the JVM", "https://rockthejvm.com")
 

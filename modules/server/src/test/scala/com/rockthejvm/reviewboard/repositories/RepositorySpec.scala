@@ -11,10 +11,10 @@ import zio.test.Assertion.*
 
 /** A trait that provides a PostgreSQL container for integration tests.
   */
-trait RepositorySpec {
+trait RepositorySpec(init: String) {
   private def postgres(): PostgreSQLContainer[Nothing] =
     val container: PostgreSQLContainer[Nothing] = PostgreSQLContainer("postgres")
-      .withInitScript("sql/companies.sql")
+      .withInitScript(init)
     container.start()
     container
 
