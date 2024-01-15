@@ -14,18 +14,19 @@ class CompanyController private (companyService: CompanyService)
   // implement your company endpoint logic here
 
   val create: ServerEndpoint[Any, Task] = createEndpoint
-    .serverLogicSuccess(companyService.create)
+    .serverLogic(companyService.create(_).either)
 
   val getAll: ServerEndpoint[Any, Task] =
-    getAllEndpoint.serverLogicSuccess(_ => companyService.getAll)
+    getAllEndpoint.serverLogic(_ => companyService.getAll.either)
 
-  val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.serverLogicSuccess { id =>
+  val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.serverLogic { id =>
     ZIO
       .attempt(id.toLong)
       .flatMap(companyService.getById)
       .catchSome { case _: NumberFormatException =>
         companyService.getBySlug(id)
       }
+      .either
   }
 
   val routes: List[ServerEndpoint[Any, Task]] = List(create, getAll, findById)

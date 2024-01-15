@@ -6,8 +6,8 @@ import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
 import com.rockthejvm.reviewboard.domain.data.Company
 
-trait CompanyEndpoints:
-  val createEndpoint = endpoint.post
+trait CompanyEndpoints extends BaseEndpoint:
+  val createEndpoint = baseEndpoint.post
     .tag("companies")
     .name("create")
     .in("companies")
@@ -16,7 +16,7 @@ trait CompanyEndpoints:
     .in(jsonBody[CreateCompanyRequest])
     .out(jsonBody[Company])
 
-  val getAllEndpoint = endpoint.get
+  val getAllEndpoint = baseEndpoint.get
     .tag("companies")
     .name("getAll")
     .in("companies")
@@ -24,7 +24,7 @@ trait CompanyEndpoints:
     .get
     .out(jsonBody[List[Company]])
 
-  val findByIdEndpoint = endpoint.get
+  val findByIdEndpoint = baseEndpoint.get
     .tag("companies")
     .name("findById")
     .in("companies" / path[String]("id"))
