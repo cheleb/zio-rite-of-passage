@@ -12,6 +12,7 @@ trait ReviewRepository {
   def getByUserId(userId: Long): Task[List[Review]]
   def update(id: Long, op: Review => Review): Task[Review]
   def delete(id: Long): Task[Review]
+  def deleteByCompanyId(companyId: Long): Task[Long]
 }
 
 class ReviewRespositoryLive private (quill: Quill.Postgres[SnakeCase]) extends ReviewRepository {
@@ -24,6 +25,9 @@ class ReviewRespositoryLive private (quill: Quill.Postgres[SnakeCase]) extends R
 
   override def delete(id: Long): Task[Review] =
     run(query[Review].filter(_.id == lift(id)).delete.returning(r => r))
+
+  override def deleteByCompanyId(companyId: Long): Task[Long] =
+    run(query[Review].filter(_.companyId == lift(companyId)).delete)
 
   override def getById(id: Long): Task[Option[Review]] =
     run(query[Review].filter(_.id == lift(id))).map(_.headOption)

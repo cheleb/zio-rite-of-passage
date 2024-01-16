@@ -33,6 +33,8 @@ object CompanyControllerSpec extends ZIOSpecDefault {
   private val rockTheJVM = Company(1, "rock-the-jvm", "Rock the JVM", "rockthejvm.com")
   private val serviceStub = new CompanyService {
 
+    override def delete(id: Long): Task[Option[Company]] = ???
+
     override def create(req: CreateCompanyRequest): Task[Company] =
       ZIO.succeed(rockTheJVM)
 

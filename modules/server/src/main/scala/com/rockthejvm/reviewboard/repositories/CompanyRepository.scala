@@ -9,16 +9,19 @@ import io.getquill.jdbczio.Quill
 trait CompanyRepository {
   def create(company: Company): Task[Company]
   def update(id: Long, op: Company => Company): Task[Company]
-  def delete(id: Long): Task[Option[Company]]
+  def delete(id: Long): Task[Long]
   def getById(id: Long): Task[Option[Company]]
   def getBySlug(slug: String): Task[Option[Company]]
   def getAll: Task[List[Company]]
+  def tx[A](zio: Task[A]): Task[A]
 
 }
 
 class CompanyRepositoryLive private (quill: Quill.Postgres[SnakeCase]) extends CompanyRepository {
 
   import quill.*
+
+  override def tx[A](zio: Task[A]): Task[A] = transaction(zio)
 
   inline given schema: SchemaMeta[Company]  = schemaMeta[Company]("companies")
   inline given insMeta: InsertMeta[Company] = insertMeta[Company](_.id)
@@ -38,9 +41,9 @@ class CompanyRepositoryLive private (quill: Quill.Postgres[SnakeCase]) extends C
 
     } yield updated
 
-  override def delete(id: Long): Task[Option[Company]] =
+  override def delete(id: Long): Task[Long] =
     run(
-      companies.filter(_.id == lift(id)).delete.returning(r => Some(r))
+      companies.filter(_.id == lift(id)).delete
     )
 
   override def getById(id: Long): Task[Option[Company]] =

@@ -29,7 +29,11 @@ class CompanyController private (companyService: CompanyService)
       .either
   }
 
-  val routes: List[ServerEndpoint[Any, Task]] = List(create, getAll, findById)
+  val delete: ServerEndpoint[Any, Task] = deleteEndpoint.serverLogic { id =>
+    companyService.delete(id).either
+  }
+
+  val routes: List[ServerEndpoint[Any, Task]] = List(create, getAll, findById, delete)
 }
 
 object CompanyController {

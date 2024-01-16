@@ -37,7 +37,10 @@ object ReviewServiceSpec extends ZIOSpecDefault {
     updated = Instant.now()
   )
 
-  private val reviewRepositoryLayer = ZLayer.succeed(new ReviewRepository {
+  val reviewRepositoryLayer = ZLayer.succeed(new ReviewRepository {
+
+    override def deleteByCompanyId(companyId: Long): Task[List[Review]] = ???
+
     override def create(review: Review): Task[Review] =
       ZIO.succeed(goodReview)
 

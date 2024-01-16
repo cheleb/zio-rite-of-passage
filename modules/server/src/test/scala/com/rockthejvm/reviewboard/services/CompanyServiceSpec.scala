@@ -17,6 +17,8 @@ object CompanyServiceSpec extends ZIOSpecDefault {
   private val repoStubLayer = ZLayer.succeed(
     new CompanyRepository {
 
+      override def tx[A](zio: Task[A]): Task[A] = ???
+
       override def delete(id: Long): Task[Option[Company]] =
         ZIO.attempt {
           val oldCompany = db.get(id)
@@ -106,6 +108,6 @@ object CompanyServiceSpec extends ZIOSpecDefault {
         }
 
       }
-    ).provide(CompanyServiceLive.layer, repoStubLayer)
+    ).provide(CompanyServiceLive.layer, repoStubLayer, ReviewServiceSpec.reviewRepositoryLayer)
 
 }
