@@ -38,6 +38,6 @@ trait CompanyEndpoints extends BaseEndpoint:
     .in("companies" / path[Long]("id"))
     .description("Delete a company by id")
     .delete
-    .out(jsonBody[Long])
+    .out(jsonBody[Company])
 
   val companyEndpoints = List(createEndpoint, getAllEndpoint, findByIdEndpoint, deleteEndpoint)

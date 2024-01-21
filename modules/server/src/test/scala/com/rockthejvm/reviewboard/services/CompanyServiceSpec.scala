@@ -19,9 +19,9 @@ object CompanyServiceSpec extends ZIOSpecDefault {
 
       override def tx[A](zio: Task[A]): Task[A] = ???
 
-      override def delete(id: Long): Task[Option[Company]] =
+      override def delete(id: Long): Task[Company] =
         ZIO.attempt {
-          val oldCompany = db.get(id)
+          val oldCompany = db(id)
           db -= id
           oldCompany
         }

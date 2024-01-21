@@ -15,7 +15,7 @@ trait CompanyService {
   def getById(id: Long): Task[Option[Company]]
   def getBySlug(slug: String): Task[Option[Company]]
   def getAll: Task[List[Company]]
-  def delete(id: Long): Task[Long]
+  def delete(id: Long): Task[Company]
 }
 
 class CompanyServiceLive private (
@@ -30,11 +30,14 @@ class CompanyServiceLive private (
     companyRepository.getBySlug(slug)
   override def getAll: Task[List[Company]] =
     companyRepository.getAll
-  override def delete(id: Long): Task[Long] =
+
+  override def delete(id: Long): Task[Company] =
     companyRepository.tx(
-      companyRepository
-        .delete(id)
-        .flatMap(company => reviewRepository.deleteByCompanyId(id))
+      for {
+        company <- companyRepository
+          .delete(id)
+        _ <- reviewRepository.deleteByCompanyId(id)
+      } yield company
     )
 }
 
