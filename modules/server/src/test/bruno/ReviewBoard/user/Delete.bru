@@ -1,0 +1,22 @@
+meta {
+  name: Delete
+  type: http
+  seq: 3
+}
+
+delete {
+  url: http://localhost:8080/users
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaXNzIjoicm9ja3RoZWp2bC5jb20iLCJleHAiOjE3MDkwNTIzMjksInVzZXJOYW1lIjoib2xpdmllci5ub3VndWllckBnbWFpbC5jb20iLCJpYXQiOjE3MDY0NjAzMjl9.Tt1iYagqIKnaGkJHrW60ngDBCbV0lMZusRtkM0EDngdcp4tepiaKP2c2kn_ndDQF2U7tmw0AwG5gHGBXtNyl6g
+}
+
+body:json {
+  {
+    "email": "olivier.nouguier@gmail.com",
+    "password": "thisisnotatest"
+  }
+}

@@ -11,6 +11,8 @@ import javax.crypto.spec.PBEKeySpec
 trait UserService {
   def registerUser(email: String, password: String): Task[User]
   def verifyPassword(email: String, password: String): Task[Boolean]
+  def updatePassword(email: String, oldPassword: String, newPassword: String): Task[User]
+  def deleteUser(email: String, password: String): Task[User]
   def generateToken(email: String, password: String): Task[Option[UserToken]]
 }
 
@@ -23,9 +25,41 @@ class UserServiceLive private (jwtService: JWTService, userRepository: UserRepos
     )
   override def verifyPassword(email: String, password: String): Task[Boolean] =
     userRepository.getByEmail(email).map {
-      case Some(user) => user.hashedPassword == UserServiceLive.Hasher.generatedHash(password)
+      case Some(user) => UserServiceLive.Hasher.validateHash(password, user.hashedPassword)
       case None       => false
     }
+
+  override def updatePassword(email: String, oldPassword: String, newPassword: String): Task[User] =
+    for
+      user <- userRepository
+        .getByEmail(email)
+        .someOrFailException
+
+      verified = UserServiceLive.Hasher.validateHash(oldPassword, user.hashedPassword)
+
+      updatedUser <- userRepository
+        .update(
+          user.id,
+          _.copy(hashedPassword = UserServiceLive.Hasher.generatedHash(newPassword))
+        )
+        .when(verified)
+        .someOrFail(new RuntimeException(s"Could not update password for user $email"))
+    yield updatedUser
+
+  override def deleteUser(email: String, password: String): Task[User] =
+    for
+      user <- userRepository
+        .getByEmail(email)
+        .someOrFailException
+
+      verified = UserServiceLive.Hasher.validateHash(password, user.hashedPassword)
+
+      updatedUser <- userRepository
+        .delete(user.id)
+        .when(verified)
+        .someOrFail(new RuntimeException(s"Could not delete password for user $email"))
+    yield updatedUser
+
   override def generateToken(email: String, password: String): Task[Option[UserToken]] =
     for {
       user       <- userRepository.getByEmail(email).someOrFailException
@@ -99,7 +133,7 @@ object Demo extends App {
     UserServiceLive.Hasher
       .validateHash(
         "rockthejvm",
-        "1000:BA0A296552E26BB5DA77F084940B70AFF3F4429F99AD8E52:486AD9326B322A0D5D4ECBDCD751D6A51C1D9425C804A626"
+        "1000:BD3416D59B2D7DB34A054D48C6D4C2DBCC0B481733088964:3EEB4B8944C29E27A4AEC147DAA80BCB291112AF6CD3EB85"
       )
   )
 }

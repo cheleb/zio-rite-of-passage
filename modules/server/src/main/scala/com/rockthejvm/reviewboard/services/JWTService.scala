@@ -15,16 +15,19 @@ import java.time.Duration
 import java.time.Clock as JavaClock
 import com.auth0.jwt.JWTVerifier.BaseVerification
 
+import com.rockthejvm.reviewboard.config.Configs
+import com.rockthejvm.reviewboard.config.JWTConfig
+
 trait JWTService {
   def createToken(user: User): Task[UserToken]
   def verifyToken(token: String): Task[UserID]
 }
 
-class JWTServiceLive private (clock: JavaClock) extends JWTService {
+class JWTServiceLive private (jwtConfig: JWTConfig, clock: JavaClock) extends JWTService {
 
   val ISSUER = "rockthejvl.com"
 
-  val secret: String  = "secret" // TODO: change this to something more secure
+  val secret: String  = jwtConfig.secret
   val algorithm       = Algorithm.HMAC512("secret")
   val TTL             = Duration.of(30, ChronoUnit.DAYS)
   val CLAIN_USER_NAME = "userName"
@@ -61,8 +64,13 @@ class JWTServiceLive private (clock: JavaClock) extends JWTService {
 }
 
 object JWTServiceLive {
-  val layer: ULayer[JWTServiceLive] =
-    ZLayer(
-      Clock.javaClock.map(new JWTServiceLive(_))
-    )
+  val layer = ZLayer(
+    for
+      jwtConfig <- ZIO.service[JWTConfig]
+      clock     <- Clock.javaClock
+    yield JWTServiceLive(jwtConfig, clock)
+  )
+
+  val configuredLayer =
+    Configs.makeConfigLayer[JWTConfig]("rockthejvm.jwt") >>> JWTServiceLive.layer
 }

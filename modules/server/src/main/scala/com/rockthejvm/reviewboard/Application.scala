@@ -14,6 +14,11 @@ import com.rockthejvm.reviewboard.repositories.Repository
 import com.rockthejvm.reviewboard.repositories.CompanyRepositoryLive
 import com.rockthejvm.reviewboard.services.ReviewServiceLive
 import com.rockthejvm.reviewboard.repositories.ReviewRespositoryLive
+import com.rockthejvm.reviewboard.services.UserServiceLive
+import com.rockthejvm.reviewboard.services.JWTServiceLive
+import com.rockthejvm.reviewboard.repositories.UserRepositoryLive
+import com.rockthejvm.reviewboard.config.Configs
+import com.rockthejvm.reviewboard.config.JWTConfig
 
 object Application extends ZIOAppDefault:
 
@@ -30,11 +35,16 @@ object Application extends ZIOAppDefault:
     serrverProgram
       .provide(
         Server.default,
+        // Configs
+        Configs.makeConfigLayer[JWTConfig]("rockthejvm.jwt"),
         // Service layers
         CompanyServiceLive.layer,
         ReviewServiceLive.layer,
+        UserServiceLive.layer,
+        JWTServiceLive.layer,
         // Repository layers
         CompanyRepositoryLive.layer,
         ReviewRespositoryLive.layer,
+        UserRepositoryLive.layer,
         Repository.dataLayer
       )

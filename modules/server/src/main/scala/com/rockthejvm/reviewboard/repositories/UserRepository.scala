@@ -4,6 +4,7 @@ import com.rockthejvm.reviewboard.domain.data.User
 import zio.Task
 import io.getquill.jdbczio.Quill
 import io.getquill.*
+import zio.ZLayer
 
 trait UserRepository {
   def create(user: User): Task[User]
@@ -38,4 +39,8 @@ class UserRepositoryLive private (quill: Quill.Postgres[SnakeCase]) extends User
 
   override def delete(id: Long): Task[User] =
     run(query[User].filter(_.id == lift(id)).delete.returning(r => r))
+}
+
+object UserRepositoryLive {
+  def layer = ZLayer.fromFunction(UserRepositoryLive(_))
 }

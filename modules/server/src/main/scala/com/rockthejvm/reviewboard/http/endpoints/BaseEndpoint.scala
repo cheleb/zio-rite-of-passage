@@ -8,4 +8,7 @@ trait BaseEndpoint {
     .errorOut(statusCode and plainBody[String])
     .mapErrorOut[Throwable](HttpError.decode)(HttpError.encode)
 
+  val baseSecuredEndpoint = baseEndpoint
+    .securityIn(auth.bearer[String]())
+
 }
