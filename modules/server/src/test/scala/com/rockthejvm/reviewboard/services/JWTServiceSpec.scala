@@ -21,7 +21,7 @@ object JWTServiceSpec extends ZIOSpecDefault {
       }
     ).provide(
       JWTServiceLive.layer,
-      ZLayer.succeed(JWTConfig("secret", "rtj", 3600))
+      ZLayer.succeed(JWTConfig("secret", "rtj", 1.hour))
     )
 
 }
