@@ -6,7 +6,7 @@ import sttp.tapir.generic.auto.*
 import sttp.model.StatusCode
 
 import com.rockthejvm.reviewboard.http.requests.*
-import com.rockthejvm.reviewboard.http.requests.UserResponse
+import com.rockthejvm.reviewboard.http.responses.UserResponse
 import com.rockthejvm.reviewboard.domain.data.UserToken
 
 trait UserEndpoints extends BaseEndpoint {

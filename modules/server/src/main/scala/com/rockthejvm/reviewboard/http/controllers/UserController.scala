@@ -8,7 +8,7 @@ import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
 
 import zio.*
-import com.rockthejvm.reviewboard.http.requests.UserResponse
+import com.rockthejvm.reviewboard.http.responses.UserResponse
 import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
 import com.rockthejvm.reviewboard.domain.errors.*
 import com.rockthejvm.reviewboard.services.JWTService

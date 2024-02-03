@@ -1,4 +1,4 @@
-package com.rockthejvm.reviewboard.http.requests
+package com.rockthejvm.reviewboard.http.responses
 
 import zio.json.JsonCodec
 
