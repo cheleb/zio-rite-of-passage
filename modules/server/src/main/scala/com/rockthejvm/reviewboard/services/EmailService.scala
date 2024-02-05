@@ -9,23 +9,6 @@ import com.rockthejvm.reviewboard.config.EmailServiceConfig
 
 trait EmailService {
   def sendEmail(to: String, subject: String, content: String): Task[Unit]
-  def sendPasswordRecoveryEmail(to: String, token: String): Task[Unit]
-}
-
-class EmailServiceLive private (config: EmailServiceConfig) extends EmailService {
-
-  private val host: String     = config.host
-  private val port: Int        = config.port
-  private val username: String = config.username
-  private val password: String = config.password
-
-  def sendEmail(to: String, subject: String, content: String): Task[Unit] =
-    for
-      props   <- propsResource
-      session <- createSession(props)
-      message <- createMessage(session)(username, to, subject, content)
-    yield Transport.send(message)
-
   def sendPasswordRecoveryEmail(to: String, token: String): Task[Unit] = {
     val subject = "Password recovery"
     val content = s"""
@@ -41,6 +24,21 @@ class EmailServiceLive private (config: EmailServiceConfig) extends EmailService
     Your password recovery token is: $token"""
     sendEmail(to, subject, content)
   }
+}
+
+class EmailServiceLive private (config: EmailServiceConfig) extends EmailService {
+
+  private val host: String     = config.host
+  private val port: Int        = config.port
+  private val username: String = config.username
+  private val password: String = config.password
+
+  def sendEmail(to: String, subject: String, content: String): Task[Unit] =
+    for
+      props   <- propsResource
+      session <- createSession(props)
+      message <- createMessage(session)(username, to, subject, content)
+    yield Transport.send(message)
 
   private val propsResource: Task[Properties] =
     ZIO.succeed {

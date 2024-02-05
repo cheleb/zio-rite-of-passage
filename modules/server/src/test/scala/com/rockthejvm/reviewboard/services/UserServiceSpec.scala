@@ -17,12 +17,25 @@ object UserServiceSpec extends ZIOSpecDefault {
     "1000:398BC9021A891666236490F8CFA6C3DCBD835E0FF6B4E3BD:78DCCAABFAC75AE94538EA6DCD2D0AB8069FEEF7FACEAD96"
   )
 
+  val stubEmailServiceLayer = ZLayer.succeed(
+    new EmailService {
+      override def sendEmail(email: String, subject: String, content: String): Task[Unit] = ZIO.unit
+    }
+  )
+
   val stubRecoveryTokenRepoLayer = ZLayer.succeed(
     new RecoveryTokenRepository {
 
-      override def getToken(email: String): Task[Option[String]] = ???
+      val db = collection.mutable.Map.empty[String, String]
 
-      override def checkToken(email: String, token: String): Task[Boolean] = ???
+      override def getToken(email: String): Task[Option[String]] = ZIO.attempt {
+        val token = util.Random.alphanumeric.take(8).mkString
+        db += (email -> token)
+        Some(token)
+      }
+
+      override def checkToken(email: String, token: String): Task[Boolean] =
+        ZIO.succeed(db.get(email).contains(token))
 
     }
   )
@@ -123,7 +136,7 @@ object UserServiceSpec extends ZIOSpecDefault {
       UserServiceLive.layer,
       stubRepoLayer,
       stubJWTLayer,
-      EmailServiceLive.configuredLayer,
+      stubEmailServiceLayer,
       stubRecoveryTokenRepoLayer
     )
 
