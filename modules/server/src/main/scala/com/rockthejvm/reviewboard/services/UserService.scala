@@ -7,6 +7,7 @@ import com.rockthejvm.reviewboard.repositories.UserRepository
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
+import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
 
 trait UserService {
   def registerUser(email: String, password: String): Task[User]
@@ -14,10 +15,16 @@ trait UserService {
   def updatePassword(email: String, oldPassword: String, newPassword: String): Task[User]
   def deleteUser(email: String, password: String): Task[User]
   def generateToken(email: String, password: String): Task[Option[UserToken]]
+  def sendPasswordRecoveryEmain(email: String): Task[Unit]
+  def recoverPasswordFromToken(email: String, token: String, newPassword: String): Task[Boolean]
 }
 
-class UserServiceLive private (jwtService: JWTService, userRepository: UserRepository)
-    extends UserService {
+class UserServiceLive private (
+    jwtService: JWTService,
+    emailService: EmailService,
+    userRepository: UserRepository,
+    tokenRepository: RecoveryTokenRepository
+) extends UserService {
 
   override def registerUser(email: String, password: String): Task[User] =
     userRepository.create(
@@ -68,11 +75,40 @@ class UserServiceLive private (jwtService: JWTService, userRepository: UserRepos
 
     } yield maybetoken
 
+  override def sendPasswordRecoveryEmain(email: String): Task[Unit] =
+    tokenRepository.getToken(email).flatMap {
+      case Some(token) =>
+        emailService
+          .sendPasswordRecoveryEmail(email, token)
+          .unit
+      case None =>
+        ZIO.unit
+    }
+
+  override def recoverPasswordFromToken(
+      email: String,
+      token: String,
+      newPassword: String
+  ): Task[Boolean] =
+    for
+      existingUser <- userRepository.getByEmail(email).someOrFailException
+      validToken   <- tokenRepository.checkToken(email, token)
+      updatedUser <- userRepository
+        .update(
+          existingUser.id,
+          _.copy(hashedPassword = UserServiceLive.Hasher.generatedHash(newPassword))
+        )
+        .when(validToken)
+    yield updatedUser.nonEmpty
+
 }
 
 object UserServiceLive {
-  val layer: URLayer[JWTService & UserRepository, UserServiceLive] =
-    ZLayer.fromFunction(UserServiceLive(_, _))
+  val layer: URLayer[
+    JWTService & EmailService & UserRepository & RecoveryTokenRepository,
+    UserServiceLive
+  ] =
+    ZLayer.fromFunction(UserServiceLive(_, _, _, _))
 
   object Hasher {
 
@@ -125,15 +161,4 @@ object UserServiceLive {
       compareArrays(testHash, validHash)
 
   }
-}
-
-object Demo extends App {
-  println(UserServiceLive.Hasher.generatedHash("rockthejvm"))
-  println(
-    UserServiceLive.Hasher
-      .validateHash(
-        "rockthejvm",
-        "1000:BD3416D59B2D7DB34A054D48C6D4C2DBCC0B481733088964:3EEB4B8944C29E27A4AEC147DAA80BCB291112AF6CD3EB85"
-      )
-  )
 }
