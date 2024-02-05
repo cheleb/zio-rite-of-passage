@@ -17,6 +17,7 @@ import com.auth0.jwt.JWTVerifier.BaseVerification
 
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.JWTConfig
+import java.time.temporal.ChronoField
 
 trait JWTService {
   def createToken(user: User): Task[UserToken]

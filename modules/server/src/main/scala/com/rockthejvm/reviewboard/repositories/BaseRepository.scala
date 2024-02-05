@@ -8,6 +8,6 @@ trait WithTransaction {
   def tx[A](zio: Task[A]): Task[A]
 }
 
-abstract class BaseRepository(quill: Quill.Postgres[SnakeCase]) extends WithTransaction {
+class BaseRepository(quill: Quill.Postgres[SnakeCase]) extends WithTransaction {
   def tx[A](zio: Task[A]): Task[A] = quill.transaction(zio)
 }

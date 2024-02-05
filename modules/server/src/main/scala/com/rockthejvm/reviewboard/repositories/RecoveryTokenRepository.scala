@@ -84,4 +84,4 @@ object RecoveryTokenRepositoryLive:
   def layer = ZLayer.fromFunction(RecoveryTokenRepositoryLive(_, _, _))
 
   def configuredLayer =
-    Configs.makeConfigLayer[RecoveryTokensConfig]("rockethejvm.recoverutokens") >>> layer
+    Configs.makeConfigLayer[RecoveryTokensConfig]("rockthejvm.recoverytokens") >>> layer

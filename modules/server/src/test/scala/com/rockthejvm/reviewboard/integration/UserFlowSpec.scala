@@ -25,6 +25,7 @@ import com.rockthejvm.reviewboard.domain.data.UserToken
 import sttp.client3.SttpBackend
 import sttp.model.Method
 import com.rockthejvm.reviewboard.http.requests.UpdatePasswordRequest
+import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
 
 object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.sql") {
   // Http controller
@@ -158,8 +159,10 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
     ).provide(
       UserServiceLive.layer,
       JWTServiceLive.layer,
+      EmailServiceLive.configuredLayer,
       UserRepositoryLive.layer,
       Repository.quillLayer,
+      RecoveryTokenRepositoryLive.configuredLayer,
       dataSouurceLayer,
       ZLayer.succeed(JWTConfig("****", "rockthejvm", 1.hour)),
       Scope.default

@@ -7,12 +7,24 @@ import zio.*
 import sttp.model.Uri
 import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.repositories.UserRepository
+import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
+import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
 object UserServiceSpec extends ZIOSpecDefault {
 
   val daniel = User(
     1,
     "daniel@rockthejvm.com",
     "1000:398BC9021A891666236490F8CFA6C3DCBD835E0FF6B4E3BD:78DCCAABFAC75AE94538EA6DCD2D0AB8069FEEF7FACEAD96"
+  )
+
+  val stubRecoveryTokenRepoLayer = ZLayer.succeed(
+    new RecoveryTokenRepository {
+
+      override def getToken(email: String): Task[Option[String]] = ???
+
+      override def checkToken(email: String, token: String): Task[Boolean] = ???
+
+    }
   )
 
   val stubRepoLayer = ZLayer.succeed(
@@ -107,6 +119,12 @@ object UserServiceSpec extends ZIOSpecDefault {
           deletedUser <- userService.deleteUser(daniel.email, "rockthejvm")
         yield assertTrue(deletedUser.email == daniel.email)
       }
-    ).provide(UserServiceLive.layer, stubRepoLayer, stubJWTLayer)
+    ).provide(
+      UserServiceLive.layer,
+      stubRepoLayer,
+      stubJWTLayer,
+      EmailServiceLive.configuredLayer,
+      stubRecoveryTokenRepoLayer
+    )
 
 }

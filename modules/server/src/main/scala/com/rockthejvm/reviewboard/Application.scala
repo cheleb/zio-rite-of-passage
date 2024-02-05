@@ -21,6 +21,7 @@ import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.JWTConfig
 import com.rockthejvm.reviewboard.services.EmailServiceLive
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
+import com.rockthejvm.reviewboard.config.EmailServiceConfig
 
 object Application extends ZIOAppDefault:
 
@@ -40,7 +41,7 @@ object Application extends ZIOAppDefault:
         // Service layers
         CompanyServiceLive.layer,
         ReviewServiceLive.layer,
-        EmailServiceLive.layer,
+        EmailServiceLive.configuredLayer,
         UserServiceLive.layer,
         JWTServiceLive.configuredLayer,
         RecoveryTokenRepositoryLive.configuredLayer,
