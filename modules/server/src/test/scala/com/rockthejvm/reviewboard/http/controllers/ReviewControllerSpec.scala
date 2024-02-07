@@ -37,6 +37,13 @@ object ReviewControllerSpec extends ZIOSpecDefault {
     updated = Instant.now()
   )
 
+  private val jwtServiceStub = new JWTService {
+    override def createToken(user: User): Task[UserToken] =
+      ZIO.succeed(UserToken("daniel@rockthejvm.com", "token", 10))
+
+    override def verifyToken(token: String): Task[UserID] =
+      ZIO.succeed(UserID(1, "daniel@rockthejvm.com"))
+  }
   private val serviceStub = new ReviewService {
     override def create(req: CreateReviewRequest, userId: Long): Task[Review] =
       ZIO.succeed(
@@ -78,6 +85,8 @@ object ReviewControllerSpec extends ZIOSpecDefault {
           backendStub <- backendStubZIO(_.create)
           response <- basicRequest
             .post(uri"/reviews")
+            .auth
+            .bearer("It is me")
             .body(
               CreateReviewRequest(
                 companyId = 1,
@@ -137,6 +146,8 @@ object ReviewControllerSpec extends ZIOSpecDefault {
               .contains(List.empty)
         )
       }
-    ).provide(ZLayer.succeed(serviceStub))
-
+    ).provide(
+      ZLayer.succeed(serviceStub),
+      ZLayer.succeed(jwtServiceStub)
+    )
 }

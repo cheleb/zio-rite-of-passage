@@ -10,7 +10,7 @@ import sttp.tapir.generic.auto.*
 trait ReviewEndpoint extends BaseEndpoint {
 
   val createEndpoint =
-    baseEndpoint.post
+    baseSecuredEndpoint.post
       .tag("reviews")
       .summary("Create a review")
       .in("reviews")

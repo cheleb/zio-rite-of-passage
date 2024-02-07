@@ -13,10 +13,10 @@ import sttp.client3.*
 import sttp.tapir.server.ServerEndpoint
 
 import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
-import com.rockthejvm.reviewboard.domain.data.Company
+import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.syntax.*
 
-import com.rockthejvm.reviewboard.services.CompanyService
+import com.rockthejvm.reviewboard.services.*
 
 object CompanyControllerSpec extends ZIOSpecDefault {
 
@@ -31,6 +31,7 @@ object CompanyControllerSpec extends ZIOSpecDefault {
   private given MonadError[Task] = new RIOMonadError
 
   private val rockTheJVM = Company(1, "rock-the-jvm", "Rock the JVM", "rockthejvm.com")
+
   private val serviceStub = new CompanyService {
 
     override def delete(id: Long): Task[Company] = ???
@@ -55,6 +56,12 @@ object CompanyControllerSpec extends ZIOSpecDefault {
 
   }
 
+  private val jwtServiceStub = new JWTService {
+    override def createToken(user: User): Task[UserToken] = ???
+    override def verifyToken(token: String): Task[UserID] =
+      ZIO.succeed(UserID(1, "daniel@rockthejvm.com"))
+  }
+
   override def spec: Spec[TestEnvironment & Scope, Any] =
     suite("CompanyControllerSpec")(
       test("post company") {
@@ -63,6 +70,8 @@ object CompanyControllerSpec extends ZIOSpecDefault {
           backend <- backendStubZIO(_.create)
           response <- basicRequest
             .post(uri"/companies")
+            .auth
+            .bearer("It is me")
             .body(CreateCompanyRequest("Rock the JVM", "rockthejvm.com").toJson)
             .send(backend)
 
@@ -105,5 +114,8 @@ object CompanyControllerSpec extends ZIOSpecDefault {
             .contains(Some(rockTheJVM))
         }
       }
-    ).provide(ZLayer.succeed(serviceStub))
+    ).provide(
+      ZLayer.succeed(serviceStub),
+      ZLayer.succeed(jwtServiceStub)
+    )
 }

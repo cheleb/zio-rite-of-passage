@@ -2,20 +2,21 @@ package com.rockthejvm.reviewboard.http.controllers
 
 import sttp.tapir.server.ServerEndpoint
 
-import zio.Task
+import zio.*
 import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoint
 import com.rockthejvm.reviewboard.services.ReviewService
-import com.rockthejvm.reviewboard.domain.data.Review
-import zio.ZIO
+import com.rockthejvm.reviewboard.domain.data.*
+import com.rockthejvm.reviewboard.services.JWTService
 
-class ReviewController private (reviewService: ReviewService)
-    extends BaseController
+class ReviewController private (jwtService: JWTService, reviewService: ReviewService)
+    extends SecuredBaseController(jwtService)
     with ReviewEndpoint {
 
   val create: ServerEndpoint[Any, Task] =
     createEndpoint
-      .serverLogic { request =>
-        reviewService.create(request, -1L).either // FIXME get the user id from the request
+      .withSecurity
+      .serverLogic { userId => request =>
+        reviewService.create(request, userId.id).either // FIXME get the user id from the request
       }
 
   val getById: ServerEndpoint[Any, Task] =
@@ -35,5 +36,9 @@ class ReviewController private (reviewService: ReviewService)
 }
 
 object ReviewController {
-  val makeZIO = ZIO.service[ReviewService].map(ReviewController(_))
+  val makeZIO =
+    for {
+      jwtService    <- ZIO.service[JWTService]
+      reviewService <- ZIO.service[ReviewService]
+    } yield new ReviewController(jwtService, reviewService)
 }

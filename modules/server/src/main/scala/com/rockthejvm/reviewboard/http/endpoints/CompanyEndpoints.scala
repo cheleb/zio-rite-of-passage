@@ -7,7 +7,7 @@ import sttp.tapir.generic.auto.*
 import com.rockthejvm.reviewboard.domain.data.Company
 
 trait CompanyEndpoints extends BaseEndpoint:
-  val createEndpoint = baseEndpoint.post
+  val createEndpoint = baseSecuredEndpoint.post
     .tag("companies")
     .name("create")
     .in("companies")
@@ -32,7 +32,7 @@ trait CompanyEndpoints extends BaseEndpoint:
     .get
     .out(jsonBody[Option[Company]])
 
-  val deleteEndpoint = baseEndpoint.delete
+  val deleteEndpoint = baseSecuredEndpoint.delete
     .tag("companies")
     .name("delete")
     .in("companies" / path[Long]("id"))

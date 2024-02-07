@@ -4,17 +4,18 @@ import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import zio.*
 import sttp.tapir.*
 import scala.collection.mutable
-import com.rockthejvm.reviewboard.domain.data.Company
+import com.rockthejvm.reviewboard.domain.data.*
 import sttp.tapir.server.ServerEndpoint
-import com.rockthejvm.reviewboard.services.CompanyService
+import com.rockthejvm.reviewboard.services.*
 
-class CompanyController private (companyService: CompanyService)
-    extends BaseController
+class CompanyController private (jwtService: JWTService, companyService: CompanyService)
+    extends SecuredBaseController(jwtService)
     with CompanyEndpoints {
   // implement your company endpoint logic here
 
   val create: ServerEndpoint[Any, Task] = createEndpoint
-    .serverLogic(companyService.create(_).either)
+    .withSecurity
+    .serverLogic(userId => req => companyService.create(req).either)
 
   val getAll: ServerEndpoint[Any, Task] =
     getAllEndpoint.serverLogic(_ => companyService.getAll.either)
@@ -29,9 +30,11 @@ class CompanyController private (companyService: CompanyService)
       .either
   }
 
-  val delete: ServerEndpoint[Any, Task] = deleteEndpoint.serverLogic { id =>
-    companyService.delete(id).either
-  }
+  val delete: ServerEndpoint[Any, Task] = deleteEndpoint
+    .withSecurity
+    .serverLogic { userId => id =>
+      companyService.delete(id).either
+    }
 
   val routes: List[ServerEndpoint[Any, Task]] = List(create, getAll, findById, delete)
 }
@@ -39,7 +42,8 @@ class CompanyController private (companyService: CompanyService)
 object CompanyController {
   val makeZIO =
     for {
+      jwtService     <- ZIO.service[JWTService]
       companyService <- ZIO.service[CompanyService]
-    } yield new CompanyController(companyService)
+    } yield new CompanyController(jwtService, companyService)
 
 }
