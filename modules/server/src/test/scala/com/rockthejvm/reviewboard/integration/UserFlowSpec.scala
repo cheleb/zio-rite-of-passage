@@ -18,7 +18,7 @@ import com.rockthejvm.reviewboard.repositories.UserRepository
 import com.rockthejvm.reviewboard.repositories.UserRepositoryLive
 import com.rockthejvm.reviewboard.repositories.Repository
 import com.rockthejvm.reviewboard.repositories.RepositorySpec
-import com.rockthejvm.reviewboard.config.JWTConfig
+import com.rockthejvm.reviewboard.config.*
 import com.rockthejvm.reviewboard.http.responses.*
 import com.rockthejvm.reviewboard.http.requests.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
@@ -66,6 +66,18 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
         token: Option[String] = None
     ): Task[Option[Response]] =
       sendRequest[Response](Method.POST, path, request, token)
+
+    def postNoResponse(
+        path: String,
+        request: Request,
+        token: Option[String] = None
+    ): Task[Unit] =
+      basicRequest
+        .post(uri"$path")
+        .body(request.toJson)
+        .send(backend)
+        .unit
+
     def put[Response: JsonCodec](
         path: String,
         request: Request,
@@ -78,6 +90,20 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
         token: Option[String] = None
     ): Task[Option[Response]] =
       sendRequest[Response](Method.DELETE, path, request, token)
+
+  class EmailServiceProbe extends EmailService {
+
+    private val mutableEmails = collection.mutable.Map[String, String]()
+    override def sendEmail(to: String, subject: String, content: String): Task[Unit] = ???
+
+    override def sendPasswordRecoveryEmail(to: String, token: String): Task[Unit] =
+      ZIO.succeed(mutableEmails.put(to, token))
+
+    def probeTo(to: String): Task[Option[String]] = ZIO.succeed(mutableEmails.get(to))
+
+  }
+
+  val stubEmailServiceLayer: ULayer[EmailServiceProbe] = ZLayer.succeed(EmailServiceProbe())
 
   def createUser(backend: SttpBackend[Task, Nothing]) =
     backend
@@ -155,16 +181,40 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
             )
           ) && noneUser.isEmpty && someUser.nonEmpty
         )
+      },
+      test("recover password") {
+        for
+          backend            <- backendStubZIO
+          createUserResponse <- createUser(backend)
+          // Send a forgot password request
+          _ <- backend.postNoResponse("/users/forgot", ForgotPasswordRequest(danielEmail))
+          // Fetch the token from the
+          emailServiceProbe <- ZIO.service[EmailServiceProbe]
+          token <- emailServiceProbe
+            .probeTo(danielEmail)
+            .someOrFail(new RuntimeException("No token found"))
+          _ <- backend.postNoResponse(
+            "/users/recover",
+            RecoverPasswordRequest(danielEmail, token, "scalarulez")
+          )
+          oldTokenResponse <- backend
+            .post[UserToken]("/users/login", LoginRequest(danielEmail, "rockthejvm"))
+          newTokenResponse <- backend
+            .post[UserToken]("/users/login", LoginRequest(danielEmail, "scalarulez"))
+        yield assertTrue(
+          oldTokenResponse.isEmpty && newTokenResponse.nonEmpty
+        )
       }
     ).provide(
       UserServiceLive.layer,
       JWTServiceLive.layer,
-      EmailServiceLive.configuredLayer,
       UserRepositoryLive.layer,
+      stubEmailServiceLayer,
       Repository.quillLayer,
-      RecoveryTokenRepositoryLive.configuredLayer,
+      RecoveryTokenRepositoryLive.layer,
       dataSouurceLayer,
       ZLayer.succeed(JWTConfig("****", "rockthejvm", 1.hour)),
+      ZLayer.succeed(RecoveryTokensConfig(24 * 3600)),
       Scope.default
     )
 }
