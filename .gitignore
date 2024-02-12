@@ -2,7 +2,7 @@
 .DS_Store
 
 # sbt specific
-dist/*
+dist/
 target/
 lib_managed/
 src_managed/
@@ -18,6 +18,10 @@ local.sbt
 # Bloop
 .bsp
 
+# Parcel
+
+.parcel-cache/
+
 # VS Code
 .vscode/
 
@@ -32,4 +36,3 @@ metals.sbt
 /.worksheet/
 target/
 node_modules/
-
