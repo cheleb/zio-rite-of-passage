@@ -7,6 +7,7 @@ import com.rockthejvm.reviewboard.components.Router
 import frontroute.LinkHandler
 import scalajs.js
 import scala.scalajs.js.annotation.JSImport
+import com.rockthejvm.reviewboard.common.Constants
 object Header:
   def apply() = div(
     cls := "container-fluid p-0",
@@ -44,16 +45,13 @@ object Header:
       )
     )
   )
-  @js.native
-  @JSImport("/static/img/fiery-lava 128x128.png", JSImport.Default)
-  private val logoImage: String = js.native
 
   def renderLogo() = a(
     cls  := "navbar-brand",
     href := "/",
     img(
       cls := "home-logo",
-      src := logoImage,
+      src := Constants.logoImage,
       alt := "Rock the JVM logo"
     )
   )

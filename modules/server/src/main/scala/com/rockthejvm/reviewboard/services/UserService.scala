@@ -2,12 +2,12 @@ package com.rockthejvm.reviewboard.services
 
 import zio.*
 
-import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.repositories.UserRepository
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
+import com.rockthejvm.reviewboard.domain.data.{User, UserToken}
 
 trait UserService {
   def registerUser(email: String, password: String): Task[User]

@@ -63,10 +63,11 @@ object CompanyServiceSpec extends ZIOSpecDefault {
       },
       test("get company by id") {
 
-        val program = for
-          company    <- service(_.create(CreateCompanyRequest("Rock the JVM", "rockthejvm.com")))
-          companyOpt <- service(_.getById(company.id))
-        yield (company, companyOpt)
+        val program =
+          for
+            company    <- service(_.create(CreateCompanyRequest("Rock the JVM", "rockthejvm.com")))
+            companyOpt <- service(_.getById(company.id))
+          yield (company, companyOpt)
 
         program.assert {
           case (company, Some(companyRes)) =>
@@ -80,10 +81,11 @@ object CompanyServiceSpec extends ZIOSpecDefault {
       },
       test("get company by slug") {
 
-        val program = for
-          company    <- service(_.create(CreateCompanyRequest("Rock the JVM", "rockthejvm.com")))
-          companyOpt <- service(_.getBySlug(company.slug))
-        yield (company, companyOpt)
+        val program =
+          for
+            company    <- service(_.create(CreateCompanyRequest("Rock the JVM", "rockthejvm.com")))
+            companyOpt <- service(_.getBySlug(company.slug))
+          yield (company, companyOpt)
 
         program.assert {
           case (company, Some(companyRes)) =>
@@ -97,11 +99,12 @@ object CompanyServiceSpec extends ZIOSpecDefault {
       },
       test("get all companies") {
 
-        val program = for
-          company   <- service(_.create(CreateCompanyRequest("Rock the JVM", "rockthejvm.com")))
-          company2  <- service(_.create(CreateCompanyRequest("Google", "google.com")))
-          companies <- service(_.getAll)
-        yield (company, company2, companies)
+        val program =
+          for
+            company   <- service(_.create(CreateCompanyRequest("Rock the JVM", "rockthejvm.com")))
+            company2  <- service(_.create(CreateCompanyRequest("Google", "google.com")))
+            companies <- service(_.getAll)
+          yield (company, company2, companies)
 
         program.assert { case (company, company2, companies) =>
           companies.toSet == Set(company, company2)

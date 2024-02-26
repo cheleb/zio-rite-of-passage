@@ -12,12 +12,12 @@ import sttp.tapir.generic.auto.*
 import sttp.client3.*
 import sttp.tapir.server.ServerEndpoint
 
-import com.rockthejvm.reviewboard.http.requests.*
-import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.syntax.*
 
 import com.rockthejvm.reviewboard.services.*
 import java.time.Instant
+import com.rockthejvm.reviewboard.domain.data.{Review, User, UserID, UserToken}
+import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
 
 object ReviewControllerSpec extends ZIOSpecDefault {
 

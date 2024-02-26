@@ -13,10 +13,10 @@ import sttp.client3.*
 import sttp.tapir.server.ServerEndpoint
 
 import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
-import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.syntax.*
 
 import com.rockthejvm.reviewboard.services.*
+import com.rockthejvm.reviewboard.domain.data.{Company, User, UserID, UserToken}
 
 object CompanyControllerSpec extends ZIOSpecDefault {
 

@@ -5,10 +5,10 @@ import zio.Scope
 import zio.test.*
 import zio.*
 import sttp.model.Uri
-import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.repositories.UserRepository
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
+import com.rockthejvm.reviewboard.domain.data.{User, UserID, UserToken}
 object UserServiceSpec extends ZIOSpecDefault {
 
   val daniel = User(

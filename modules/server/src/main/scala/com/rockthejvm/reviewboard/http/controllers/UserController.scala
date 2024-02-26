@@ -10,9 +10,9 @@ import sttp.tapir.server.ServerEndpoint
 import zio.*
 import com.rockthejvm.reviewboard.http.responses.UserResponse
 import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
-import com.rockthejvm.reviewboard.domain.errors.*
 import com.rockthejvm.reviewboard.services.JWTService
 import com.rockthejvm.reviewboard.domain.data.UserID
+import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
 
 class UserController(userService: UserService, jwtService: JWTService)
     extends BaseController
@@ -70,8 +70,9 @@ class UserController(userService: UserService, jwtService: JWTService)
 }
 
 object UserController {
-  def makeZIO: ZIO[UserService with JWTService, Nothing, UserController] = for
-    userService <- ZIO.service[UserService]
-    jwtService  <- ZIO.service[JWTService]
-  yield new UserController(userService, jwtService)
+  def makeZIO: ZIO[UserService with JWTService, Nothing, UserController] =
+    for
+      userService <- ZIO.service[UserService]
+      jwtService  <- ZIO.service[JWTService]
+    yield new UserController(userService, jwtService)
 }

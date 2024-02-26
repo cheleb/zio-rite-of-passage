@@ -19,13 +19,18 @@ import com.rockthejvm.reviewboard.repositories.UserRepositoryLive
 import com.rockthejvm.reviewboard.repositories.Repository
 import com.rockthejvm.reviewboard.repositories.RepositorySpec
 import com.rockthejvm.reviewboard.config.*
-import com.rockthejvm.reviewboard.http.responses.*
-import com.rockthejvm.reviewboard.http.requests.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
 import sttp.client3.SttpBackend
 import sttp.model.Method
 import com.rockthejvm.reviewboard.http.requests.UpdatePasswordRequest
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
+import com.rockthejvm.reviewboard.http.requests.{
+  DeleteUserRequest,
+  ForgotPasswordRequest,
+  LoginRequest,
+  RecoverPasswordRequest
+}
+import com.rockthejvm.reviewboard.http.responses.UserResponse
 
 object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.sql") {
   // Http controller

@@ -1,7 +1,5 @@
 package com.rockthejvm.reviewboard.services
 
-import com.rockthejvm.reviewboard.domain.data.*
-
 import zio.*
 import com.auth0.jwt.*
 import java.time.Instant
@@ -18,6 +16,7 @@ import com.auth0.jwt.JWTVerifier.BaseVerification
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.JWTConfig
 import java.time.temporal.ChronoField
+import com.rockthejvm.reviewboard.domain.data.{User, UserID, UserToken}
 
 trait JWTService {
   def createToken(user: User): Task[UserToken]
