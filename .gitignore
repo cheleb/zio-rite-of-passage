@@ -23,7 +23,8 @@ local.sbt
 .parcel-cache/
 
 # VS Code
-.vscode/
+.vscode/**
+!.vscode/tasks.json
 
 # Metals
 .bloop/

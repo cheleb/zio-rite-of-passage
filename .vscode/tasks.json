@@ -1,0 +1,64 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "demo",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "npmInstall",
+                "runDemo"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "npmInstall",
+            "type": "shell",
+            "command": "pushd modules/app; npm i; popd; NODE_OPTIONS='--openssl-legacy-provider' DEV=1 sbt \"app/fastLinkJS\"",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "runDevCmd",
+                "close": true
+            },
+            "group": "build"
+        },
+        {
+            "label": "runDemo",
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "fastLink",
+                "npmDev"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "fastLink",
+            "type": "shell",
+            "command": "NODE_OPTIONS='--openssl-legacy-provider' DEV=1 sbt \"~app/fastOptJS\"",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "runDevCmd"
+            },
+            "group": "build"
+        },
+        {
+            "label": "npmDev",
+            "type": "shell",
+            "command": "cd modules/app; npm run start",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "runDevCmd"
+            },
+            "group": "build"
+        }
+    ]
+
+}
