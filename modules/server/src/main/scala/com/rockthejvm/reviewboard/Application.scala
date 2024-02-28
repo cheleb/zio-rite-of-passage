@@ -22,6 +22,7 @@ import com.rockthejvm.reviewboard.config.JWTConfig
 import com.rockthejvm.reviewboard.services.EmailServiceLive
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
 import com.rockthejvm.reviewboard.config.EmailServiceConfig
+import sttp.tapir.server.interceptor.cors.CORSInterceptor
 
 object Application extends ZIOAppDefault:
 
@@ -30,7 +31,9 @@ object Application extends ZIOAppDefault:
       _         <- ZIO.succeed(println("Hello world"))
       endpoints <- HttpApi.endpointsZIO
       _ <- Server.serve(
-        ZioHttpInterpreter(ZioHttpServerOptions.default).toHttp(endpoints)
+        ZioHttpInterpreter(ZioHttpServerOptions.default.appendInterceptor(
+          CORSInterceptor.default
+        )).toHttp(endpoints)
       )
     yield ()
 

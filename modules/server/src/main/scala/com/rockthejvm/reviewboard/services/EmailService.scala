@@ -80,14 +80,3 @@ object EmailServiceLive {
   val configuredLayer =
     Configs.makeConfigLayer[EmailServiceConfig]("rockthejvm.email") >>> EmailServiceLive.layer
 }
-
-object Demo extends ZIOAppDefault:
-
-  val program = for
-    emailService <- ZIO.service[EmailService]
-    _            <- emailService.sendPasswordRecoveryEmail("ono@rockthejvm.com", "AAAA")
-    _            <- Console.printLine("Email sent!")
-  yield ()
-
-  override def run =
-    program.provide(EmailServiceLive.configuredLayer)

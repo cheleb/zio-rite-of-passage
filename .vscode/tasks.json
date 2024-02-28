@@ -9,7 +9,7 @@
             "dependsOrder": "sequence",
             "dependsOn": [
                 "npmInstall",
-                "runDemo"
+                "runAll"
             ],
             "problemMatcher": [],
             "group": {
@@ -28,7 +28,19 @@
             "group": "build"
         },
         {
-            "label": "runDemo",
+            "label": "runAll",
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "runFront",
+                "runBack"
+            ],
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "runFront",
             "dependsOrder": "parallel",
             "dependsOn": [
                 "fastLink",
@@ -53,6 +65,16 @@
             "label": "npmDev",
             "type": "shell",
             "command": "cd modules/app; npm run start",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "runDevCmd"
+            },
+            "group": "build"
+        },
+        {
+            "label": "runBack",
+            "type": "shell",
+	    "command": "sleep 5; sbt -mem 4096 \"~server/run\"",
             "presentation": {
                 "panel": "dedicated",
                 "group": "runDevCmd"
