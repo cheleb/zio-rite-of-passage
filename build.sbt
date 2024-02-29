@@ -32,7 +32,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "com.softwaremill.sttp.client3" %% "zio"                     % sttpVersion,
   "dev.zio"                       %% "zio-logging"             % zioLoggingVersion,
   "dev.zio"                       %% "zio-logging-slf4j"       % zioLoggingVersion,
-  "ch.qos.logback"                 % "logback-classic"         % "1.4.4",
+  "ch.qos.logback"                 % "logback-classic"         % "1.5.1",
   "dev.zio"                       %% "zio-test"                % zioVersion,
   "dev.zio"                       %% "zio-test-junit"          % zioVersion % "test",
   "dev.zio"                       %% "zio-test-sbt"            % zioVersion % "test",
