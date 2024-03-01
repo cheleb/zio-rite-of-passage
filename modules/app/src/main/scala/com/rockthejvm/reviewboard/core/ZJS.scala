@@ -20,10 +20,13 @@ object ZJS {
   extension [E <: Throwable, A](zio: ZIO[BackendClient, E, A])
     def emitTo(bus: EventBus[A]) =
       Unsafe.unsafe { implicit unsafe =>
-        println(s"Emitting to bus... $bus")
         Runtime.default.unsafe.fork(zio.tapError(e => Console.printLineError(e.getMessage())).tap(
           a => ZIO.attempt(bus.emit(a))
         ).provide(BackendClientLive.configuredLayer))
+      }
+    def runJs =
+      Unsafe.unsafe { implicit unsafe =>
+        Runtime.default.unsafe.runToFuture(zio.provide(BackendClientLive.configuredLayer))
       }
   extension [I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])
     def apply(payload: I): RIO[BackendClient, O] =

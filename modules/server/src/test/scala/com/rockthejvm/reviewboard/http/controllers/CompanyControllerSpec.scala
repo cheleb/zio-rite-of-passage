@@ -17,6 +17,7 @@ import com.rockthejvm.reviewboard.syntax.*
 
 import com.rockthejvm.reviewboard.services.*
 import com.rockthejvm.reviewboard.domain.data.{Company, User, UserID, UserToken}
+import com.rockthejvm.reviewboard.domain.data.CompanyFilter
 
 object CompanyControllerSpec extends ZIOSpecDefault {
 
@@ -53,6 +54,8 @@ object CompanyControllerSpec extends ZIOSpecDefault {
 
     override def getAll: Task[List[Company]] =
       ZIO.succeed(List(rockTheJVM))
+
+    override def allFilters: Task[CompanyFilter] = ???
 
   }
 

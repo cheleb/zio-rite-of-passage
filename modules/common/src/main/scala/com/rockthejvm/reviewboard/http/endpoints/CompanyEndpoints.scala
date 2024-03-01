@@ -4,7 +4,7 @@ import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
 import sttp.tapir.*
 import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
-import com.rockthejvm.reviewboard.domain.data.Company
+import com.rockthejvm.reviewboard.domain.data.*
 
 trait CompanyEndpoints extends BaseEndpoint:
   val createEndpoint = baseSecuredEndpoint.post
@@ -40,4 +40,13 @@ trait CompanyEndpoints extends BaseEndpoint:
     .delete
     .out(jsonBody[Company])
 
-  val companyEndpoints = List(createEndpoint, getAllEndpoint, findByIdEndpoint, deleteEndpoint)
+  val allFiltersEndpoint = baseEndpoint.get
+    .tag("companies")
+    .name("allFilters")
+    .in("companies" / "filters")
+    .description("Get all available filters for companies")
+    .get
+    .out(jsonBody[CompanyFilter])
+
+  val companyEndpoints =
+    List(createEndpoint, getAllEndpoint, findByIdEndpoint, deleteEndpoint, allFiltersEndpoint)

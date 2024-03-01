@@ -1,6 +1,6 @@
 package com.rockthejvm.reviewboard.repositories
 
-import com.rockthejvm.reviewboard.domain.data.Company
+import com.rockthejvm.reviewboard.domain.data.*
 
 import zio.*
 import io.getquill.*
@@ -13,6 +13,7 @@ trait CompanyRepository extends WithTransaction {
   def getById(id: Long): Task[Option[Company]]
   def getBySlug(slug: String): Task[Option[Company]]
   def getAll: Task[List[Company]]
+  def uniqueAttributes: Task[CompanyFilter]
 
 }
 
@@ -53,6 +54,13 @@ class CompanyRepositoryLive private (quill: Quill.Postgres[SnakeCase])
 
   override def getAll: Task[List[Company]] =
     run(companies)
+
+  override def uniqueAttributes: Task[CompanyFilter] = for {
+    locations  <- run(companies.map(_.location).distinct).map(_.flatten)
+    countries  <- run(companies.map(_.country).distinct).map(_.flatten)
+    industries <- run(companies.map(_.industry).distinct).map(_.flatten)
+    tags       <- run(companies.map(_.tags)).map(_.flatten.distinct)
+  } yield CompanyFilter(locations, countries, industries, tags)
 
 }
 

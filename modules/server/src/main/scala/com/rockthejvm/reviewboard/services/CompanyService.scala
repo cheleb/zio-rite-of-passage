@@ -2,7 +2,7 @@ package com.rockthejvm.reviewboard.services
 
 import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
 
-import com.rockthejvm.reviewboard.domain.data.Company
+import com.rockthejvm.reviewboard.domain.data.*
 
 import scala.collection.mutable
 
@@ -16,6 +16,7 @@ trait CompanyService {
   def getBySlug(slug: String): Task[Option[Company]]
   def getAll: Task[List[Company]]
   def delete(id: Long): Task[Company]
+  def allFilters: Task[CompanyFilter]
 }
 
 class CompanyServiceLive private (
@@ -39,6 +40,7 @@ class CompanyServiceLive private (
         _ <- reviewRepository.deleteByCompanyId(id)
       } yield company
     )
+  override def allFilters: Task[CompanyFilter] = companyRepository.uniqueAttributes
 }
 
 object CompanyServiceLive {
