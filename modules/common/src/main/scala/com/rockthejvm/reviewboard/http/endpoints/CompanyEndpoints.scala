@@ -8,7 +8,7 @@ import com.rockthejvm.reviewboard.domain.data.*
 
 trait CompanyEndpoints extends BaseEndpoint:
   val createEndpoint = baseSecuredEndpoint.post
-    .tag("companies")
+    .tag("Companies")
     .name("create")
     .in("companies")
     .description("Create a new company")
@@ -17,7 +17,7 @@ trait CompanyEndpoints extends BaseEndpoint:
     .out(jsonBody[Company])
 
   val getAllEndpoint = baseEndpoint.get
-    .tag("companies")
+    .tag("Companies")
     .name("getAll")
     .in("companies")
     .description("Get all companies")
@@ -25,7 +25,7 @@ trait CompanyEndpoints extends BaseEndpoint:
     .out(jsonBody[List[Company]])
 
   val findByIdEndpoint = baseEndpoint.get
-    .tag("companies")
+    .tag("Companies")
     .name("findById")
     .in("companies" / path[String]("id"))
     .description("Get a company by id or slug")
@@ -33,7 +33,7 @@ trait CompanyEndpoints extends BaseEndpoint:
     .out(jsonBody[Option[Company]])
 
   val deleteEndpoint = baseSecuredEndpoint.delete
-    .tag("companies")
+    .tag("Companies")
     .name("delete")
     .in("companies" / path[Long]("id"))
     .description("Delete a company by id")
@@ -41,12 +41,28 @@ trait CompanyEndpoints extends BaseEndpoint:
     .out(jsonBody[Company])
 
   val allFiltersEndpoint = baseEndpoint.get
-    .tag("companies")
+    .tag("Companies")
     .name("allFilters")
     .in("companies" / "filters")
     .description("Get all available filters for companies")
     .get
     .out(jsonBody[CompanyFilter])
 
+  val searchEndpoint =
+    baseEndpoint.tag("Companies")
+      .name("search")
+      .description("Get companies based on filters")
+      .in("companies" / "search")
+      .post
+      .in(jsonBody[CompanyFilter])
+      .out(jsonBody[List[Company]])
+
   val companyEndpoints =
-    List(createEndpoint, getAllEndpoint, findByIdEndpoint, deleteEndpoint, allFiltersEndpoint)
+    List(
+      createEndpoint,
+      getAllEndpoint,
+      searchEndpoint,
+      findByIdEndpoint,
+      deleteEndpoint,
+      allFiltersEndpoint
+    )

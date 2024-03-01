@@ -13,6 +13,7 @@ trait CompanyRepository extends WithTransaction {
   def getById(id: Long): Task[Option[Company]]
   def getBySlug(slug: String): Task[Option[Company]]
   def getAll: Task[List[Company]]
+  def search(companyFilter: CompanyFilter): Task[List[Company]]
   def uniqueAttributes: Task[CompanyFilter]
 
 }
@@ -55,6 +56,39 @@ class CompanyRepositoryLive private (quill: Quill.Postgres[SnakeCase])
   override def getAll: Task[List[Company]] =
     run(companies)
 
+  override def search(companyFilter: CompanyFilter): Task[List[Company]] =
+    if companyFilter.isEmpty then
+      getAll
+    else
+      run(
+        companies.filter(c =>
+          (if lift(companyFilter.locations.isEmpty) then true
+           else
+             liftQuery(companyFilter.locations).contains(c.location)
+          )
+          &&
+//          liftQuery(companyFilter.locations).contains(c.location) &&
+          (if lift(companyFilter.countries.isEmpty) then true
+           else
+             liftQuery(companyFilter.countries).contains(c.country)
+          ) &&
+//          liftQuery(companyFilter.countries).contains(c.country) &&
+          (if lift(companyFilter.industries.isEmpty) then true
+           else
+             liftQuery(companyFilter.industries).contains(c.industry)
+          ) &&
+//          liftQuery(companyFilter.industries).contains(c.industry) &&
+          (if lift(companyFilter.tags.isEmpty) then true
+           else
+             query[Company].filter(_.id == c.id)
+               .concatMap(_.tags)
+               .filter(tag => liftQuery(companyFilter.tags.toSet).contains(tag)).nonEmpty
+           // query[Company].filter(_.id == c.id)
+           //   .concatMap(_.tags)
+           //   .filter(tag => liftQuery(companyFilter.tags.toSet).contains(tag)).nonEmpty
+          )
+        )
+      )
   override def uniqueAttributes: Task[CompanyFilter] = for {
     locations  <- run(companies.map(_.location).distinct).map(_.flatten)
     countries  <- run(companies.map(_.country).distinct).map(_.flatten)

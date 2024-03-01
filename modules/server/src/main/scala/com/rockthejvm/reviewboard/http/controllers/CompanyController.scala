@@ -38,7 +38,11 @@ class CompanyController private (jwtService: JWTService, companyService: Company
 
   val allFilters: ServerEndpoint[Any, Task] =
     allFiltersEndpoint.serverLogic(_ => companyService.allFilters.either)
-  val routes: List[ServerEndpoint[Any, Task]] = List(create, getAll, allFilters, findById, delete)
+
+  val search: ServerEndpoint[Any, Task] =
+    searchEndpoint.serverLogic(filter => companyService.search(filter).either)
+  val routes: List[ServerEndpoint[Any, Task]] =
+    List(create, getAll, allFilters, search, findById, delete)
 }
 
 object CompanyController {

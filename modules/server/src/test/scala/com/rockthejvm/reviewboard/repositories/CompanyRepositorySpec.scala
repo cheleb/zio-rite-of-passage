@@ -7,10 +7,12 @@ import com.rockthejvm.reviewboard.domain.data.Company
 
 import com.rockthejvm.reviewboard.syntax.*
 import java.sql.SQLException
+import com.rockthejvm.reviewboard.domain.data.CompanyFilter
 
 object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec("sql/companies.sql") {
 
-  private val rockthejvm = Company(1, "rock-the-jvm", "Rock the JVM", "https://rockthejvm.com")
+  private val rockthejvm =
+    Company(1, "rock-the-jvm", "Rock the JVM", "https://rockthejvm.com", country = Some("Romania"))
 
   override def spec: Spec[TestEnvironment & Scope, Any] =
     suite("CompanyRepositorySpec")(
@@ -34,6 +36,17 @@ object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec("sql/com
 
         program.assert(
           _.isInstanceOf[SQLException]
+        )
+      },
+      test("Search a company by location") {
+        val program = for {
+          repository <- ZIO.service[CompanyRepository]
+          _          <- repository.create(rockthejvm)
+          company    <- repository.search(CompanyFilter(countries = List("Romania")))
+        } yield company
+
+        program.assert(
+          _.nonEmpty
         )
       }
     ).provide(

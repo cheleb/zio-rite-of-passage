@@ -17,6 +17,7 @@ trait CompanyService {
   def getAll: Task[List[Company]]
   def delete(id: Long): Task[Company]
   def allFilters: Task[CompanyFilter]
+  def search(companyFilter: CompanyFilter): Task[List[Company]]
 }
 
 class CompanyServiceLive private (
@@ -31,6 +32,9 @@ class CompanyServiceLive private (
     companyRepository.getBySlug(slug)
   override def getAll: Task[List[Company]] =
     companyRepository.getAll
+
+  override def search(companyFilter: CompanyFilter): Task[List[Company]] =
+    companyRepository.search(companyFilter)
 
   override def delete(id: Long): Task[Company] =
     companyRepository.tx(

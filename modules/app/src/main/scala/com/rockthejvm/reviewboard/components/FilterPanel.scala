@@ -10,14 +10,40 @@ import com.rockthejvm.reviewboard.core.ZJS.*
   */
 object FilterPanel {
 
+  val GROUP_LOCATIONS  = "Locations"
+  val GROUP_COUNTRIES  = "Countries"
+  val GROUP_INDUSTRIES = "Industries"
+  val GROUP_TAGS       = "Tags"
+  case class CheckValueEvent(groupName: String, value: String, checked: Boolean)
+
+  val checkEvents = EventBus[CheckValueEvent]()
+
   val possibleFilter = EventBus[CompanyFilter]()
 //  val possibleFilter = Var[CompanyFilter](CompanyFilter.empty)
+
+  val state: Signal[CompanyFilter] =
+    checkEvents.events.scanLeft(
+      Map.empty[String, Set[String]].withDefaultValue(Set.empty[String])
+    ) {
+      case (currentMap, CheckValueEvent(groupName, value, checked)) =>
+        println(groupName)
+        if checked then currentMap + (groupName -> (currentMap(groupName) + value))
+        else currentMap + (groupName            -> (currentMap(groupName) - value))
+    }.map(checkMap =>
+      CompanyFilter(
+        locations = checkMap(GROUP_LOCATIONS).toList,
+        countries = checkMap(GROUP_COUNTRIES).toList,
+        industries = checkMap(GROUP_INDUSTRIES).toList,
+        tags = checkMap(GROUP_TAGS).toList
+      )
+    )
 
   def apply() = div(
     onMountCallback(_ =>
 //      useBackend(_.company.allFiltersEndpoint(())).map(possibleFilter.set).runJs
       useBackend(_.company.allFiltersEndpoint(())).emitTo(possibleFilter)
     ),
+    child.text <-- state.map(_.toString()),
     cls    := "accordion accordion-flush",
     idAttr := "accordionFlushExample",
     div(
@@ -49,10 +75,10 @@ object FilterPanel {
         htmlAttr("data-bs-parent", StringAsIsCodec)  := "#accordionFlushExample",
         div(
           cls := "accordion-body p-0",
-          renderFilterOptions("Locations", _.locations),
-          renderFilterOptions("Countries", _.countries),
-          renderFilterOptions("Industries", _.industries),
-          renderFilterOptions("Tags", _.tags),
+          renderFilterOptions(GROUP_LOCATIONS, _.locations),
+          renderFilterOptions(GROUP_COUNTRIES, _.countries),
+          renderFilterOptions(GROUP_INDUSTRIES, _.industries),
+          renderFilterOptions(GROUP_TAGS, _.tags),
           div(
             cls := "jvm-accordion-search-btn",
             button(
@@ -110,7 +136,11 @@ object FilterPanel {
       input(
         cls    := "form-check-input",
         `type` := "checkbox",
-        idAttr := s"filter-$groupName-$value"
+        idAttr := s"filter-$groupName-$value",
+        onChange.mapToChecked.map(checked =>
+          CheckValueEvent(groupName, value, checked)
+        ) --> checkEvents
+        // selected <-- state.changes.map(_.countries.contains(value))
       )
     )
 }

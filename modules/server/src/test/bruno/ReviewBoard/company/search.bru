@@ -1,0 +1,20 @@
+meta {
+  name: search
+  type: http
+  seq: 5
+}
+
+post {
+  url: http://localhost:8080/companies/search
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "countries" : ["Romania"],
+    "locations": [],
+    "industries": [],
+    "tags": []
+  }
+}

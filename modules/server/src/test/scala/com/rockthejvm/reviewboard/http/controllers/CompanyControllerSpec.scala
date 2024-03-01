@@ -57,6 +57,8 @@ object CompanyControllerSpec extends ZIOSpecDefault {
 
     override def allFilters: Task[CompanyFilter] = ???
 
+    override def search(companyFilter: CompanyFilter): Task[List[Company]] = ???
+
   }
 
   private val jwtServiceStub = new JWTService {
