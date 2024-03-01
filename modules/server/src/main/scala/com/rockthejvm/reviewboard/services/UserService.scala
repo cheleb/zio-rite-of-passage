@@ -104,10 +104,7 @@ class UserServiceLive private (
 }
 
 object UserServiceLive {
-  val layer: URLayer[
-    JWTService & EmailService & UserRepository & RecoveryTokenRepository,
-    UserServiceLive
-  ] =
+  val layer =
     ZLayer.fromFunction(UserServiceLive(_, _, _, _))
 
   object Hasher {

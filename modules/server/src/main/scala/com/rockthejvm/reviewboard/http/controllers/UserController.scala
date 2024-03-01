@@ -70,7 +70,7 @@ class UserController(userService: UserService, jwtService: JWTService)
 }
 
 object UserController {
-  def makeZIO: ZIO[UserService with JWTService, Nothing, UserController] =
+  def makeZIO: ZIO[UserService & JWTService, Nothing, UserController] =
     for
       userService <- ZIO.service[UserService]
       jwtService  <- ZIO.service[JWTService]

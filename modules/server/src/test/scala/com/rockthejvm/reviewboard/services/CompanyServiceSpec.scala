@@ -9,6 +9,7 @@ import scala.collection.mutable
 import com.rockthejvm.reviewboard.domain.data.Company
 import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
 import com.rockthejvm.reviewboard.repositories.CompanyRepository
+import com.rockthejvm.reviewboard.domain.data.CompanyFilter
 
 object CompanyServiceSpec extends ZIOSpecDefault {
 
@@ -46,6 +47,8 @@ object CompanyServiceSpec extends ZIOSpecDefault {
         ZIO.succeed(db.values.find(_.slug == slug))
       override def getAll: Task[List[Company]] =
         ZIO.succeed(db.values.toList)
+      override def uniqueAttributes: Task[CompanyFilter] = ???
+
     }
   )
 
