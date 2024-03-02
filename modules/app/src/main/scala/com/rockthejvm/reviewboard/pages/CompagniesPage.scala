@@ -21,16 +21,18 @@ import com.rockthejvm.reviewboard.components.FilterPanel
 
 object CompagniesPage {
 
-  val companiesBus = EventBus[List[Company]]()
+  val filterPanel = new FilterPanel
 
-  def performBackendCall() = {
+  val companyEvents: EventStream[List[Company]] =
     useBackend(_.company.getAllEndpoint(()))
-      .emitTo(companiesBus)
-
-  }
+      .toEventStream.mergeWith(
+        filterPanel.triggerFilters.flatMap(filter =>
+          useBackend(_.company.searchEndpoint(filter)).toEventStream
+        )
+      )
 
   def apply() = sectionTag(
-    onMountCallback(_ => performBackendCall()),
+    // onMountCallback(_ => performBackendCall()),
     cls := "section-1",
     div(
       cls := "container company-list-hero",
@@ -45,11 +47,11 @@ object CompagniesPage {
         cls := "row jvm-recent-companies-body",
         div(
           cls := "col-lg-4",
-          FilterPanel()
+          filterPanel()
         ),
         div(
           cls := "col-lg-8",
-          children <-- companiesBus.events.map(_.map(renderCompany))
+          children <-- companyEvents.map(_.map(renderCompany))
         )
       )
     )

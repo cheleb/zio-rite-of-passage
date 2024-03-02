@@ -28,6 +28,10 @@ object ZJS {
       Unsafe.unsafe { implicit unsafe =>
         Runtime.default.unsafe.runToFuture(zio.provide(BackendClientLive.configuredLayer))
       }
+    def toEventStream: EventStream[A] =
+      val eventBus = EventBus[A]()
+      emitTo(eventBus)
+      eventBus.events
   extension [I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])
     def apply(payload: I): RIO[BackendClient, O] =
       ZIO.service[BackendClient].flatMap(_.endpointRequestZIO(endpoint)(payload))

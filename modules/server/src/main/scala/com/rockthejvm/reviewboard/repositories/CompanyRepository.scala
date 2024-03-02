@@ -56,37 +56,29 @@ class CompanyRepositoryLive private (quill: Quill.Postgres[SnakeCase])
   override def getAll: Task[List[Company]] =
     run(companies)
 
+  private inline def in(set: List[String], str: Option[String]) =
+    if lift(set.isEmpty) then true
+    else liftQuery(set).contains(str)
+
   override def search(companyFilter: CompanyFilter): Task[List[Company]] =
     if companyFilter.isEmpty then
       getAll
     else
       run(
         companies.filter(c =>
-          (if lift(companyFilter.locations.isEmpty) then true
-           else
-             liftQuery(companyFilter.locations).contains(c.location)
-          )
-          &&
+          in(companyFilter.locations, c.location)
+            && in(companyFilter.countries, c.country)
+            && in(companyFilter.industries, c.industry)
+            && (if lift(companyFilter.tags.isEmpty) then true
+                else
+                  sql"${lift(companyFilter.tags)} && ${c.tags}".asCondition
 //          liftQuery(companyFilter.locations).contains(c.location) &&
-          (if lift(companyFilter.countries.isEmpty) then true
-           else
-             liftQuery(companyFilter.countries).contains(c.country)
-          ) &&
 //          liftQuery(companyFilter.countries).contains(c.country) &&
-          (if lift(companyFilter.industries.isEmpty) then true
-           else
-             liftQuery(companyFilter.industries).contains(c.industry)
-          ) &&
 //          liftQuery(companyFilter.industries).contains(c.industry) &&
-          (if lift(companyFilter.tags.isEmpty) then true
-           else
-             query[Company].filter(_.id == c.id)
-               .concatMap(_.tags)
-               .filter(tag => liftQuery(companyFilter.tags.toSet).contains(tag)).nonEmpty
-           // query[Company].filter(_.id == c.id)
-           //   .concatMap(_.tags)
-           //   .filter(tag => liftQuery(companyFilter.tags.toSet).contains(tag)).nonEmpty
-          )
+                // query[Company].filter(_.id == c.id)
+                //   .concatMap(_.tags)
+                //   .filter(tag => liftQuery(companyFilter.tags.toSet).contains(tag)).nonEmpty
+            )
         )
       )
   override def uniqueAttributes: Task[CompanyFilter] = for {

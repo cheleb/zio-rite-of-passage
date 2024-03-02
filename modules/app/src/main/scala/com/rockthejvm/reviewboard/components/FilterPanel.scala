@@ -8,20 +8,20 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 
 /** A filter panel for the companies page.
   */
-object FilterPanel {
+class FilterPanel {
 
-  val GROUP_LOCATIONS  = "Locations"
-  val GROUP_COUNTRIES  = "Countries"
-  val GROUP_INDUSTRIES = "Industries"
-  val GROUP_TAGS       = "Tags"
   case class CheckValueEvent(groupName: String, value: String, checked: Boolean)
 
-  val checkEvents = EventBus[CheckValueEvent]()
+  private val GROUP_LOCATIONS  = "Locations"
+  private val GROUP_COUNTRIES  = "Countries"
+  private val GROUP_INDUSTRIES = "Industries"
+  private val GROUP_TAGS       = "Tags"
 
-  val possibleFilter = EventBus[CompanyFilter]()
+  private val checkEvents    = EventBus[CheckValueEvent]()
+  private val appliedFilters = Var(CompanyFilter.empty)
+  private val possibleFilter = EventBus[CompanyFilter]()
 //  val possibleFilter = Var[CompanyFilter](CompanyFilter.empty)
-
-  val state: Signal[CompanyFilter] =
+  private val state: Signal[CompanyFilter] =
     checkEvents.events.scanLeft(
       Map.empty[String, Set[String]].withDefaultValue(Set.empty[String])
     ) {
@@ -37,13 +37,18 @@ object FilterPanel {
         tags = checkMap(GROUP_TAGS).toList
       )
     )
+  private val applyFilterClicks = EventBus[Unit]()
+  val triggerFilters: EventStream[CompanyFilter] =
+    applyFilterClicks.events.withCurrentValueOf(state)
+
+  val applyFilterStatus =
+    state.changes.map(_ == appliedFilters.now()).toSignal(true)
 
   def apply() = div(
     onMountCallback(_ =>
 //      useBackend(_.company.allFiltersEndpoint(())).map(possibleFilter.set).runJs
       useBackend(_.company.allFiltersEndpoint(())).emitTo(possibleFilter)
     ),
-    child.text <-- state.map(_.toString()),
     cls    := "accordion accordion-flush",
     idAttr := "accordionFlushExample",
     div(
@@ -84,7 +89,9 @@ object FilterPanel {
             button(
               cls    := "btn btn-primary",
               `type` := "button",
-              "Apply Filters"
+              "Apply Filters",
+              disabled <-- applyFilterStatus,
+              onClick.mapToUnit --> applyFilterClicks
             )
           )
         )

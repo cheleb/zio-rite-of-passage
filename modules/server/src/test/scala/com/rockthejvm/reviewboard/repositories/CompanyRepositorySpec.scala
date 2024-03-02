@@ -12,7 +12,14 @@ import com.rockthejvm.reviewboard.domain.data.CompanyFilter
 object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec("sql/companies.sql") {
 
   private val rockthejvm =
-    Company(1, "rock-the-jvm", "Rock the JVM", "https://rockthejvm.com", country = Some("Romania"))
+    Company(
+      1,
+      "rock-the-jvm",
+      "Rock the JVM",
+      "https://rockthejvm.com",
+      country = Some("Romania"),
+      tags = List("Scala")
+    )
 
   override def spec: Spec[TestEnvironment & Scope, Any] =
     suite("CompanyRepositorySpec")(
@@ -42,7 +49,8 @@ object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec("sql/com
         val program = for {
           repository <- ZIO.service[CompanyRepository]
           _          <- repository.create(rockthejvm)
-          company    <- repository.search(CompanyFilter(countries = List("Romania")))
+          company <-
+            repository.search(CompanyFilter(countries = List("Romania"), tags = List("Scala")))
         } yield company
 
         program.assert(
