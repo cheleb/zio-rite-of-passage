@@ -23,32 +23,32 @@ val commonDependencies = Seq(
 )
 
 val serverDependencies = commonDependencies ++ Seq(
-  "com.softwaremill.sttp.tapir" %% "tapir-zio" % tapirVersion, // Brings in zio, zio-streams
-  "com.softwaremill.sttp.tapir"   %% "tapir-zio-http-server"   % tapirVersion, // Brings in zhttp
-  "com.softwaremill.sttp.tapir"   %% "tapir-swagger-ui-bundle" % tapirVersion,
-  "com.softwaremill.sttp.tapir"   %% "tapir-sttp-stub-server"  % tapirVersion % "test",
-  "com.softwaremill.sttp.tapir"   %% "tapir-sttp-client"       % tapirVersion,
-  "com.softwaremill.sttp.tapir"   %% "tapir-json-zio"          % tapirVersion,
-  "com.softwaremill.sttp.client3" %% "zio"                     % sttpVersion,
-  "dev.zio"                       %% "zio-logging"             % zioLoggingVersion,
-  "dev.zio"                       %% "zio-logging-slf4j"       % zioLoggingVersion,
-  "ch.qos.logback"                 % "logback-classic"         % "1.4.4",
-  "dev.zio"                       %% "zio-test"                % zioVersion,
-  "dev.zio"                       %% "zio-test-junit"          % zioVersion % "test",
-  "dev.zio"                       %% "zio-test-sbt"            % zioVersion % "test",
-  "dev.zio"                       %% "zio-test-magnolia"       % zioVersion % "test",
-  "dev.zio"                       %% "zio-mock"                % "1.0.0-RC9" % "test",
-  "dev.zio"                       %% "zio-config"              % zioConfigVersion,
-  "dev.zio"                       %% "zio-config-magnolia"     % zioConfigVersion,
-  "dev.zio"                       %% "zio-config-typesafe"     % zioConfigVersion,
-  "io.getquill"                   %% "quill-jdbc-zio"          % "4.7.3",
-  "org.postgresql"                 % "postgresql"              % "42.5.0",
-  "org.flywaydb"                   % "flyway-core"             % "9.7.0",
-  "io.github.scottweaver" %% "zio-2-0-testcontainers-postgresql" % "0.9.0",
-  "dev.zio"               %% "zio-prelude"                       % "1.0.0-RC16",
-  "com.auth0"              % "java-jwt"                          % "4.2.1",
-  "com.sun.mail"           % "javax.mail"                        % javaMailVersion,
-  "com.stripe"             % "stripe-java"                       % stripeVersion
+  "com.softwaremill.sttp.tapir"   %% "tapir-zio"                         % tapirVersion, // Brings in zio, zio-streams
+  "com.softwaremill.sttp.tapir"   %% "tapir-zio-http-server"             % tapirVersion, // Brings in zhttp
+  "com.softwaremill.sttp.tapir"   %% "tapir-swagger-ui-bundle"           % tapirVersion,
+  "com.softwaremill.sttp.tapir"   %% "tapir-sttp-stub-server"            % tapirVersion % "test",
+  "com.softwaremill.sttp.tapir"   %% "tapir-sttp-client"                 % tapirVersion,
+  "com.softwaremill.sttp.tapir"   %% "tapir-json-zio"                    % tapirVersion,
+  "com.softwaremill.sttp.client3" %% "zio"                               % sttpVersion,
+  "dev.zio"                       %% "zio-logging"                       % zioLoggingVersion,
+  "dev.zio"                       %% "zio-logging-slf4j"                 % zioLoggingVersion,
+  "ch.qos.logback"                 % "logback-classic"                   % "1.4.4",
+  "dev.zio"                       %% "zio-test"                          % zioVersion,
+  "dev.zio"                       %% "zio-test-junit"                    % zioVersion % "test",
+  "dev.zio"                       %% "zio-test-sbt"                      % zioVersion % "test",
+  "dev.zio"                       %% "zio-test-magnolia"                 % zioVersion % "test",
+  "dev.zio"                       %% "zio-mock"                          % "1.0.0-RC9" % "test",
+  "dev.zio"                       %% "zio-config"                        % zioConfigVersion,
+  "dev.zio"                       %% "zio-config-magnolia"               % zioConfigVersion,
+  "dev.zio"                       %% "zio-config-typesafe"               % zioConfigVersion,
+  "io.getquill"                   %% "quill-jdbc-zio"                    % "4.7.3",
+  "org.postgresql"                 % "postgresql"                        % "42.5.0",
+  "org.flywaydb"                   % "flyway-core"                       % "9.7.0",
+  "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.9.0",
+  "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC16",
+  "com.auth0"                      % "java-jwt"                          % "4.2.1",
+  "com.sun.mail"                   % "javax.mail"                        % javaMailVersion,
+  "com.stripe"                     % "stripe-java"                       % stripeVersion
 )
 
 lazy val foundations = (project in file("modules/foundations"))
@@ -81,6 +81,7 @@ lazy val app = (project in file("modules/app"))
       "com.softwaremill.sttp.tapir"   %%% "tapir-json-zio"    % tapirVersion,
       "com.softwaremill.sttp.client3" %%% "zio"               % sttpVersion,
       "dev.zio"                       %%% "zio-json"          % "0.4.2",
+      "dev.zio"                       %%% "zio-prelude"       % "1.0.0-RC23",
       "io.frontroute"                 %%% "frontroute"        % "0.18.1" // Brings in Laminar 16
     ),
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
