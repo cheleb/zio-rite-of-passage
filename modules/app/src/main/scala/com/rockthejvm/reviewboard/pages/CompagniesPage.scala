@@ -27,12 +27,12 @@ object CompagniesPage {
     useBackend(_.company.getAllEndpoint(()))
       .toEventStream.mergeWith(
         filterPanel.triggerFilters.flatMap(filter =>
+          filterPanel.updateAppliedFilters(filter)
           useBackend(_.company.searchEndpoint(filter)).toEventStream
         )
       )
 
   def apply() = sectionTag(
-    // onMountCallback(_ => performBackendCall()),
     cls := "section-1",
     div(
       cls := "container company-list-hero",

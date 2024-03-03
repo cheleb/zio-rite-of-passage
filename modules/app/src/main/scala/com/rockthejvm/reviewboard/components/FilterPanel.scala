@@ -18,7 +18,6 @@ class FilterPanel {
   private val GROUP_TAGS       = "Tags"
 
   private val checkEvents    = EventBus[CheckValueEvent]()
-  private val appliedFilters = Var(CompanyFilter.empty)
   private val possibleFilter = EventBus[CompanyFilter]()
 //  val possibleFilter = Var[CompanyFilter](CompanyFilter.empty)
   private val state: Signal[CompanyFilter] =
@@ -37,7 +36,13 @@ class FilterPanel {
         tags = checkMap(GROUP_TAGS).toList
       )
     )
+
   private val applyFilterClicks = EventBus[Unit]()
+
+  private val appliedFilters = Var(CompanyFilter.empty)
+
+  def updateAppliedFilters(filter: CompanyFilter) = appliedFilters.set(filter)
+
   val triggerFilters: EventStream[CompanyFilter] =
     applyFilterClicks.events.withCurrentValueOf(state)
 
@@ -146,8 +151,8 @@ class FilterPanel {
         idAttr := s"filter-$groupName-$value",
         onChange.mapToChecked.map(checked =>
           CheckValueEvent(groupName, value, checked)
-        ) --> checkEvents
-        // selected <-- state.changes.map(_.countries.contains(value))
+        ) --> checkEvents,
+        checked <-- state.map(_.groupNameChecked(groupName, value))
       )
     )
 }

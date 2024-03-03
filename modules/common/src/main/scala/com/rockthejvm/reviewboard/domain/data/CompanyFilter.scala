@@ -9,6 +9,13 @@ final case class CompanyFilter(
     tags: List[String] = Nil
 ) derives JsonCodec {
   val isEmpty = locations.isEmpty && countries.isEmpty && industries.isEmpty && tags.isEmpty
+  def groupNameChecked(groupName: String, value: String): Boolean = groupName match {
+    case "Locations"  => locations.contains(value)
+    case "Countries"  => countries.contains(value)
+    case "Industries" => industries.contains(value)
+    case "Tags"       => tags.contains(value)
+    case _            => false
+  }
 }
 
 object CompanyFilter {
