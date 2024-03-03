@@ -4,13 +4,22 @@ import com.raquo.laminar.api.L.{*, given}
 import org.scalajs.dom
 import frontroute.*
 import com.rockthejvm.reviewboard.common.Constants
+import zio.*
 import zio.prelude.*
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
+import com.rockthejvm.reviewboard.core.ZJS.*
+import com.rockthejvm.reviewboard.http.requests.LoginRequest
+import sttp.client3.*
 
 object LoginPage {
 
-  case class State(email: String = "", password: String = "", showStatus: Boolean = false) {
+  case class State(
+      email: String = "",
+      password: String = "",
+      showStatus: Boolean = false,
+      upstreamErrors: Option[String] = None
+  ) {
 
     private def emailValidation = Validation.fromEither(
       if email.matches(Constants.emailRegex) then Right(email)
@@ -22,7 +31,8 @@ object LoginPage {
       else Left("Password must be provided")
     )
 
-    private lazy val validate = Validation.validate(emailValidation, passwordValidation)
+    private lazy val validate =
+      Validation.validate(emailValidation, passwordValidation, Validation.fromEither(upstreamErrors.toLeft(())))
 
     def validationErrors: List[String] = validate match
       case Failure(_, errors) =>
@@ -40,7 +50,16 @@ object LoginPage {
       println("Errors")
       stateVar.update(_.copy(showStatus = true))
     else
-      println("Submitting")
+      useBackend(_.user.loginEndpoint(LoginRequest(state.email, state.password)))
+        .map { userToken =>
+          stateVar.set(State())
+          BrowserNavigation.replaceState("/")
+        }
+        .tapError(e =>
+          println(e.getMessage)
+          ZIO.succeed(stateVar.update(_.copy(showStatus = true, upstreamErrors = Option(e.getMessage))))
+        )
+        .runJs
   }
 
   def renderError(msg: String) =
@@ -87,9 +106,16 @@ object LoginPage {
             "text",
             true,
             "Your email",
-            (s, v) => s.copy(email = v, showStatus = false)
+            (s, v) => s.copy(email = v, showStatus = false, upstreamErrors = None)
           ),
-          renderInput("Password", "password-input", "password", true, "Your password", (s, v) => s.copy(password = v)),
+          renderInput(
+            "Password",
+            "password-input",
+            "password",
+            true,
+            "Your password",
+            (s, v) => s.copy(password = v, showStatus = false, upstreamErrors = None)
+          ),
           // an input of type password
           button(
             `type` := "button",

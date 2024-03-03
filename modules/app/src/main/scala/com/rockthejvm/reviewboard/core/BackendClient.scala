@@ -10,21 +10,24 @@ import sttp.model.Uri
 import zio.*
 import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import com.rockthejvm.reviewboard.config.*
+import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
+/** A client to the backend, exposing the endpoints as methods.
+  */
 trait BackendClient {
   val company = new CompanyEndpoints {}
+  val user    = new UserEndpoints {}
   def endpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])(
       payload: I
   ): ZIO[Any, Throwable, O]
 }
-class BackendClientLive(
+private class BackendClientLive(
     backend: SttpBackend[Task, ZioStreams & WebSockets],
     interpreter: SttpClientInterpreter,
     config: BackendClientConfig
 ) extends BackendClient {
 
-  private def endpointRequest[I, E, O](endpoint: Endpoint[Unit, I, E, O, Any])
-      : I => Request[Either[E, O], Any] =
+  private def endpointRequest[I, E, O](endpoint: Endpoint[Unit, I, E, O, Any]): I => Request[Either[E, O], Any] =
     interpreter.toRequestThrowDecodeFailures(endpoint, config.baseUrl)
 
   def endpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])(
