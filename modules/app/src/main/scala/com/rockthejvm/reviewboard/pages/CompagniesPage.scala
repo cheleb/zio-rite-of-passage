@@ -23,16 +23,18 @@ object CompagniesPage {
 
   val filterPanel = new FilterPanel
 
+  val firstBatch = EventBus[List[Company]]()
+
   val companyEvents: EventStream[List[Company]] =
-    useBackend(_.company.getAllEndpoint(()))
-      .toEventStream.mergeWith(
-        filterPanel.triggerFilters.flatMap(filter =>
-          filterPanel.updateAppliedFilters(filter)
-          useBackend(_.company.searchEndpoint(filter)).toEventStream
-        )
+    firstBatch.events.mergeWith(
+      filterPanel.triggerFilters.flatMap(filter =>
+        filterPanel.updateAppliedFilters(filter)
+        useBackend(_.company.searchEndpoint(filter)).toEventStream
       )
+    )
 
   def apply() = sectionTag(
+    onMountCallback(_ => useBackend(_.company.getAllEndpoint(())).emitTo(firstBatch)),
     cls := "section-1",
     div(
       cls := "container company-list-hero",

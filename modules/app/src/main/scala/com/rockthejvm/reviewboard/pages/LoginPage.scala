@@ -11,6 +11,7 @@ import zio.prelude.ZValidation.Success
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.LoginRequest
 import sttp.client3.*
+import com.rockthejvm.reviewboard.core.Session
 
 object LoginPage {
 
@@ -52,6 +53,7 @@ object LoginPage {
     else
       useBackend(_.user.loginEndpoint(LoginRequest(state.email, state.password)))
         .map { userToken =>
+          Session.setUserState(userToken)
           stateVar.set(State())
           BrowserNavigation.replaceState("/")
         }

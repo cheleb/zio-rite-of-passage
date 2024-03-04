@@ -8,6 +8,8 @@ import frontroute.LinkHandler
 import scalajs.js
 import scala.scalajs.js.annotation.JSImport
 import com.rockthejvm.reviewboard.common.Constants
+import com.rockthejvm.reviewboard.core.Session
+import com.rockthejvm.reviewboard.domain.data.UserToken
 object Header:
   def apply() = div(
     cls := "container-fluid p-0",
@@ -37,7 +39,7 @@ object Header:
               ul(
                 cls := "navbar-nav ms-auto menu align-center expanded text-center SMN_effect-3",
                 // TODO children
-                renderNavLinks()
+                children <-- Session.userState.signal.map(renderNavLinks)
               )
             )
           )
@@ -55,11 +57,22 @@ object Header:
       alt := "Rock the JVM logo"
     )
   )
-  def renderNavLinks() = List(
-    renderNavLink("Companies", "/companies"),
-    renderNavLink("Login", "/login"),
-    renderNavLink("Sign Up", "/signup")
-  )
+  def renderNavLinks(maybeUserState: Option[UserToken]) = {
+    val constantLinks = List(
+      renderNavLink("Companies", "/companies")
+    )
+    val unauthedLinks = List(
+      renderNavLink("Login", "/login"),
+      renderNavLink("Sign Up", "/signup")
+    )
+    val authedLinks = List(
+      renderNavLink("Profile", "/profile"),
+      renderNavLink("Logout", "/logout")
+    )
+
+    constantLinks ++ (if (maybeUserState.isDefined) authedLinks else unauthedLinks)
+
+  }
   //
   def renderNavLink(text: String, location: String) = li(
     cls := "nav-item",
