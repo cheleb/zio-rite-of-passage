@@ -15,32 +15,32 @@ class CompanyController private (jwtService: JWTService, companyService: Company
 
   val create: ServerEndpoint[Any, Task] = createEndpoint
     .withSecurity
-    .serverLogic(userId => req => companyService.create(req).either)
+    .zioServerLogic(userId => req => companyService.create(req))
 
   val getAll: ServerEndpoint[Any, Task] =
-    getAllEndpoint.serverLogic(_ => companyService.getAll.either)
+    getAllEndpoint.zioServerLogic(_ => companyService.getAll)
 
-  val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.serverLogic { id =>
+  val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.zioServerLogic { id =>
     ZIO
       .attempt(id.toLong)
       .flatMap(companyService.getById)
       .catchSome { case _: NumberFormatException =>
         companyService.getBySlug(id)
       }
-      .either
+
   }
 
   val delete: ServerEndpoint[Any, Task] = deleteEndpoint
     .withSecurity
-    .serverLogic { userId => id =>
-      companyService.delete(id).either
+    .zioServerLogic { userId => id =>
+      companyService.delete(id)
     }
 
   val allFilters: ServerEndpoint[Any, Task] =
-    allFiltersEndpoint.serverLogic(_ => companyService.allFilters.either)
+    allFiltersEndpoint.zioServerLogic(_ => companyService.allFilters)
 
   val search: ServerEndpoint[Any, Task] =
-    searchEndpoint.serverLogic(filter => companyService.search(filter).either)
+    searchEndpoint.zioServerLogic(filter => companyService.search(filter))
   val routes: List[ServerEndpoint[Any, Task]] =
     List(create, getAll, allFilters, search, findById, delete)
 }

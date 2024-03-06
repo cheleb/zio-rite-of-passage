@@ -7,6 +7,8 @@ import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoint
 import com.rockthejvm.reviewboard.services.ReviewService
 import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.services.JWTService
+import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
+import sttp.tapir.server.PartialServerEndpoint
 
 class ReviewController private (jwtService: JWTService, reviewService: ReviewService)
     extends SecuredBaseController(jwtService)
@@ -15,20 +17,20 @@ class ReviewController private (jwtService: JWTService, reviewService: ReviewSer
   val create: ServerEndpoint[Any, Task] =
     createEndpoint
       .withSecurity
-      .serverLogic { userId => request =>
-        reviewService.create(request, userId.id).either // FIXME get the user id from the request
+      .zioServerLogic { userId => request =>
+        reviewService.create(request, userId.id)
       }
 
   val getById: ServerEndpoint[Any, Task] =
     getByIdEndpoint
-      .serverLogic { id =>
-        reviewService.getById(id).either
+      .zioServerLogic { id =>
+        reviewService.getById(id)
       }
 
   val getByCompanyId: ServerEndpoint[Any, Task] =
     getByCompanyIdEndpoint
-      .serverLogic { companyId =>
-        reviewService.getByCompanyId(companyId).either
+      .zioServerLogic { companyId =>
+        reviewService.getByCompanyId(companyId)
       }
 
   override val routes: List[ServerEndpoint[Any, Task]] = List(create, getById, getByCompanyId)

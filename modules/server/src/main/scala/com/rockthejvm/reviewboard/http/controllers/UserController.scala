@@ -15,41 +15,37 @@ import com.rockthejvm.reviewboard.domain.data.UserID
 import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
 
 class UserController(userService: UserService, jwtService: JWTService)
-    extends BaseController
+    extends SecuredBaseController(jwtService)
     with UserEndpoints {
 
-  val create: ServerEndpoint[Any, Task] = createUserEndpoint.serverLogic(request =>
+  val create: ServerEndpoint[Any, Task] = createUserEndpoint.zioServerLogic(request =>
     userService
       .registerUser(request.email, request.password)
       .map(user => UserResponse(user.email))
-      .either
   )
 
-  val login: ServerEndpoint[Any, Task] = loginEndpoint.serverLogic(request =>
+  val login: ServerEndpoint[Any, Task] = loginEndpoint.zioServerLogic(request =>
     userService
       .generateToken(request.email, request.password)
       .someOrFail(UnauthorizedException)
-      .either
   )
 
   val updatePassword: ServerEndpoint[Any, Task] = updatePasswordEndpoint
-    .serverSecurityLogic[UserID, Task](token => jwtService.verifyToken(token).either)
-    .serverLogic(userId =>
+    .withSecurity
+    .zioServerLogic(userId =>
       request =>
         userService
           .updatePassword(request.email, request.oldPassword, request.newPassword)
           .map(user => UserResponse(user.email))
-          .either
     )
 
   val delete: ServerEndpoint[Any, Task] = deleteEndpoint
-    .serverSecurityLogic[UserID, Task](token => jwtService.verifyToken(token).either)
-    .serverLogic(userId =>
+    .withSecurity
+    .zioServerLogic(userId =>
       request =>
         userService
           .deleteUser(request.email, request.password)
           .map(user => UserResponse(user.email))
-          .either
     )
 
   val forgotPassword: ServerEndpoint[Any, Task] =
@@ -57,12 +53,11 @@ class UserController(userService: UserService, jwtService: JWTService)
       userService.sendPasswordRecoveryEmain(req.email).either
     )
 
-  val recoverPassword: ServerEndpoint[Any, Task] = recoverPasswordEndpoint.serverLogic(req =>
+  val recoverPassword: ServerEndpoint[Any, Task] = recoverPasswordEndpoint.zioServerLogic(req =>
     userService
       .recoverPasswordFromToken(req.email, req.token, req.newPassword)
       .filterOrFail(identity)(UnauthorizedException)
       .unit
-      .either
   )
   override val routes: List[ServerEndpoint[Any, Task]] =
     List(create, login, updatePassword, delete, forgotPassword, recoverPassword)

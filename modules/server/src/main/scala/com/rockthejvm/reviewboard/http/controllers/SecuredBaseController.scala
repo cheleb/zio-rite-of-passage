@@ -19,4 +19,7 @@ trait SecuredBaseController(jwtService: JWTService) extends BaseController {
         jwtService.verifyToken(userToken).either
       )
 
+  extension [I, E, O](endpoint: PartialServerEndpoint[String, UserID, I, Throwable, O, Any, Task])
+    def zioServerLogic(logic: UserID => I => Task[O]): ServerEndpoint[Any, Task] =
+      endpoint.serverLogic(userId => i => logic(userId)(i).either)
 }
