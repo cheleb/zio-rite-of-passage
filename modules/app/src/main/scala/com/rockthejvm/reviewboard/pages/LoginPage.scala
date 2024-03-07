@@ -66,7 +66,7 @@ object LoginPage extends FormPage[LoginState]("Log In") {
         .runJs
   }
 
-  override def renderChildren() =
+  def renderChildren() =
     List(
       renderInput(
         "Email",

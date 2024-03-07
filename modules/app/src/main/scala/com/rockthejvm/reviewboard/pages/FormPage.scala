@@ -36,7 +36,7 @@ abstract class FormPage[S <: FormState](title: String) {
 
   val stateVar: Var[S]
 
-  def renderChildren(): List[ReactiveHtmlElement[dom.html.Element]] = ???
+  def renderChildren(): List[ReactiveHtmlElement[dom.html.Element]]
 
   final def apply() = div(
     cls := "row",
