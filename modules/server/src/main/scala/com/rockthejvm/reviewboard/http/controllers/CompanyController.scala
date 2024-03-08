@@ -2,7 +2,7 @@ package com.rockthejvm.reviewboard.http.controllers
 
 import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import zio.*
-import sttp.tapir.*
+import sttp.tapir.ztapir.*
 import scala.collection.mutable
 import com.rockthejvm.reviewboard.domain.data.*
 import sttp.tapir.server.ServerEndpoint
@@ -14,13 +14,12 @@ class CompanyController private (jwtService: JWTService, companyService: Company
   // implement your company endpoint logic here
 
   val create: ServerEndpoint[Any, Task] = createEndpoint
-    .withSecurity
-    .zioServerLogic(userId => req => companyService.create(req))
+    .securedServerLogic(userId => req => companyService.create(req))
 
   val getAll: ServerEndpoint[Any, Task] =
-    getAllEndpoint.zioServerLogic(_ => companyService.getAll)
+    getAllEndpoint.zServerLogic(_ => companyService.getAll)
 
-  val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.zioServerLogic { id =>
+  val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.zServerLogic { id =>
     ZIO
       .attempt(id.toLong)
       .flatMap(companyService.getById)
@@ -31,16 +30,15 @@ class CompanyController private (jwtService: JWTService, companyService: Company
   }
 
   val delete: ServerEndpoint[Any, Task] = deleteEndpoint
-    .withSecurity
-    .zioServerLogic { userId => id =>
+    .securedServerLogic { userId => id =>
       companyService.delete(id)
     }
 
   val allFilters: ServerEndpoint[Any, Task] =
-    allFiltersEndpoint.zioServerLogic(_ => companyService.allFilters)
+    allFiltersEndpoint.zServerLogic(_ => companyService.allFilters)
 
   val search: ServerEndpoint[Any, Task] =
-    searchEndpoint.zioServerLogic(filter => companyService.search(filter))
+    searchEndpoint.zServerLogic(filter => companyService.search(filter))
   val routes: List[ServerEndpoint[Any, Task]] =
     List(create, getAll, allFilters, search, findById, delete)
 }

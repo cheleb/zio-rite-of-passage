@@ -1,6 +1,7 @@
 package com.rockthejvm.reviewboard.http.controllers
 
 import sttp.tapir.server.ServerEndpoint
+import sttp.tapir.ztapir.*
 
 import zio.*
 import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoint
@@ -16,20 +17,19 @@ class ReviewController private (jwtService: JWTService, reviewService: ReviewSer
 
   val create: ServerEndpoint[Any, Task] =
     createEndpoint
-      .withSecurity
-      .zioServerLogic { userId => request =>
+      .securedServerLogic { userId => request =>
         reviewService.create(request, userId.id)
       }
 
   val getById: ServerEndpoint[Any, Task] =
     getByIdEndpoint
-      .zioServerLogic { id =>
+      .zServerLogic { id =>
         reviewService.getById(id)
       }
 
   val getByCompanyId: ServerEndpoint[Any, Task] =
     getByCompanyIdEndpoint
-      .zioServerLogic { companyId =>
+      .zServerLogic { companyId =>
         reviewService.getByCompanyId(companyId)
       }
 

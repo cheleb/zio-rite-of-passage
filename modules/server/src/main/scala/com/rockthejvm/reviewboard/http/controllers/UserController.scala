@@ -5,6 +5,7 @@ import com.rockthejvm.reviewboard.services.UserService
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
 import sttp.tapir.*
+import sttp.tapir.ztapir.*
 import sttp.tapir.server.ServerEndpoint
 
 import zio.*
@@ -18,21 +19,20 @@ class UserController(userService: UserService, jwtService: JWTService)
     extends SecuredBaseController(jwtService)
     with UserEndpoints {
 
-  val create: ServerEndpoint[Any, Task] = createUserEndpoint.zioServerLogic(request =>
+  val create: ServerEndpoint[Any, Task] = createUserEndpoint.zServerLogic(request =>
     userService
       .registerUser(request.email, request.password)
       .map(user => UserResponse(user.email))
   )
 
-  val login: ServerEndpoint[Any, Task] = loginEndpoint.zioServerLogic(request =>
+  val login: ServerEndpoint[Any, Task] = loginEndpoint.zServerLogic(request =>
     userService
       .generateToken(request.email, request.password)
       .someOrFail(UnauthorizedException)
   )
 
   val updatePassword: ServerEndpoint[Any, Task] = updatePasswordEndpoint
-    .withSecurity
-    .zioServerLogic(userId =>
+    .securedServerLogic(userId =>
       request =>
         userService
           .updatePassword(request.email, request.oldPassword, request.newPassword)
@@ -40,8 +40,7 @@ class UserController(userService: UserService, jwtService: JWTService)
     )
 
   val delete: ServerEndpoint[Any, Task] = deleteEndpoint
-    .withSecurity
-    .zioServerLogic(userId =>
+    .securedServerLogic(userId =>
       request =>
         userService
           .deleteUser(request.email, request.password)
@@ -53,7 +52,7 @@ class UserController(userService: UserService, jwtService: JWTService)
       userService.sendPasswordRecoveryEmain(req.email).either
     )
 
-  val recoverPassword: ServerEndpoint[Any, Task] = recoverPasswordEndpoint.zioServerLogic(req =>
+  val recoverPassword: ServerEndpoint[Any, Task] = recoverPasswordEndpoint.zServerLogic(req =>
     userService
       .recoverPasswordFromToken(req.email, req.token, req.newPassword)
       .filterOrFail(identity)(UnauthorizedException)
