@@ -28,7 +28,7 @@ class UserController(userService: UserService, jwtService: JWTService)
   val login: ServerEndpoint[Any, Task] = loginEndpoint.zServerLogic(request =>
     userService
       .generateToken(request.email, request.password)
-      .someOrFail(UnauthorizedException)
+      .someOrFail(UnauthorizedException("Invalid credentials"))
   )
 
   val updatePassword: ServerEndpoint[Any, Task] = updatePasswordEndpoint
@@ -55,7 +55,7 @@ class UserController(userService: UserService, jwtService: JWTService)
   val recoverPassword: ServerEndpoint[Any, Task] = recoverPasswordEndpoint.zServerLogic(req =>
     userService
       .recoverPasswordFromToken(req.email, req.token, req.newPassword)
-      .filterOrFail(identity)(UnauthorizedException)
+      .filterOrFail(identity)(UnauthorizedException("Invalid token"))
       .unit
   )
   override val routes: List[ServerEndpoint[Any, Task]] =

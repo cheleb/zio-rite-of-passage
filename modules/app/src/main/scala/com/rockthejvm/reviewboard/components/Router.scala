@@ -21,6 +21,18 @@ object Router:
           path("signup") { // Localhost:8080/signup
             SignUpPage()
           },
+          path("profile") { // Localhost:8080/signup
+            ProfilePage()
+          },
+          path("forgot-password") { // Localhost:8080/forgot-password
+            ForgotPasswordPage()
+          },
+          path("recover-password") { // Localhost:8080/recover-password
+            RecoverPasswordPage()
+          },
+          path("logout") { // Localhost:8080/logout
+            LogoutPage()
+          },
           noneMatched { // Localhost:8080/whatever
             NotFoundPage()
           }

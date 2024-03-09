@@ -57,7 +57,7 @@ case class SignupFormState(
 
 object SignUpPage extends FormPage[SignupFormState]("Sign Up") {
 
-  val stateVar = Var(SignupFormState())
+  def basicState = SignupFormState()
 
   val submitter = Observer[SignupFormState] { state =>
     if state.hasErrors then

@@ -11,6 +11,7 @@ import zio.*
 import com.rockthejvm.reviewboard.config.BackendClientConfig
 import com.raquo.laminar.api.L.{*, given}
 import org.scalajs.dom
+import scala.annotation.targetName
 
 object ZJS {
 
@@ -20,13 +21,13 @@ object ZJS {
   extension [E <: Throwable, A](zio: ZIO[BackendClient, E, A])
     def emitTo(bus: EventBus[A]) =
       Unsafe.unsafe { implicit unsafe =>
-        Runtime.default.unsafe.fork(zio.tapError(e => Console.printLineError(e.getMessage())).tap(
-          a => ZIO.attempt(bus.emit(a))
+        Runtime.default.unsafe.fork(zio.tapError(e => Console.printLineError(e.getMessage())).tap(a =>
+          ZIO.attempt(bus.emit(a))
         ).provide(BackendClientLive.configuredLayer))
       }
     def runJs =
       Unsafe.unsafe { implicit unsafe =>
-        Runtime.default.unsafe.runToFuture(zio.provide(BackendClientLive.configuredLayer))
+        Runtime.default.unsafe.fork(zio.provide(BackendClientLive.configuredLayer))
       }
     def toEventStream: EventStream[A] =
       val eventBus = EventBus[A]()
@@ -35,5 +36,11 @@ object ZJS {
   extension [I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])
     def apply(payload: I): RIO[BackendClient, O] =
       ZIO.service[BackendClient].flatMap(_.endpointRequestZIO(endpoint)(payload))
+
+  extension [I, E <: Throwable, O](endpoint: Endpoint[String, I, E, O, Any])
+    @targetName("securedApply")
+    def apply(payload: I): RIO[BackendClient, O] =
+      ZIO.service[BackendClient]
+        .flatMap(_.securedEndpointRequestZIO(endpoint)(payload))
 
 }

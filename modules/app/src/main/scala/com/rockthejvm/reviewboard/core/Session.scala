@@ -9,12 +9,17 @@ object Session {
 
   private val userTokenKey = "userToken"
 
+  // Should be more clever about expiration.
   def isActive = userState.now().isDefined
 
   def setUserState(token: UserToken): Unit = {
     userState.set(Option(token))
     Storage.set(userTokenKey, token)
   }
+
+  def getUserState: Option[UserToken] =
+    loadUserState()
+    userState.now()
 
   def loadUserState(): Unit =
     Storage.get[UserToken](userTokenKey)

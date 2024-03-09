@@ -12,6 +12,8 @@ import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import com.rockthejvm.reviewboard.config.*
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
+case class RestrictedEndpointException(message: String) extends RuntimeException(message)
+
 /** A client to the backend, exposing the endpoints as methods.
   */
 trait BackendClient {
@@ -19,7 +21,10 @@ trait BackendClient {
   val user    = new UserEndpoints {}
   def endpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])(
       payload: I
-  ): ZIO[Any, Throwable, O]
+  ): Task[O]
+
+  def securedEndpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[String, I, E, O, Any])(payload: I): Task[O]
+
 }
 private class BackendClientLive(
     backend: SttpBackend[Task, ZioStreams & WebSockets],
@@ -30,10 +35,25 @@ private class BackendClientLive(
   private def endpointRequest[I, E, O](endpoint: Endpoint[Unit, I, E, O, Any]): I => Request[Either[E, O], Any] =
     interpreter.toRequestThrowDecodeFailures(endpoint, config.baseUrl)
 
+  private def securedEndpointRequest[A, I, E, O](endpoint: Endpoint[A, I, E, O, Any])
+      : A => I => Request[Either[E, O], Any] =
+    interpreter.toSecureRequestThrowDecodeFailures(endpoint, config.baseUrl)
+
+  private def tokenOfFail =
+    ZIO.fromOption(Session.getUserState)
+      .orElseFail(RestrictedEndpointException("No token found"))
+      .map(_.token)
+
   def endpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])(
       payload: I
   ): ZIO[Any, Throwable, O] =
     backend.send(endpointRequest(endpoint)(payload)).map(_.body).absolve
+
+  def securedEndpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[String, I, E, O, Any])(payload: I)
+      : ZIO[Any, Throwable, O] = for {
+    token <- tokenOfFail
+    res   <- backend.send(securedEndpointRequest(endpoint)(token)(payload)).map(_.body).absolve
+  } yield res
 
 }
 

@@ -12,6 +12,7 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.LoginRequest
 import sttp.client3.*
 import com.rockthejvm.reviewboard.core.Session
+import com.rockthejvm.reviewboard.components.Anchors
 
 case class LoginState(
     email: String = "",
@@ -46,11 +47,10 @@ case class LoginState(
 
 object LoginPage extends FormPage[LoginState]("Log In") {
 
-  val stateVar = Var(LoginState())
+  def basicState = LoginState()
 
   val submitter = Observer[LoginState] { state =>
     if state.hasErrors then
-      println("Errors")
       stateVar.update(_.copy(showStatus = true))
     else
       useBackend(_.user.loginEndpoint(LoginRequest(state.email, state.password)))
@@ -60,7 +60,6 @@ object LoginPage extends FormPage[LoginState]("Log In") {
           BrowserNavigation.replaceState("/")
         }
         .tapError(e =>
-          println(e.getMessage)
           ZIO.succeed(stateVar.update(_.copy(showStatus = true, upstreamErrors = Option(e.getMessage))))
         )
         .runJs
@@ -85,11 +84,15 @@ object LoginPage extends FormPage[LoginState]("Log In") {
         (s, v) => s.copy(password = v, showStatus = false, upstreamErrors = None)
       ),
       // an input of type password
-      button(
-        `type` := "button",
-        "Log Isn",
-        onClick.preventDefault.mapTo(stateVar.now()) --> submitter
+      div(
+        cls := "align-center",
+        button(
+          cls    := "btn btn-primary",
+          `type` := "button",
+          "Log in",
+          onClick.preventDefault.mapTo(stateVar.now()) --> submitter
+        ),
+        Anchors.renderNavLink("Forgot password", "/forgot-password", "auth-link")
       )
     )
-
 }

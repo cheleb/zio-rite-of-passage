@@ -34,7 +34,9 @@ trait FormState {
 
 abstract class FormPage[S <: FormState](title: String) {
 
-  val stateVar: Var[S]
+  def basicState: S
+
+  val stateVar: Var[S] = Var(basicState)
 
   def renderChildren(): List[ReactiveHtmlElement[dom.html.Element]]
 
@@ -60,10 +62,6 @@ abstract class FormPage[S <: FormState](title: String) {
           .map(_.maybeStatus)
           .map(renderStatus)
           .map(_.toList)
-      ),
-      div(
-        cls := "page-status-success",
-        "This is a success"
       ),
       form(
         nameAttr := "signin",
