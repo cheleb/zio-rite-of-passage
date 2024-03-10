@@ -8,6 +8,7 @@ import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
 import com.rockthejvm.reviewboard.domain.data.{User, UserToken}
+import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
 
 trait UserService {
   def registerUser(email: String, password: String): Task[User]
@@ -50,7 +51,7 @@ class UserServiceLive private (
           _.copy(hashedPassword = UserServiceLive.Hasher.generatedHash(newPassword))
         )
         .when(verified)
-        .someOrFail(new RuntimeException(s"Could not update password for user $email"))
+        .someOrFail(UnauthorizedException(s"Could not update password for user $email"))
     yield updatedUser
 
   override def deleteUser(email: String, password: String): Task[User] =
@@ -64,12 +65,12 @@ class UserServiceLive private (
       updatedUser <- userRepository
         .delete(user.id)
         .when(verified)
-        .someOrFail(new RuntimeException(s"Could not delete password for user $email"))
+        .someOrFail(UnauthorizedException(s"Could not delete password for user $email"))
     yield updatedUser
 
   override def generateToken(email: String, password: String): Task[Option[UserToken]] =
     for {
-      user       <- userRepository.getByEmail(email).someOrFailException
+      user       <- userRepository.getByEmail(email).someOrFail(UnauthorizedException("Invalid credentials"))
       verified   <- ZIO.attempt(UserServiceLive.Hasher.validateHash(password, user.hashedPassword))
       maybetoken <- jwtService.createToken(user).when(verified)
 

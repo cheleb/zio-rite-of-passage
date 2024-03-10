@@ -9,7 +9,7 @@ import zio.prelude.*
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
 import com.rockthejvm.reviewboard.core.ZJS.*
-import com.rockthejvm.reviewboard.http.requests.LoginRequest
+import com.rockthejvm.reviewboard.http.requests.*
 import sttp.client3.*
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.components.Anchors

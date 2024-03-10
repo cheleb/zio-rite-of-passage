@@ -61,14 +61,14 @@ abstract class FormPage[S <: FormState](title: String) {
         children <-- stateVar.signal
           .map(_.maybeStatus)
           .map(renderStatus)
-          .map(_.toList)
-      ),
-      form(
-        nameAttr := "signin",
-        cls      := "form",
-        idAttr   := "form",
-        // an input of type text
-        renderChildren()
+          .map(_.toList),
+        form(
+          nameAttr := "signin",
+          cls      := "form",
+          idAttr   := "form",
+          // an input of type text
+          renderChildren()
+        )
       )
     )
   )

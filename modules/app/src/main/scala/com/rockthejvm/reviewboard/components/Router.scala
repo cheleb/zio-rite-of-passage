@@ -33,6 +33,9 @@ object Router:
           path("logout") { // Localhost:8080/logout
             LogoutPage()
           },
+          path("post") { // Localhost:8080/post
+            CreateCompanyPage()
+          },
           noneMatched { // Localhost:8080/whatever
             NotFoundPage()
           }
