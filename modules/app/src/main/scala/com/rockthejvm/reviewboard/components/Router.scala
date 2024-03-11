@@ -36,6 +36,10 @@ object Router:
           path("post") { // Localhost:8080/post
             CreateCompanyPage()
           },
+          path("company" / long) { // Localhost:8080/company/42
+            companyId =>
+              CompanyPage(companyId)
+          },
           noneMatched { // Localhost:8080/whatever
             NotFoundPage()
           }

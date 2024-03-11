@@ -39,7 +39,7 @@ object ReviewControllerSpec extends ZIOSpecDefault {
 
   private val jwtServiceStub = new JWTService {
     override def createToken(user: User): Task[UserToken] =
-      ZIO.succeed(UserToken("daniel@rockthejvm.com", "token", 10))
+      ZIO.succeed(UserToken(1, "daniel@rockthejvm.com", "token", 10))
 
     override def verifyToken(token: String): Task[UserID] =
       ZIO.succeed(UserID(1, "daniel@rockthejvm.com"))

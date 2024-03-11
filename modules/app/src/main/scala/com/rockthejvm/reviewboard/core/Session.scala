@@ -24,8 +24,8 @@ object Session {
   def loadUserState(): Unit =
     Storage.get[UserToken](userTokenKey)
       .foreach {
-        case UserToken(_, _, expiration) if expiration * 1000 > new Date().getTime() => Storage.remove(userTokenKey)
-        case _                                                                       => userState.set
+        case UserToken(_, _, _, expiration) if expiration * 1000 > new Date().getTime() => Storage.remove(userTokenKey)
+        case _                                                                          => userState.set
       }
 
   def clearUserState(): Unit =

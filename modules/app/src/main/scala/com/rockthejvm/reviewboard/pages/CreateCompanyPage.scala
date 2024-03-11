@@ -17,6 +17,7 @@ import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom.html
 import org.scalajs.dom.HTMLImageElement
 import org.scalajs.dom.HTMLCanvasElement
+import com.rockthejvm.reviewboard.domain.data.UserToken
 
 case class CreateCompanyState(
     name: String = "",
@@ -58,11 +59,11 @@ case class CreateCompanyState(
 
 }
 
-object CreateCompanyPage extends FormPage[CreateCompanyState]("Create Company") {
+object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Company") {
 
   override def basicState: CreateCompanyState = CreateCompanyState()
 
-  override def renderChildren(): List[ReactiveHtmlElement[html.Element]] = List(
+  override def renderChildren(user: UserToken): List[ReactiveHtmlElement[html.Element]] = List(
     renderInput("Company name", "Name", "text", true, "ACME Inc", (s, v) => s.copy(name = v)),
     renderInput("Company URL", "URL", "text", true, "https://acme.com", (s, v) => s.copy(url = v)),
     renderLogoUpload("logo", "logo", false),

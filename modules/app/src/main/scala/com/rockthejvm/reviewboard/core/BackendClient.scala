@@ -8,9 +8,8 @@ import sttp.capabilities.WebSockets
 import sttp.tapir.Endpoint
 import sttp.model.Uri
 import zio.*
-import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import com.rockthejvm.reviewboard.config.*
-import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
+import com.rockthejvm.reviewboard.http.endpoints.*
 
 case class RestrictedEndpointException(message: String) extends RuntimeException(message)
 
@@ -19,6 +18,7 @@ case class RestrictedEndpointException(message: String) extends RuntimeException
 trait BackendClient {
   val company = new CompanyEndpoints {}
   val user    = new UserEndpoints {}
+  val review  = new ReviewEndpoints {}
   def endpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])(
       payload: I
   ): Task[O]

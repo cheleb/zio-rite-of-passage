@@ -13,6 +13,7 @@ import zio.prelude.ZValidation.Success
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import org.scalajs.dom.html
 import com.rockthejvm.reviewboard.core.Session
+import com.rockthejvm.reviewboard.domain.data.UserToken
 
 case class ProfilePageState(
     password: String = "",
@@ -56,7 +57,7 @@ case class ProfilePageState(
 
 }
 
-object ProfilePage extends FormPage[ProfilePageState]("Profile") {
+object ProfilePage extends SecuredFormPage[ProfilePageState]("Profile") {
 
   def basicState = ProfilePageState()
 
@@ -79,18 +80,8 @@ object ProfilePage extends FormPage[ProfilePageState]("Profile") {
         .runJs
   }
 
-  def renderChildren(): List[ReactiveHtmlElement[html.Element]] =
-    Session.getUserState match
-      case Some(user) =>
-        renderProfile(user.email)
-      case None =>
-        List(
-          div(
-            cls := "logout-status",
-            h1("You are not logged in !"),
-            p("You should try log in again if you want.")
-          )
-        )
+  def renderChildren(user: UserToken): List[ReactiveHtmlElement[html.Element]] =
+    renderProfile(user.email)
   def renderProfile(email: String) =
     List(
       renderInput(

@@ -7,7 +7,7 @@ import sttp.tapir.*
 import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
 
-trait ReviewEndpoint extends BaseEndpoint {
+trait ReviewEndpoints extends BaseEndpoint {
 
   val createEndpoint =
     baseSecuredEndpoint.post
