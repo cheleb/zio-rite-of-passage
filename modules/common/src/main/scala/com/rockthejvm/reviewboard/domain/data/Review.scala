@@ -21,4 +21,6 @@ final case class Review(
 
 object Review {
   given JsonCodec[Review] = DeriveJsonCodec.gen[Review]
+
+  def empty(companyId: Long): Review = Review(-1, companyId, -1, 5, 5, 5, 5, 5, "", Instant.now(), Instant.now())
 }

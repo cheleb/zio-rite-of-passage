@@ -2919,7 +2919,7 @@ body a {
 
     border: none;
     padding: 0.75rem 3.125rem;
-    float: right;
+
 }
 
 .rock-action-btn:hover {
@@ -3864,7 +3864,6 @@ ul {
 
     border: none;
     padding: 0.75rem 3.125rem;
-    float: right;
 }
 
 @media (max-width: 767px) {
@@ -4451,7 +4450,6 @@ ul {
 
     border: none;
     padding: 0.5rem 3.125rem;
-    float: right;
 }
 
 .rock-action-btn:hover {

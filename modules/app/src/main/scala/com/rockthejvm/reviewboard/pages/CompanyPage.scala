@@ -10,9 +10,34 @@ import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
 import com.rockthejvm.reviewboard.core.Session
+import com.rockthejvm.reviewboard.components.*
+import com.raquo.laminar.DomApi
 
 object CompanyPage {
 
+  enum Status:
+    case Loading
+    case NOT_FOUND
+    case OK(company: Company)
+
+  val addReviewCardActive = Var(false)
+  val fetchCompanyBus     = EventBus[Option[Company]]()
+  val triggerRefreshBus   = EventBus[Unit]()
+  val status = fetchCompanyBus.events.scanLeft(Status.Loading) {
+    case (_, None)          => Status.NOT_FOUND
+    case (_, Some(company)) => Status.OK(company)
+  }
+
+  val reviewsSignal: Signal[List[Review]] = {
+
+    fetchCompanyBus.events.flatMap {
+      case None => EventStream.empty
+      case Some(company) =>
+        def refreshReview = useBackend(_.review.getByCompanyIdEndpoint(company.id)).toEventStream
+        refreshReview.mergeWith(triggerRefreshBus.events.flatMap(_ => refreshReview))
+
+    }.scanLeft(List.empty)((_, newReviews) => newReviews)
+  }
   // the render function
 
   def render(company: Company) =
@@ -39,6 +64,10 @@ object CompanyPage {
       div(
         cls := "container-fluid",
         renderCompanySummary,
+        child <-- addReviewCardActive.signal.map {
+          case true  => AddReviewCard(company.id, () => addReviewCardActive.set(false), triggerRefreshBus).reviewCard()
+          case false => div()
+        },
         children <-- reviewsSignal.map(list => list.map(renderStaticReview)),
         div(
           cls := "container",
@@ -92,7 +121,9 @@ object CompanyPage {
             button(
               `type` := "button",
               cls    := "btn btn-warning",
-              "Add a review"
+              "Add a review",
+              disabled <-- addReviewCardActive.signal,
+              onClick.mapTo(true) --> addReviewCardActive
             )
         }
       )
@@ -117,6 +148,7 @@ object CompanyPage {
         // TODO add a highlight if this is "your" review
         div(
           cls := "company-description",
+          cls.toggle("review-highlighted") <-- Session.userState.signal.map(_.exists(_.id == review.userId)),
           div(
             cls := "review-summary",
             renderStaticReviewDetail("Would Recommend", review.wouldRecommend),
@@ -126,12 +158,21 @@ object CompanyPage {
             renderStaticReviewDetail("Benefits", review.benefits)
           ),
           // TODO parse this Markdown
-          div(
-            cls := "review-content",
-            review.review
-          ),
-          div(cls := "review-posted", "Posted (TODO) a million years ago")
+
+          injectMarkdown(review),
+          div(cls := "review-posted", s"Posted ${Time.unixToHumanReadable(review.created.toEpochMilli())}"),
+          child.maybe <-- Session.userState.signal
+            .map(_.filter(_.id == review.userId)).map(_.map(_ =>
+              div(cls := "review-posted", "Your review")
+            ))
         )
+      )
+    )
+  def injectMarkdown(review: Review) =
+    div(
+      cls := "review-content",
+      foreignHtmlElement(
+        DomApi.unsafeParseHtmlString(s"<div>${Markdown.toHtml(review.review)}</div>")
       )
     )
 
@@ -149,26 +190,6 @@ object CompanyPage {
         )
       )
     )
-
-  enum Status:
-    case Loading
-    case NOT_FOUND
-    case OK(company: Company)
-
-  val fetchCompanyBus = EventBus[Option[Company]]()
-
-  val reviewsSignal: Signal[List[Review]] = fetchCompanyBus.events.flatMap {
-    case None => EventStream.empty
-    case Some(company) =>
-      val reviewsBus = EventBus[List[Review]]()
-      useBackend(_.review.getByCompanyIdEndpoint(company.id)).emitTo(reviewsBus)
-      reviewsBus.events
-  }.scanLeft(List.empty)((_, newReviews) => newReviews)
-
-  val status = fetchCompanyBus.events.scanLeft(Status.Loading) {
-    case (_, None)          => Status.NOT_FOUND
-    case (_, Some(company)) => Status.OK(company)
-  }
 
   def apply(companyId: Long) = {
     div(
