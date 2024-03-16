@@ -58,7 +58,6 @@ object ForgotPasswordPage extends FormPage[ForgotPasswordState]("Forgot Password
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password request submited."))))
         }
         .tapError(e =>
-          println(e.getMessage)
           ZIO.succeed(stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Left(e.getMessage)))))
         )
         .runJs
