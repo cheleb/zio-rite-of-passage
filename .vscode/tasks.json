@@ -74,7 +74,7 @@
         {
             "label": "runBack",
             "type": "shell",
-	    "command": "sleep 5; sbt -mem 4096 \"~server/run\"",
+            "command": "sleep 5; sbt -mem 4096 \"~server/run\"",
             "presentation": {
                 "panel": "dedicated",
                 "group": "runDevCmd"
@@ -82,5 +82,4 @@
             "group": "build"
         }
     ]
-
 }
