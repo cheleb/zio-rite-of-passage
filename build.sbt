@@ -32,7 +32,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "com.softwaremill.sttp.client3" %% "zio"                               % sttpVersion,
   "dev.zio"                       %% "zio-logging"                       % zioLoggingVersion,
   "dev.zio"                       %% "zio-logging-slf4j"                 % zioLoggingVersion,
-  "ch.qos.logback"                 % "logback-classic"                   % "1.4.4",
+  "ch.qos.logback"                 % "logback-classic"                   % "1.5.3",
   "dev.zio"                       %% "zio-test"                          % zioVersion,
   "dev.zio"                       %% "zio-test-junit"                    % zioVersion % "test",
   "dev.zio"                       %% "zio-test-sbt"                      % zioVersion % "test",
@@ -42,11 +42,11 @@ val serverDependencies = commonDependencies ++ Seq(
   "dev.zio"                       %% "zio-config-magnolia"               % zioConfigVersion,
   "dev.zio"                       %% "zio-config-typesafe"               % zioConfigVersion,
   "io.getquill"                   %% "quill-jdbc-zio"                    % "4.8.3",
-  "org.postgresql"                 % "postgresql"                        % "42.5.0",
-  "org.flywaydb"                   % "flyway-core"                       % "9.7.0",
+  "org.postgresql"                 % "postgresql"                        % "42.7.3",
+  "org.flywaydb"                   % "flyway-core"                       % "10.10.0",
   "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.9.0",
   "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC16",
-  "com.auth0"                      % "java-jwt"                          % "4.2.1",
+  "com.auth0"                      % "java-jwt"                          % "4.4.0",
   "com.sun.mail"                   % "javax.mail"                        % javaMailVersion,
   "com.stripe"                     % "stripe-java"                       % stripeVersion
 )
