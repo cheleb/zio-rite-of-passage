@@ -80,7 +80,7 @@ lazy val app = (project in file("modules/app"))
       "com.softwaremill.sttp.tapir"   %%% "tapir-sttp-client" % tapirVersion,
       "com.softwaremill.sttp.tapir"   %%% "tapir-json-zio"    % tapirVersion,
       "com.softwaremill.sttp.client3" %%% "zio"               % sttpVersion,
-      "dev.zio"                       %%% "zio-json"          % "0.4.2",
+      "dev.zio"                       %%% "zio-json"          % "0.6.2",
       "dev.zio"                       %%% "zio-prelude"       % "1.0.0-RC23",
       "io.frontroute"                 %%% "frontroute"        % "0.18.1" // Brings in Laminar 16
     ),
