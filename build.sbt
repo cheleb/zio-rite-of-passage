@@ -12,7 +12,7 @@ val zioVersion        = "2.0.19"
 val tapirVersion      = "1.2.6"
 val zioLoggingVersion = "2.1.8"
 val zioConfigVersion  = "3.0.7"
-val sttpVersion       = "3.8.8"
+val sttpVersion       = "3.9.5"
 val javaMailVersion   = "1.6.2"
 val stripeVersion     = "24.3.0"
 
