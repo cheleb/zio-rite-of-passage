@@ -45,7 +45,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "org.postgresql"                 % "postgresql"                        % "42.7.3",
   "org.flywaydb"                   % "flyway-core"                       % "10.10.0",
   "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.9.0",
-  "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC16",
+  "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC23",
   "com.auth0"                      % "java-jwt"                          % "4.4.0",
   "com.sun.mail"                   % "javax.mail"                        % javaMailVersion,
   "com.stripe"                     % "stripe-java"                       % stripeVersion
