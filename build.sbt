@@ -8,7 +8,7 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
-val zioVersion        = "2.0.19"
+val zioVersion        = "2.0.21"
 val tapirVersion      = "1.2.6"
 val zioLoggingVersion = "2.1.8"
 val zioConfigVersion  = "3.0.7"
