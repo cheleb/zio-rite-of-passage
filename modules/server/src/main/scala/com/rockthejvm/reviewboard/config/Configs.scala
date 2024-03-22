@@ -2,13 +2,14 @@ package com.rockthejvm.reviewboard.config
 
 import zio.*
 import zio.config.*
-import zio.config.magnolia.*
-import zio.config.typesafe.TypesafeConfig
-import com.typesafe.config.ConfigFactory
 
+import zio.config.magnolia.*
+import com.typesafe.config.ConfigFactory
+import zio.ConfigProvider
+
+import zio.config.typesafe.TypesafeConfigProvider
 object Configs:
-  def makeConfigLayer[C](path: String)(using Descriptor[C], Tag[C]) =
-    TypesafeConfig.fromTypesafeConfig(
-      ZIO.attempt(ConfigFactory.load().getConfig(path)),
-      descriptor[C]
-    )
+  def makeConfigLayer[C](path: String)(using conf: Config[C], r: Tag[C]) =
+    ZLayer(TypesafeConfigProvider.fromTypesafeConfig(
+      ConfigFactory.load().getConfig(path)
+    ).load[C](conf))

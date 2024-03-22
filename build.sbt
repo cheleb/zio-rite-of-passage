@@ -8,11 +8,11 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
-val zioVersion        = "2.0.19"
-val tapirVersion      = "1.2.6"
-val zioLoggingVersion = "2.1.8"
-val zioConfigVersion  = "3.0.7"
-val sttpVersion       = "3.8.8"
+val zioVersion        = "2.0.21"
+val tapirVersion      = "1.10.0"
+val zioLoggingVersion = "2.2.2"
+val zioConfigVersion  = "4.0.1"
+val sttpVersion       = "3.9.5"
 val javaMailVersion   = "1.6.2"
 val stripeVersion     = "24.3.0"
 
@@ -44,8 +44,8 @@ val serverDependencies = commonDependencies ++ Seq(
   "io.getquill"                   %% "quill-jdbc-zio"                    % "4.8.3",
   "org.postgresql"                 % "postgresql"                        % "42.7.3",
   "org.flywaydb"                   % "flyway-core"                       % "10.10.0",
-  "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.9.0",
-  "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC16",
+  "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.10.0",
+  "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC23",
   "com.auth0"                      % "java-jwt"                          % "4.4.0",
   "com.sun.mail"                   % "javax.mail"                        % javaMailVersion,
   "com.stripe"                     % "stripe-java"                       % stripeVersion
