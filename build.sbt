@@ -37,7 +37,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "dev.zio"                       %% "zio-test-junit"                    % zioVersion % "test",
   "dev.zio"                       %% "zio-test-sbt"                      % zioVersion % "test",
   "dev.zio"                       %% "zio-test-magnolia"                 % zioVersion % "test",
-  "dev.zio"                       %% "zio-mock"                          % "1.0.0-RC9" % "test",
+  "dev.zio"                       %% "zio-mock"                          % "1.0.0-RC12" % "test",
   "dev.zio"                       %% "zio-config"                        % zioConfigVersion,
   "dev.zio"                       %% "zio-config-magnolia"               % zioConfigVersion,
   "dev.zio"                       %% "zio-config-typesafe"               % zioConfigVersion,
