@@ -8,6 +8,10 @@ import io.getquill.*
 
 trait InviteRepository {
   def getByUserName(userName: String): Task[List[InviteNamedRecord]]
+  def getInvitePack(userName: String, companyId: Long): Task[Option[InviteRecord]]
+  def addInvitePack(userName: String, companyId: Long, nInvites: Int): Task[Long]
+  def activatePack(id: Long): Task[Boolean]
+  def markInvite(userName: String, companyId: Long, nInvites: Int): Task[Int]
 }
 
 class InviteRepositoryLive private (quill: Quill.Postgres[SnakeCase])
@@ -30,6 +34,40 @@ class InviteRepositoryLive private (quill: Quill.Postgres[SnakeCase])
         company <- query[Company] if company.id == record.companyId
       } yield InviteNamedRecord(company.id, company.name, record.nInvites)
     )
+
+  override def getInvitePack(userName: String, companyId: Long): Task[Option[InviteRecord]] =
+    run(
+      query[InviteRecord]
+        .filter(_.userName == lift(userName))
+        .filter(_.companyId == lift(companyId))
+    ).map(_.headOption)
+
+  override def addInvitePack(userName: String, companyId: Long, nInvites: Int): Task[Long] =
+    run(
+      query[InviteRecord]
+        .insertValue(lift(InviteRecord(0, userName, companyId, nInvites, active = false)))
+        .returning(_.id)
+    )
+
+  override def activatePack(id: Long): Task[Boolean] = run(
+    query[InviteRecord]
+      .filter(_.id == lift(id))
+      .update(_.active -> lift(true))
+  ).map(_ > 0)
+
+  override def markInvite(userName: String, companyId: Long, nInvites: Int): Task[Int] =
+    for {
+      pack <- getInvitePack(userName, companyId)
+        .someOrFail(new RuntimeException(s"User $userName cannot send invite pack for company id $companyId."))
+      nInvitesMarked = Math.min(pack.nInvites, nInvites)
+      _ <- run(
+        query[InviteRecord]
+          .filter(_.id == lift(pack.id))
+          .update(_.nInvites -> (lift(pack.nInvites) - lift(nInvitesMarked)))
+      )
+
+    } yield nInvitesMarked
+
 }
 
 object InviteRepositoryLive:

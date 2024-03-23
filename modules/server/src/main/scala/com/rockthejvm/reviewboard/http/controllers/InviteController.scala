@@ -15,7 +15,7 @@ class InviteController private (jwtService: JWTService, inviteService: InviteSer
   val addPack: ServerEndpoint[Any, Task] =
     addPackEndpoint.securedServerLogic(userId =>
       req =>
-        inviteService.addPack(userId.email, req.companyId).map(_.toString())
+        inviteService.addInvitePack(userId.email, req.companyId).map(_.toString())
     )
 
   val invite: ServerEndpoint[Any, Task] =
@@ -32,6 +32,7 @@ class InviteController private (jwtService: JWTService, inviteService: InviteSer
   val getByUserId: ServerEndpoint[Any, Task] =
     getByUserIdEndpoint.securedServerLogic(userId => _ => inviteService.getByUserName(userId.email))
 
+  val addPackPromoted: ServerEndpoint[Any, Task]       = addPack.promoteTo[Task]
   override val routes: List[ServerEndpoint[Any, Task]] = List(addPack, invite, getByUserId)
 }
 

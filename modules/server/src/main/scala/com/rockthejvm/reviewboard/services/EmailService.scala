@@ -6,6 +6,7 @@ import javax.mail.*
 import javax.mail.internet.MimeMessage
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.EmailServiceConfig
+import com.rockthejvm.reviewboard.domain.data.Company
 
 trait EmailService {
   def sendEmail(to: String, subject: String, content: String): Task[Unit]
@@ -22,6 +23,22 @@ trait EmailService {
       </p>
       <a href="http://localhost:8080/reset-password?token=$token">Reset password</a>
     Your password recovery token is: $token"""
+    sendEmail(to, subject, content)
+  }
+
+  def sendReviewInviteEmail(from: String, to: String, company: Company): Task[Unit] = {
+    val subject = s"You've been invited to review ${company.name}"
+    val content = s"""
+    <div>
+      <h1>You've been invited to review ${company.name} request</h1>
+      <p>
+        You've been invited to review a company on our platform. If you did not request this, please ignore this email.
+      </p>
+      <p>
+        If you did request to review a pull request, please click on the following link to access the review:
+      </p>
+      <a href="http://localhost:8080/company/${company.id}">Review plz</a>
+    """
     sendEmail(to, subject, content)
   }
 }
