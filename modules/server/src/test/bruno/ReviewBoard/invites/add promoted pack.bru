@@ -1,0 +1,21 @@
+meta {
+  name: add promoted pack
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://localhost:8080/invite/promoted
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "companyId": 1
+  }
+}

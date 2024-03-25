@@ -10,6 +10,7 @@ trait InviteService {
   def getByUserName(userName: String): Task[List[InviteNamedRecord]]
   def sendInvite(userName: String, companyId: Long, receivers: List[String]): Task[Int]
   def addInvitePack(userName: String, companyId: Long): Task[Long]
+  def activatePack(packId: Long): Task[Boolean]
 }
 
 class InviteServiceLive private (
@@ -48,9 +49,12 @@ class InviteServiceLive private (
         case None    => inviteRepository.addInvitePack(userName, companyId, config.nInvites)
       }
 
-      _ <- inviteRepository.activatePack(newPack) // FIXME - remove this line
+      // _ <- inviteRepository.activatePack(newPack) // FIXME - remove this line
 
     } yield newPack
+
+  override def activatePack(packId: Long): Task[Boolean] =
+    inviteRepository.activatePack(packId)
 
 }
 

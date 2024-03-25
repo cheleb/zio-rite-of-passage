@@ -10,15 +10,6 @@ import reviewboard.http.responses.*
 import reviewboard.domain.data.*
 
 trait InviteEndpoints extends BaseEndpoint {
-  val addPackEndpoint =
-    baseSecuredEndpoint
-      .tag("Invites")
-      .name("Add an invites")
-      .description("Get invite tokens")
-      .in("invite" / "add")
-      .post
-      .in(jsonBody[InvitePackRequest])
-      .out(stringBody)
 
   val inviteEndpoint =
     baseSecuredEndpoint
@@ -39,4 +30,35 @@ trait InviteEndpoints extends BaseEndpoint {
       .in("invite" / "all")
       .get
       .out(jsonBody[List[InviteNamedRecord]])
+
+  val addPackEndpoint =
+    baseSecuredEndpoint
+      .tag("Invites")
+      .name("Add an invites")
+      .description("Get invite tokens")
+      .in("invite" / "add")
+      .post
+      .in(jsonBody[InvitePackRequest])
+      .out(stringBody)
+
+  val addPackPromotedEndpoint =
+    baseSecuredEndpoint
+      .tag("Invites")
+      .name("Add an invites (promoted)")
+      .description("Get invite tokens (promoted)")
+      .in("invite" / "promoted")
+      .post
+      .in(jsonBody[InvitePackRequest])
+      .out(stringBody)
+
+  val webhookEndpoint =
+    baseEndpoint
+      .tag("Invites")
+      .name("Webhook")
+      .description("Webhook for invites")
+      .in("invite" / "webhook")
+      .in(header[String]("Stripe-Signature"))
+      .post
+      .in(stringBody)
+
 }

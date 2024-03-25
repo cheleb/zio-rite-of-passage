@@ -40,6 +40,7 @@ object Application extends ZIOAppDefault:
         InviteServiceLive.configuredLayer,
         JWTServiceLive.configuredLayer,
         RecoveryTokenRepositoryLive.configuredLayer,
+        PaymentServiceLive.configuredLayer,
         // Repository layers
         CompanyRepositoryLive.layer,
         ReviewRespositoryLive.layer,
