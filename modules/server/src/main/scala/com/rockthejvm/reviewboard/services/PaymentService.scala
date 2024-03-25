@@ -13,7 +13,7 @@ import com.rockthejvm.reviewboard.repositories.InviteRepository
 
 trait PaymentService {
   def createCheckoutSession(invitePackId: Long, userName: String): Task[Option[Session]]
-  def handleWebhookEvent(signature: String, payload: String, action: Long => Task[Boolean]): Task[Boolean]
+  def handleWebhookEvent[A](signature: String, payload: String, action: Long => Task[A]): Task[Option[A]]
 }
 
 class PaymentServiceLive private (config: StripeConfig) extends PaymentService {
@@ -41,30 +41,32 @@ class PaymentServiceLive private (config: StripeConfig) extends PaymentService {
       .logError("Failed to create Stripe session")
       .catchSome { case _ => ZIO.none }
 
-  def handleWebhookEvent(signature: String, payload: String, action: Long => Task[Boolean]): Task[Boolean] =
+  def handleWebhookEvent[A](signature: String, payload: String, action: Long => Task[A]): Task[Option[A]] =
     ZIO.attempt(
       Webhook.constructEvent(payload, signature, config.webhookSecret)
     ).flatMap { event =>
       event.getType match {
         case "checkout.session.completed" =>
           for {
-            packId    <- extractPackId(event)
-            activated <- action(packId) // action(packId
-          } yield activated
+            packId    <- extractPackId(event).someOrFail(new RuntimeException("Failed to extract pack ID"))
+            activated <- action(packId)
+          } yield Some(activated)
 
-        case _ => ZIO.succeed(false)
+        case _ =>
+          ZIO.none
+
       }
     }
       .logError("Failed to handle Stripe webhook event")
-      .catchSome { case _ => ZIO.succeed(false) }
+      .catchSome { case _ => ZIO.succeed(None) }
 
-  private def extractPackId(event: Event): Task[Long] =
+  private def extractPackId(event: Event): Task[Option[Long]] =
     ZIO.attempt {
       val deserializer = event.getDataObjectDeserializer
       val session      = deserializer.getObject().toScala.map(_.asInstanceOf[Session])
       session.flatMap(s => Option(s.getClientReferenceId)).map(_.toLong)
 
-    }.someOrFail(new RuntimeException("Failed to extract invite pack ID from Stripe event"))
+    }
 
 }
 

@@ -50,7 +50,7 @@ class InviteController private (jwtService: JWTService, inviteService: InviteSer
       paymentService.handleWebhookEvent(signature, payload, inviteService.activatePack).unit
 
     }
-  override val routes: List[ServerEndpoint[Any, Task]] = List(addPack, invite, getByUserId, addPackPromoted)
+  override val routes: List[ServerEndpoint[Any, Task]] = List(addPack, addPackPromoted, webhook, invite, getByUserId)
 }
 
 object InviteController {
