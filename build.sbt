@@ -6,6 +6,8 @@ ThisBuild / scalacOptions ++= Seq(
   "-feature"
 )
 
+ThisBuild / run / fork := true
+
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 val zioVersion        = "2.0.21"
