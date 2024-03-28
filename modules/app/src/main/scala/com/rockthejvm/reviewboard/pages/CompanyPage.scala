@@ -57,7 +57,8 @@ object CompanyPage {
           ),
           div(
             cls := "col-md-6 col-sm-6 col-6",
-            button(`type` := "button", cls := "rock-action-btn", "Invite people")
+            button(`type` := "button", cls := "rock-action-btn", "Invite people"),
+            onClick.mapTo(s"/company/${company.id}/invite") --> Router.externalUrlBus
           )
         )
       )
