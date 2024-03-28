@@ -40,6 +40,29 @@ object CompanyPage {
   }
   // the render function
 
+  def renderInviteAction(company: Company) =
+    div(
+      cls := "container",
+      div(
+        cls := "rok-last",
+        div(
+          cls := "row invite-row",
+          div(
+            cls := "col-md-6 col-sm-6 col-6",
+            span(
+              cls := "rock-apply",
+              p("Do you represent this company?"),
+              p("Invite people to leave reviews.")
+            )
+          ),
+          div(
+            cls := "col-md-6 col-sm-6 col-6",
+            button(`type` := "button", cls := "rock-action-btn", "Invite people")
+          )
+        )
+      )
+    )
+
   def render(company: Company) =
     List(
       div(
@@ -69,31 +92,7 @@ object CompanyPage {
           case false => div()
         },
         children <-- reviewsSignal.map(list => list.map(renderStaticReview)),
-        div(
-          cls := "container",
-          div(
-            cls := "rok-last",
-            div(
-              cls := "row invite-row",
-              div(
-                cls := "col-md-6 col-sm-6 col-6",
-                span(
-                  cls := "rock-apply",
-                  p("Do you represent this company?"),
-                  p("Invite people to leave reviews.")
-                )
-              ),
-              div(
-                cls := "col-md-6 col-sm-6 col-6",
-                a(
-                  href   := company.url,
-                  target := "blank",
-                  button(`type` := "button", cls := "rock-action-btn", "Invite people")
-                )
-              )
-            )
-          )
-        )
+        child.maybe <-- Session.whenActive(renderInviteAction(company))
       )
     )
 
