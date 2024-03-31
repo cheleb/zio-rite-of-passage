@@ -23,8 +23,8 @@ object Router:
           path("signup") { // Localhost:8080/signup
             SignUpPage()
           },
-          path("profile") { // Localhost:8080/signup
-            ProfilePage()
+          path("change-password") { // Localhost:8080/signup
+            ChangePasswordPage()
           },
           path("forgot-password") { // Localhost:8080/forgot-password
             ForgotPasswordPage()
@@ -34,6 +34,9 @@ object Router:
           },
           path("logout") { // Localhost:8080/logout
             LogoutPage()
+          },
+          path("profile") { // Localhost:8080/profile
+            ProfilePage()
           },
           path("post") { // Localhost:8080/post
             CreateCompanyPage()

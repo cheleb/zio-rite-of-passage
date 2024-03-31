@@ -19,6 +19,8 @@ trait BackendClient {
   val company = new CompanyEndpoints {}
   val user    = new UserEndpoints {}
   val review  = new ReviewEndpoints {}
+  val invite  = new InviteEndpoints {}
+
   def endpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])(
       payload: I
   ): Task[O]

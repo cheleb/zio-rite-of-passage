@@ -11,6 +11,11 @@ object Session {
 
   private val userTokenKey = "userToken"
 
+  def apply[A](withSession: => A)(withoutSession: => A): Signal[Option[A]] =
+    userState.signal.map:
+      case Some(_) => Some(withSession)
+      case None    => Some(withoutSession)
+
   /** This method is used to produce an Option when the user is active.
     *
     * Convenient to render an element only when the user is active.
@@ -22,7 +27,8 @@ object Session {
     */
   def whenActive[A](callback: => A): Signal[Option[A]] =
     userState.signal.map(_.map(_ => callback))
-  // Should be more clever about expiration.
+
+  // TODO Should be more clever about expiration.
   def isActive = userState.now().isDefined
 
   def setUserState(token: UserToken): Unit = {
@@ -37,8 +43,11 @@ object Session {
   def loadUserState(): Unit =
     Storage.get[UserToken](userTokenKey)
       .foreach {
-        case UserToken(_, _, _, expiration) if expiration * 1000 > new Date().getTime() => Storage.remove(userTokenKey)
-        case _                                                                          => userState.set
+        case UserToken(_, _, _, expiration) if expiration * 1000 < new Date().getTime() => Storage.remove(userTokenKey)
+        case token                                                                     => userState.now() match
+            case Some(value) if token != value => userState.set(Some(token))
+            case None => userState.set(Some(token))
+            case _ => () 
       }
 
   def clearUserState(): Unit =

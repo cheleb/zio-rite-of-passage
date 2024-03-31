@@ -141,6 +141,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
                     _ => {
                       val canvas          = dom.document.createElement("canvas").asInstanceOf[HTMLCanvasElement]
                       val (width, height) = computeDimensions(fakeImg.width, fakeImg.height)
+                      println(s"$width, $height")
                       canvas.width = width
                       canvas.height = height
                       val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
@@ -160,7 +161,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
   )
   private def computeDimensions(width: Int, height: Int): (Int, Int) =
     if width > height then
-      val aspectRatio = width * 1.0 / 256
+      val aspectRatio = width * 1.0 / 128
       val newWidth    = width / aspectRatio
       val newHeight   = height / aspectRatio
       (newWidth.toInt, newHeight.toInt)

@@ -1,118 +1,51 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import frontroute.*
 import zio.*
-import zio.prelude.*
+import com.raquo.laminar.api.L.{*, given}
 import com.rockthejvm.reviewboard.common.Constants
-import com.rockthejvm.reviewboard.http.requests.*
-import com.rockthejvm.reviewboard.core.ZJS.*
-import zio.prelude.ZValidation.Failure
-import zio.prelude.ZValidation.Success
-import com.raquo.laminar.nodes.ReactiveHtmlElement
-import org.scalajs.dom.html
 import com.rockthejvm.reviewboard.core.Session
-import com.rockthejvm.reviewboard.domain.data.UserToken
+import com.rockthejvm.reviewboard.components.Anchors
+import com.rockthejvm.reviewboard.components.InviteAction
 
-case class ProfilePageState(
-    password: String = "",
-    newPassword: String = "",
-    confirmPassword: String = "",
-    showStatus: Boolean = false,
-    upstreamStatus: Option[Either[String, String]] = None
-) extends FormState {
-
-  private def passwordValidation = Validation.fromEither(
-    if password.nonEmpty then Right(password)
-    else Left("Password must be provided")
-  )
-
-  private def newPasswordValidation = Validation.fromEither(
-    if newPassword.nonEmpty then Right(confirmPassword)
-    else Left("Password must be provided")
-  )
-
-  private def confirmPasswordValidation = Validation.fromEither(
-    if confirmPassword == newPassword then Right(confirmPassword)
-    else Left("Passwords do not match")
-  )
-
-  private lazy val validate =
-    Validation.validate(
-      passwordValidation,
-      newPasswordValidation,
-      confirmPasswordValidation,
-      Validation.fromEither(upstreamStatus.flatMap(_.left.toOption).toLeft(()))
-    )
-
-  def validationErrors: List[String] = validate match
-    case Failure(_, errors) =>
-      errors.toList
-    case Success(_, _) => Nil
-
-  override def hasErrors: Boolean = validationErrors.nonEmpty
-
-  override def maybeSuccess: Option[String] = upstreamStatus.flatMap(_.toOption)
-
-}
-
-object ProfilePage extends SecuredFormPage[ProfilePageState]("Profile") {
-
-  def basicState = ProfilePageState()
-
-  def submitter(email: String): Observer[ProfilePageState] = Observer[ProfilePageState] { state =>
-    if state.hasErrors then
-      stateVar.update(_.copy(showStatus = true))
-    else
-      useBackend(_.user.updatePasswordEndpoint(UpdatePasswordRequest(
-        email,
-        state.password,
-        state.newPassword
-      )))
-        .map { user =>
-          stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password successfully changed."))))
-        }
-        .tapError(e =>
-          println(e.getMessage)
-          ZIO.succeed(stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Left(e.getMessage)))))
+object ProfilePage {
+  def apply() =
+    div(
+      cls := "row",
+      div(
+        cls := "col-md-5 p-0",
+        div(
+          cls := "logo",
+          img(
+            src := Constants.logoImage,
+            alt := "Rock the JVM logo"
+          )
         )
-        .runJs
-  }
-
-  def renderChildren(user: UserToken): List[ReactiveHtmlElement[html.Element]] =
-    renderProfile(user.email)
-  def renderProfile(email: String) =
-    List(
-      renderInput(
-        "Password",
-        "password-input",
-        "password",
-        true,
-        "Your password",
-        (s, v) => s.copy(password = v, showStatus = false, upstreamStatus = None)
       ),
-      renderInput(
-        "New Password",
-        "new password-input",
-        "password",
-        true,
-        "Your new password",
-        (s, v) => s.copy(newPassword = v, showStatus = false, upstreamStatus = None)
-      ),
-      renderInput(
-        "Confirm Password",
-        "confirm-password-input",
-        "password",
-        true,
-        "Confirm password",
-        (s, v) => s.copy(confirmPassword = v, showStatus = false, upstreamStatus = None)
-      ),
-      // an input of type password
-      button(
-        `type` := "button",
-        "Sign Up",
-        onClick.preventDefault.mapTo(stateVar.now()) --> submitter(email)
+      div(
+        cls := "col-md-7",
+        // right
+        div(
+          cls := "form-section",
+          child.maybe <-- Session(renderContent())(renderNotLoggedIn())
+        )
       )
     )
+  def renderContent() = div(
+    cls := "top-section",
+    h1(span("Profile")),
+    // Change password
+    div(
+      cls := "profile-section",
+      h3(span("Account settings")),
+      Anchors.renderNavLink("Change password", "/change-password")
+    ),
+    // Invites
+    InviteAction()
+  )
+
+  def renderNotLoggedIn() = div(
+    cls := "top-section",
+    h1("Please log in to access your profile")
+  )
+
 }

@@ -12,6 +12,7 @@ import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.components.*
 import com.raquo.laminar.DomApi
+import com.rockthejvm.reviewboard.http.requests.InvitePackRequest
 
 object CompanyPage {
 
@@ -28,6 +29,8 @@ object CompanyPage {
     case (_, Some(company)) => Status.OK(company)
   }
 
+  val inviteErrorBus = EventBus[String]()
+
   val reviewsSignal: Signal[List[Review]] = {
 
     fetchCompanyBus.events.flatMap {
@@ -38,8 +41,13 @@ object CompanyPage {
 
     }.scanLeft(List.empty)((_, newReviews) => newReviews)
   }
-  // the render function
 
+  def startPaymentFlow(company: Company) =
+    useBackend(_.invite.addPackPromotedEndpoint(InvitePackRequest(company.id)))
+      .tapError(error => ZIO.succeed(inviteErrorBus.emit(error.getMessage())))
+      .emitTo(Router.externalUrlBus)
+
+  // the render function Strin
   def renderInviteAction(company: Company) =
     div(
       cls := "container",
@@ -57,8 +65,19 @@ object CompanyPage {
           ),
           div(
             cls := "col-md-6 col-sm-6 col-6",
-            button(`type` := "button", cls := "rock-action-btn", "Invite people"),
-            onClick.mapTo(s"/company/${company.id}/invite") --> Router.externalUrlBus
+            button(
+              `type` := "button",
+              cls    := "rock-action-btn",
+              disabled <-- inviteErrorBus.events.mapTo(true).startWith(false),
+              "Invite people"
+            ),
+            onClick.mapToUnit --> (_ => startPaymentFlow(company)),
+            child <-- inviteErrorBus.events.map { error =>
+              div(
+                cls := "alert alert-danger",
+                error
+              )
+            }
           )
         )
       )

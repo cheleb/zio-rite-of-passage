@@ -8,3 +8,21 @@
 .add-review-cancel {
     margin: 0 2rem;
 }
+
+.profile-section {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    margin: 2rem 0;
+
+}
+
+.invite-area {
+    display: block;
+    width: 100%;
+    min-height: 7rem;
+    resize: vertical;
+    padding: 0.5rem 1rem;
+}
