@@ -13,7 +13,7 @@ import com.rockthejvm.reviewboard.http.endpoints.*
 
 case class RestrictedEndpointException(message: String) extends RuntimeException(message)
 
-/** A client to the backend, exposing the endpoints as methods.
+/** A client to the backend, extending the endpoints as methods.
   */
 trait BackendClient {
   val company = new CompanyEndpoints {}
@@ -21,26 +21,66 @@ trait BackendClient {
   val review  = new ReviewEndpoints {}
   val invite  = new InviteEndpoints {}
 
+  /** Call an endpoint with a payload.
+    *
+    * This method turns an endpoint into a Task, that:
+    *   - build a request from a payload
+    *   - sends it to the backend
+    *   - returns the response.
+    *
+    * @param endpoint
+    * @param payload
+    * @return
+    */
   def endpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])(
       payload: I
   ): Task[O]
 
+  /** Call a secured endpoint with a payload.
+    *
+    * This method turns a secured endpoint into a Task, that:
+    *   - build a request from a payload and a security token
+    *   - sends it to the backend
+    *   - returns the response.
+    *
+    * @param endpoint
+    * @param payload
+    * @return
+    */
   def securedEndpointRequestZIO[I, E <: Throwable, O](endpoint: Endpoint[String, I, E, O, Any])(payload: I): Task[O]
 
 }
+
+/** The live implementation of the BackendClient.
+  *
+  * @param backend
+  * @param interpreter
+  * @param config
+  */
 private class BackendClientLive(
     backend: SttpBackend[Task, ZioStreams & WebSockets],
     interpreter: SttpClientInterpreter,
     config: BackendClientConfig
 ) extends BackendClient {
 
+  /** Turn an endpoint into a function from Input => Request.
+    *
+    * @param endpoint
+    * @return
+    */
   private def endpointRequest[I, E, O](endpoint: Endpoint[Unit, I, E, O, Any]): I => Request[Either[E, O], Any] =
     interpreter.toRequestThrowDecodeFailures(endpoint, config.baseUrl)
 
+  /** Turn a secured endpoint into curried functions from Token => Input => Request.
+    *
+    * @param endpoint
+    * @return
+    */
   private def securedEndpointRequest[A, I, E, O](endpoint: Endpoint[A, I, E, O, Any])
       : A => I => Request[Either[E, O], Any] =
     interpreter.toSecureRequestThrowDecodeFailures(endpoint, config.baseUrl)
 
+  /** Get the token from the session, or fail with an exception. */
   private def tokenOfFail =
     ZIO.fromOption(Session.getUserState)
       .orElseFail(RestrictedEndpointException("No token found"))
