@@ -1,0 +1,15 @@
+meta {
+  name: make summary
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/reviews/company/1/summary
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

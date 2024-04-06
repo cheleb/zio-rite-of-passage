@@ -60,7 +60,7 @@ object Application extends ZIOAppDefault:
         JWTServiceLive.configuredLayer,
         RecoveryTokenRepositoryLive.configuredLayer,
         PaymentServiceLive.configuredLayer,
-        OpenAIServiceLive.layer,
+        OpenAIServiceLive.configuredLayer,
         // Repository layers
         CompanyRepositoryLive.layer,
         ReviewRespositoryLive.layer,

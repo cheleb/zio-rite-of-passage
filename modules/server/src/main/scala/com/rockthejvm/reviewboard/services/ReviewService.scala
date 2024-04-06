@@ -76,7 +76,6 @@ class ReviewServiceLive private (repo: ReviewRepository, openAIService: OpenAISe
         """.stripMargin
       }.mkString("\n") +
       "Make a summary of the reviews above in at most one paragraph."
-    ???
 
 object ReviewServiceLive:
   val layer =
