@@ -33,7 +33,18 @@ class ReviewController private (jwtService: JWTService, reviewService: ReviewSer
         reviewService.getByCompanyId(companyId)
       }
 
-  override val routes: List[ServerEndpoint[Any, Task]] = List(create, getById, getByCompanyId)
+  val getSummary: ServerEndpoint[Any, Task] =
+    getSummaryEndpoint
+      .zServerLogic { companyId =>
+        reviewService.getSummary(companyId)
+      }
+
+  val makeSummary: ServerEndpoint[Any, Task] =
+    makeSummaryEndpoint
+      .securedServerLogic { userId => companyId =>
+        reviewService.makeSummary(companyId, userId.id)
+      }
+  override val routes: List[ServerEndpoint[Any, Task]] = List(getSummary, makeSummary, create, getById, getByCompanyId)
 
 }
 

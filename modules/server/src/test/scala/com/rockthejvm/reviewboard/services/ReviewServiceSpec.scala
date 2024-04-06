@@ -6,6 +6,7 @@ import com.rockthejvm.reviewboard.repositories.ReviewRepository
 import com.rockthejvm.reviewboard.domain.data.Review
 import java.time.Instant
 import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
+import com.rockthejvm.reviewboard.domain.data.ReviewSummary
 
 object ReviewServiceSpec extends ZIOSpecDefault {
 
@@ -38,6 +39,10 @@ object ReviewServiceSpec extends ZIOSpecDefault {
   )
 
   val reviewRepositoryLayer = ZLayer.succeed(new ReviewRepository {
+
+    override def insertSummary(companyId: Long, summary: String): Task[ReviewSummary] = ???
+
+    override def getSummary(companyId: Long): Task[Option[ReviewSummary]] = ???
 
     override def deleteByCompanyId(companyId: Long): Task[List[Review]] = ???
 
@@ -136,5 +141,5 @@ object ReviewServiceSpec extends ZIOSpecDefault {
             empty.isEmpty
         )
       }
-    ).provide(ReviewServiceLive.layer, reviewRepositoryLayer)
+    ).provide(ReviewServiceLive.layer, reviewRepositoryLayer, OpenAIServiceLive.layer)
 }

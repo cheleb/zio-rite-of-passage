@@ -47,3 +47,9 @@ CREATE TABLE IF NOT EXISTS invites(
     active boolean NOT NULL DEFAULT FALSE
 );
 
+CREATE TABLE IF NOT EXISTS review_summaries(
+    company_id bigint PRIMARY KEY,
+    content text,
+    created timestamp NOT NULL DEFAULT now()
+);
+

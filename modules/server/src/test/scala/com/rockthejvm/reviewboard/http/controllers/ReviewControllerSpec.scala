@@ -16,7 +16,7 @@ import com.rockthejvm.reviewboard.syntax.*
 
 import com.rockthejvm.reviewboard.services.*
 import java.time.Instant
-import com.rockthejvm.reviewboard.domain.data.{Review, User, UserID, UserToken}
+import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
 
 object ReviewControllerSpec extends ZIOSpecDefault {
@@ -68,6 +68,9 @@ object ReviewControllerSpec extends ZIOSpecDefault {
         else List.empty
       )
 
+    override def getSummary(companyId: Long): Task[Option[ReviewSummary]] = ZIO.succeed(None)
+
+    override def makeSummary(companyId: Long, userId: Long): Task[Option[ReviewSummary]] = ZIO.succeed(None)
   }
 
   private def backendStubZIO(endpointFun: ReviewController => ServerEndpoint[Any, Task]) =

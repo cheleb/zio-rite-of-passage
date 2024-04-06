@@ -53,13 +53,14 @@ object Application extends ZIOAppDefault:
         Server.default,
         // Service layers
         CompanyServiceLive.layer,
-        ReviewServiceLive.layer,
+        ReviewServiceLive.configuredLayer,
         EmailServiceLive.configuredLayer,
         UserServiceLive.layer,
         InviteServiceLive.configuredLayer,
         JWTServiceLive.configuredLayer,
         RecoveryTokenRepositoryLive.configuredLayer,
         PaymentServiceLive.configuredLayer,
+        OpenAIServiceLive.layer,
         // Repository layers
         CompanyRepositoryLive.layer,
         ReviewRespositoryLive.layer,

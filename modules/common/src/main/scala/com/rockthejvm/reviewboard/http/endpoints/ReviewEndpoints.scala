@@ -6,6 +6,7 @@ import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
 import sttp.tapir.*
 import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
+import com.rockthejvm.reviewboard.domain.data.ReviewSummary
 
 trait ReviewEndpoints extends BaseEndpoint {
 
@@ -37,4 +38,21 @@ trait ReviewEndpoints extends BaseEndpoint {
       .summary("Get all reviews for a user")
       .in("reviews" / "user" / path[Long]("userId"))
       .out(jsonBody[List[Review]])
+
+  val getSummaryEndpoint =
+    baseEndpoint.get
+      .tag("reviews")
+      .name("GetSummary")
+      .description("Get a summary of reviews for a company")
+      .in("reviews" / "company" / path[Long]("companyId") / "summary")
+      .get
+      .out(jsonBody[Option[ReviewSummary]])
+
+  val makeSummaryEndpoint = baseSecuredEndpoint
+    .tag("reviews")
+    .name("MakeSummary")
+    .description("Make a summary of reviews for a company")
+    .in("reviews" / "company" / path[Long]("companyId") / "summary")
+    .post
+    .out(jsonBody[Option[ReviewSummary]])
 }
