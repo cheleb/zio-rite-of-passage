@@ -65,7 +65,7 @@ object ZJS {
       emitTo(eventBus)
       eventBus.events
 
-  /** Extension that allows us to call an unsecure endpoint as a function with a payload, and get a ZIO back.
+  /** Extension that allows us to turn an unsecure endpoint to a function from a payload to a ZIO.
     */
   extension [I, E <: Throwable, O](endpoint: Endpoint[Unit, I, E, O, Any])
     /** Call the endpoint with a payload, and get a ZIO back.
@@ -75,7 +75,7 @@ object ZJS {
     def apply(payload: I): RIO[BackendClient, O] =
       ZIO.service[BackendClient].flatMap(_.endpointRequestZIO(endpoint)(payload))
 
-  /** Extension that allows us to call a secured endpoint as a function with a payload, and get a ZIO back.
+  /** Extension that allows us to turn a secured endpoint to a function from a payload to a ZIO.
     */
   extension [I, E <: Throwable, O](endpoint: Endpoint[String, I, E, O, Any])
     /** Call the secured endpoint with a payload, and get a ZIO back.
