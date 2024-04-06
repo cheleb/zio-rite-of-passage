@@ -1,18 +1,11 @@
 package com.rockthejvm.reviewboard.core
 
-import sttp.client3.impl.zio.FetchZioBackend
-import sttp.client3.*
-import sttp.tapir.client.sttp.SttpClientInterpreter
-import sttp.capabilities.zio.ZioStreams
-import sttp.capabilities.WebSockets
+import com.raquo.laminar.api.L._
 import sttp.tapir.Endpoint
-import sttp.model.Uri
-import zio.*
-import com.rockthejvm.reviewboard.config.BackendClientConfig
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import scala.annotation.targetName
 import zio.ZIO.ServiceWithZIOPartiallyApplied
+import zio._
+
+import scala.annotation.targetName
 
 /** ZIO JS extension methods.
   *

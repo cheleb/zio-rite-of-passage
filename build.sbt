@@ -3,7 +3,8 @@ ThisBuild / scalaVersion := "3.4.1"
 ThisBuild / scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
-  "-feature"
+  "-feature",
+  "-Wunused:imports"
 )
 
 ThisBuild / run / fork := true

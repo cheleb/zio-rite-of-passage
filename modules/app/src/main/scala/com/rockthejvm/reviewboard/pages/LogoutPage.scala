@@ -1,13 +1,9 @@
 package com.rockthejvm.reviewboard.pages
 
-import org.scalajs.dom.html.Element
-
+import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveHtmlElement
-import com.raquo.laminar.api.L.*
-
-import com.raquo.airstream.state.Var
 import com.rockthejvm.reviewboard.core.Session
-import com.rockthejvm.reviewboard.core.ZJS.*
+import org.scalajs.dom.html.Element
 
 case class LogoutPageState() extends FormState {
 

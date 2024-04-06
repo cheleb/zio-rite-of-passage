@@ -1,23 +1,11 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import frontroute.*
+import com.raquo.laminar.api.L._
 import com.rockthejvm.reviewboard.components.Anchors
-import com.rockthejvm.reviewboard.common.*
-import com.rockthejvm.reviewboard.domain.data.*
-import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
-import com.rockthejvm.reviewboard.core.ZJS.*
-import sttp.client3.impl.zio.FetchZioBackend
-import sttp.client3.*
-import sttp.tapir.client.sttp.SttpClientInterpreter
-import zio.*
-import sttp.capabilities.zio.ZioStreams
-import sttp.capabilities.WebSockets
-import sttp.tapir.Endpoint
-import sttp.model.Uri
-import ZIO.*
 import com.rockthejvm.reviewboard.components.FilterPanel
+import com.rockthejvm.reviewboard.core.ZJS._
+import com.rockthejvm.reviewboard.domain.data._
+import zio._
 
 object CompagniesPage {
 

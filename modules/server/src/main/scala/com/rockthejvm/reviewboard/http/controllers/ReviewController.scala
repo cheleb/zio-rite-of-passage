@@ -6,10 +6,7 @@ import sttp.tapir.ztapir.*
 import zio.*
 import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoints
 import com.rockthejvm.reviewboard.services.ReviewService
-import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.services.JWTService
-import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
-import sttp.tapir.server.PartialServerEndpoint
 
 class ReviewController private (jwtService: JWTService, reviewService: ReviewService)
     extends SecuredBaseController(jwtService)

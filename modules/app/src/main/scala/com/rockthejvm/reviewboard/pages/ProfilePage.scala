@@ -1,11 +1,10 @@
 package com.rockthejvm.reviewboard.pages
 
-import zio.*
-import com.raquo.laminar.api.L.{*, given}
+import com.raquo.laminar.api.L._
 import com.rockthejvm.reviewboard.common.Constants
-import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.components.InviteAction
+import com.rockthejvm.reviewboard.core.Session
 
 object ProfilePage {
   def apply() =

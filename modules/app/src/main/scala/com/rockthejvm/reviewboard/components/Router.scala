@@ -1,9 +1,9 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L.{*, given}
+import com.raquo.laminar.api.L._
+import com.rockthejvm.reviewboard.pages._
+import frontroute._
 import org.scalajs.dom
-import frontroute.*
-import com.rockthejvm.reviewboard.pages.*
 
 object Router:
   val externalUrlBus = EventBus[String]()

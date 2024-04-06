@@ -1,17 +1,16 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import frontroute.*
-import zio.*
-import zio.prelude.*
+import com.raquo.laminar.api.L._
+import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.common.Constants
+import com.rockthejvm.reviewboard.core.ZJS._
 import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
-import com.rockthejvm.reviewboard.core.ZJS.*
+import org.scalajs.dom
+import org.scalajs.dom.html
+import zio._
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
-import com.raquo.laminar.nodes.ReactiveHtmlElement
-import org.scalajs.dom.html
+import zio.prelude._
 
 case class SignupFormState(
     email: String = "",

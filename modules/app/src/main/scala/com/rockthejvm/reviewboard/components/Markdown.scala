@@ -1,8 +1,8 @@
 package com.rockthejvm.reviewboard.components
 
-import scala.scalajs.*
-import scala.scalajs.js.*
-import scala.scalajs.js.annotation.*
+import scala.scalajs._
+import scala.scalajs.js._
+import scala.scalajs.js.annotation._
 
 @js.native
 @JSImport("showdown", JSImport.Default)

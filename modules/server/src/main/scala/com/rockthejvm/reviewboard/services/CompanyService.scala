@@ -4,7 +4,6 @@ import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
 
 import com.rockthejvm.reviewboard.domain.data.*
 
-import scala.collection.mutable
 
 import zio.*
 import com.rockthejvm.reviewboard.repositories.CompanyRepository

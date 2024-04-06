@@ -1,15 +1,11 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L.{*, given}
-import com.raquo.laminar.codecs.*
-import org.scalajs.dom
-import com.rockthejvm.reviewboard.components.Router
-import frontroute.LinkHandler
-import scalajs.js
-import scala.scalajs.js.annotation.JSImport
+import com.raquo.laminar.api.L._
+import com.raquo.laminar.codecs._
 import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.domain.data.UserToken
+
 object Header:
   def apply() = div(
     cls := "container-fluid p-0",

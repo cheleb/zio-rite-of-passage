@@ -1,10 +1,10 @@
 package com.rockthejvm.reviewboard
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import com.rockthejvm.reviewboard.components.*
-import frontroute.LinkHandler
+import com.raquo.laminar.api.L._
+import com.rockthejvm.reviewboard.components._
 import com.rockthejvm.reviewboard.core.Session
+import frontroute.LinkHandler
+import org.scalajs.dom
 
 object App extends App {
 

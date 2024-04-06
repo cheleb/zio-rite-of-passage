@@ -3,7 +3,6 @@ package com.rockthejvm.reviewboard.http.controllers
 import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import zio.*
 import sttp.tapir.ztapir.*
-import scala.collection.mutable
 import com.rockthejvm.reviewboard.domain.data.*
 import sttp.tapir.server.ServerEndpoint
 import com.rockthejvm.reviewboard.services.*

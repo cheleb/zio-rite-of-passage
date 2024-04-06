@@ -4,7 +4,6 @@ import sttp.tapir.server.ServerEndpoint
 import zio.*
 import sttp.tapir.ztapir.*
 import sttp.tapir.Endpoint
-import sttp.tapir.server.PartialServerEndpoint
 import com.rockthejvm.reviewboard.services.JWTService
 import com.rockthejvm.reviewboard.domain.data.UserID
 

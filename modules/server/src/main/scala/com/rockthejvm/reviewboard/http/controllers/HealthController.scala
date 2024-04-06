@@ -4,7 +4,6 @@ import com.rockthejvm.reviewboard.http.endpoints.HealthEndpoint
 import zio.*
 import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
-import com.rockthejvm.reviewboard.domain.errors.HttpError
 
 class HealthController private extends BaseController with HealthEndpoint {
 

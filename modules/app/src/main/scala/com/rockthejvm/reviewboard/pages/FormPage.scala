@@ -1,20 +1,11 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import frontroute.*
-import com.rockthejvm.reviewboard.common.Constants
-import zio.*
-import zio.prelude.*
-import zio.prelude.ZValidation.Failure
-import zio.prelude.ZValidation.Success
-import com.rockthejvm.reviewboard.core.ZJS.*
-import com.rockthejvm.reviewboard.http.requests.LoginRequest
-import sttp.client3.*
-import com.rockthejvm.reviewboard.core.Session
-import org.scalajs.dom.HTMLButtonElement
-import org.scalajs.dom.HTMLDivElement
+import com.raquo.laminar.api.L._
 import com.raquo.laminar.nodes.ReactiveHtmlElement
+import com.rockthejvm.reviewboard.common.Constants
+import org.scalajs.dom
+import org.scalajs.dom.HTMLDivElement
+import zio._
 
 trait FormState {
 

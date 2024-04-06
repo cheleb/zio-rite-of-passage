@@ -1,18 +1,16 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import frontroute.*
+import com.raquo.laminar.api.L._
 import com.rockthejvm.reviewboard.common.Constants
-import zio.*
-import zio.prelude.*
+import com.rockthejvm.reviewboard.components.Anchors
+import com.rockthejvm.reviewboard.core.Session
+import com.rockthejvm.reviewboard.core.ZJS._
+import com.rockthejvm.reviewboard.http.requests._
+import frontroute._
+import zio._
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
-import com.rockthejvm.reviewboard.core.ZJS.*
-import com.rockthejvm.reviewboard.http.requests.*
-import sttp.client3.*
-import com.rockthejvm.reviewboard.core.Session
-import com.rockthejvm.reviewboard.components.Anchors
+import zio.prelude._
 
 case class LoginState(
     email: String = "",

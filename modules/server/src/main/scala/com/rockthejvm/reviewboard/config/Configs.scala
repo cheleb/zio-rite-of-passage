@@ -3,9 +3,7 @@ package com.rockthejvm.reviewboard.config
 import zio.*
 import zio.config.*
 
-import zio.config.magnolia.*
 import com.typesafe.config.ConfigFactory
-import zio.ConfigProvider
 
 import zio.config.typesafe.TypesafeConfigProvider
 object Configs:

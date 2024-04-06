@@ -3,19 +3,14 @@ package com.rockthejvm.reviewboard.services
 import zio.*
 import com.auth0.jwt.*
 import java.time.Instant
-import java.util.concurrent.TimeUnit
-import java.time.temporal.TemporalUnit
 import java.time.temporal.ChronoUnit
 import com.auth0.jwt.algorithms.Algorithm
-import java.time.temporal.TemporalAmount
-import java.time.chrono.ChronoPeriod
 import java.time.Duration
 import java.time.Clock as JavaClock
 import com.auth0.jwt.JWTVerifier.BaseVerification
 
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.JWTConfig
-import java.time.temporal.ChronoField
 import com.rockthejvm.reviewboard.domain.data.{User, UserID, UserToken}
 
 trait JWTService {

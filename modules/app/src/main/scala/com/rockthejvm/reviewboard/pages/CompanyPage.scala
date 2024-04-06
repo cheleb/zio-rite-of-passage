@@ -1,18 +1,14 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-
-import zio.*
-import com.rockthejvm.reviewboard.domain.data.*
-import java.time.Instant
-import com.rockthejvm.reviewboard.common.Constants
-import com.rockthejvm.reviewboard.core.ZJS.*
-import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
-import com.rockthejvm.reviewboard.core.Session
-import com.rockthejvm.reviewboard.components.*
 import com.raquo.laminar.DomApi
+import com.raquo.laminar.api.L._
+import com.rockthejvm.reviewboard.components._
+import com.rockthejvm.reviewboard.core.Session
+import com.rockthejvm.reviewboard.core.ZJS._
+import com.rockthejvm.reviewboard.domain.data._
 import com.rockthejvm.reviewboard.http.requests.InvitePackRequest
+import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
+import zio._
 
 object CompanyPage {
 

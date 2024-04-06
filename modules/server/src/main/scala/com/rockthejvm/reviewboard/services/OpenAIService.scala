@@ -1,7 +1,6 @@
 package com.rockthejvm.reviewboard.services
 
 import zio.*
-import zio.test.ZIOSpecDefault
 
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.*
@@ -9,13 +8,11 @@ import sttp.client3.httpclient.zio.HttpClientZioBackend
 import sttp.tapir.*
 import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
-import sttp.tapir.EndpointIO.annotations.statusCode
 import sttp.tapir.client.sttp.SttpClientInterpreter
 
 import com.rockthejvm.reviewboard.config.OpenIAConfig
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.domain.errors.HttpError
-import com.rockthejvm.reviewboard.http.requests.*
 import com.rockthejvm.reviewboard.http.requests.*
 
 trait OpenAIService {

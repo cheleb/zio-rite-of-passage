@@ -9,7 +9,6 @@ import com.stripe.Stripe
 import com.stripe.net.Webhook
 import scala.jdk.OptionConverters.*
 import com.stripe.model.Event
-import com.rockthejvm.reviewboard.repositories.InviteRepository
 
 trait PaymentService {
   def createCheckoutSession(invitePackId: Long, userName: String): Task[Option[Session]]

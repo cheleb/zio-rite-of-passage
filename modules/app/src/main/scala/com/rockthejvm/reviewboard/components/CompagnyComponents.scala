@@ -1,10 +1,8 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L.{*, given}
-import org.scalajs.dom
-import com.rockthejvm.reviewboard.components.Anchors
-import com.rockthejvm.reviewboard.common.*
-import com.rockthejvm.reviewboard.domain.data.*
+import com.raquo.laminar.api.L._
+import com.rockthejvm.reviewboard.common._
+import com.rockthejvm.reviewboard.domain.data._
 
 object CompagnyComponents {
 

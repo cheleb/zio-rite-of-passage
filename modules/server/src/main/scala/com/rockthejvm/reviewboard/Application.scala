@@ -2,7 +2,6 @@ package com.rockthejvm.reviewboard
 
 import zio.*
 
-import com.rockthejvm.reviewboard.http.controllers.HealthController
 import zio.http.Server
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpServerOptions
@@ -10,12 +9,8 @@ import sttp.tapir.server.ziohttp.ZioHttpServerOptions
 import com.rockthejvm.reviewboard.http.HttpApi
 import com.rockthejvm.reviewboard.services.*
 import com.rockthejvm.reviewboard.repositories.*
-import com.rockthejvm.reviewboard.config.Configs
-import com.rockthejvm.reviewboard.config.JWTConfig
-import com.rockthejvm.reviewboard.config.EmailServiceConfig
 import sttp.tapir.server.interceptor.cors.CORSInterceptor
 import sttp.tapir.server.interceptor.log.DefaultServerLog
-import com.rockthejvm.reviewboard.Application.serverLOg
 import sttp.tapir.server.interceptor.log.ServerLog
 import zio.logging.backend.SLF4J
 

@@ -10,9 +10,7 @@ import sttp.tapir.server.ServerEndpoint
 
 import zio.*
 import com.rockthejvm.reviewboard.http.responses.UserResponse
-import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
 import com.rockthejvm.reviewboard.services.JWTService
-import com.rockthejvm.reviewboard.domain.data.UserID
 import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
 
 class UserController(userService: UserService, jwtService: JWTService)
