@@ -141,5 +141,9 @@ object ReviewServiceSpec extends ZIOSpecDefault {
             empty.isEmpty
         )
       }
-    ).provide(ReviewServiceLive.layer, reviewRepositoryLayer, OpenAIServiceLive.layer)
+    ).provide(
+      ReviewServiceLive.configuredLayer,
+      reviewRepositoryLayer,
+      OpenAIServiceLive.configuredLayer
+    )
 }
