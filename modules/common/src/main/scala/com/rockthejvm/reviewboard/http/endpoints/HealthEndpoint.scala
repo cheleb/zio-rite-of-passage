@@ -1,7 +1,6 @@
 package com.rockthejvm.reviewboard.http.endpoints
 
 import sttp.tapir.*
-import zio.*
 
 trait HealthEndpoint extends BaseEndpoint {
   val healthEndpoint = baseEndpoint

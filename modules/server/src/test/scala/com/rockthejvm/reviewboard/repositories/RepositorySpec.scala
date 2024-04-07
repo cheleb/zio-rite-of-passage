@@ -1,7 +1,6 @@
 package com.rockthejvm.reviewboard.repositories
 
 import zio.*
-import zio.test.*
 
 import javax.sql.DataSource
 

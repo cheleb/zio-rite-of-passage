@@ -4,7 +4,7 @@ ThisBuild / scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
   "-feature",
-  "-Wunused:imports"
+  "-Wunused:all"
 )
 
 ThisBuild / run / fork := true

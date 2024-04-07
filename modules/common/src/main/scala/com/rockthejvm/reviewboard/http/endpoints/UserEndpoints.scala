@@ -3,7 +3,6 @@ package com.rockthejvm.reviewboard.http.endpoints
 import sttp.tapir.*
 import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
-import sttp.model.StatusCode
 
 import com.rockthejvm.reviewboard.http.responses.UserResponse
 import com.rockthejvm.reviewboard.domain.data.UserToken

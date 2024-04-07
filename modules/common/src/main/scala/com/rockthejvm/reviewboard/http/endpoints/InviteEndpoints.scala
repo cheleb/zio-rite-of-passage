@@ -6,7 +6,6 @@ import sttp.tapir.generic.auto.*
 import com.rockthejvm.reviewboard
 import reviewboard.http.requests.*
 import reviewboard.http.responses.*
-import reviewboard.http.responses.*
 import reviewboard.domain.data.*
 
 trait InviteEndpoints extends BaseEndpoint {

@@ -28,7 +28,7 @@ class RecoveryTokenRepositoryLive private (
   inline given InsertMeta[PasswordRecoveryToken] = insertMeta[PasswordRecoveryToken]()
   inline given UpdateMeta[PasswordRecoveryToken] = updateMeta[PasswordRecoveryToken](_.email)
 
-  private val tokenDuration = 600
+  private val tokenDuration = config.duration
 
   private def randomUppercaseString(size: Int): Task[String] =
     ZIO.succeed(scala.util.Random.alphanumeric.take(size).mkString.toUpperCase)
