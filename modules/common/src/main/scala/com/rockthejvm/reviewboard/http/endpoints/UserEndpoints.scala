@@ -6,14 +6,7 @@ import sttp.tapir.generic.auto.*
 
 import com.rockthejvm.reviewboard.http.responses.UserResponse
 import com.rockthejvm.reviewboard.domain.data.UserToken
-import com.rockthejvm.reviewboard.http.requests.{
-  DeleteUserRequest,
-  ForgotPasswordRequest,
-  LoginRequest,
-  RecoverPasswordRequest,
-  UpdatePasswordRequest,
-  UserRegistrationRequest
-}
+import com.rockthejvm.reviewboard.http.requests.*
 
 trait UserEndpoints extends BaseEndpoint {
 
