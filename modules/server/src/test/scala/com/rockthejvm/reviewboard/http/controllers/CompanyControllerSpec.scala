@@ -42,13 +42,13 @@ object CompanyControllerSpec extends ZIOSpecDefault {
 
     override def getById(id: Long): Task[Option[Company]] =
       ZIO.succeed {
-        if (id == 1) Some(rockTheJVM)
+        if id == 1 then Some(rockTheJVM)
         else None
       }
 
     override def getBySlug(slug: String): Task[Option[Company]] =
       ZIO.succeed {
-        if (slug == "rock-the-jvm") Some(rockTheJVM)
+        if slug == "rock-the-jvm" then Some(rockTheJVM)
         else None
       }
 

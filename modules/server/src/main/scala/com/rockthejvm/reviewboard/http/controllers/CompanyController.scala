@@ -1,11 +1,11 @@
 package com.rockthejvm.reviewboard.http.controllers
 
-import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
-import zio.*
-import sttp.tapir.ztapir.*
 import com.rockthejvm.reviewboard.domain.data.*
-import sttp.tapir.server.ServerEndpoint
+import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import com.rockthejvm.reviewboard.services.*
+import sttp.tapir.server.ServerEndpoint
+import sttp.tapir.ztapir.*
+import zio.*
 
 class CompanyController private (jwtService: JWTService, companyService: CompanyService)
     extends SecuredBaseController(jwtService)

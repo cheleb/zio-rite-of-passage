@@ -1,14 +1,14 @@
 package com.rockthejvm.reviewboard.pages
 
 import com.raquo.laminar.DomApi
-import com.raquo.laminar.api.L._
-import com.rockthejvm.reviewboard.components._
+import com.raquo.laminar.api.L.*
+import com.rockthejvm.reviewboard.components.*
 import com.rockthejvm.reviewboard.core.Session
-import com.rockthejvm.reviewboard.core.ZJS._
-import com.rockthejvm.reviewboard.domain.data._
+import com.rockthejvm.reviewboard.core.ZJS.*
+import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.http.requests.InvitePackRequest
 import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
-import zio._
+import zio.*
 
 object CompanyPage {
 

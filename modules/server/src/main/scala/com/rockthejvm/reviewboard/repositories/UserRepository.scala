@@ -1,9 +1,9 @@
 package com.rockthejvm.reviewboard.repositories
 
 import com.rockthejvm.reviewboard.domain.data.User
-import zio.Task
-import io.getquill.jdbczio.Quill
 import io.getquill.*
+import io.getquill.jdbczio.Quill
+import zio.Task
 import zio.ZLayer
 
 trait UserRepository {

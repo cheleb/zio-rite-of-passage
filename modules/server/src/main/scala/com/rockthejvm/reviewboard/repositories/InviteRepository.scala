@@ -1,10 +1,10 @@
 package com.rockthejvm.reviewboard.repositories
 
-import zio.*
-import io.getquill.jdbczio.Quill
-import io.getquill.SnakeCase
 import com.rockthejvm.reviewboard.domain.data.*
+import io.getquill.SnakeCase
 import io.getquill.*
+import io.getquill.jdbczio.Quill
+import zio.*
 
 trait InviteRepository {
   def getByUserName(userName: String): Task[List[InviteNamedRecord]]

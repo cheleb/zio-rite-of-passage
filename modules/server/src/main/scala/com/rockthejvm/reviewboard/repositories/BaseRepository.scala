@@ -1,8 +1,8 @@
 package com.rockthejvm.reviewboard.repositories
 
-import zio.Task
 import io.getquill.SnakeCase
 import io.getquill.jdbczio.Quill
+import zio.Task
 
 trait WithTransaction {
   def tx[A](zio: Task[A]): Task[A]

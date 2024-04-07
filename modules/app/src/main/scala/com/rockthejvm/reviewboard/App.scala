@@ -1,7 +1,7 @@
 package com.rockthejvm.reviewboard
 
-import com.raquo.laminar.api.L._
-import com.rockthejvm.reviewboard.components._
+import com.raquo.laminar.api.L.*
+import com.rockthejvm.reviewboard.components.*
 import com.rockthejvm.reviewboard.core.Session
 import frontroute.LinkHandler
 import org.scalajs.dom

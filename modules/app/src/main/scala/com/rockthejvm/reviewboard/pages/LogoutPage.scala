@@ -1,6 +1,6 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.core.Session
 import org.scalajs.dom.html.Element

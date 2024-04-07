@@ -1,6 +1,6 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.components.InviteAction

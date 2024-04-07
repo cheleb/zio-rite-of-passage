@@ -1,11 +1,11 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.common.Constants
-import com.rockthejvm.reviewboard.core.ZJS._
+import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.InviteNamedRecord
 import com.rockthejvm.reviewboard.http.requests.InviteRequest
-import zio._
+import zio.*
 
 object InviteAction {
 

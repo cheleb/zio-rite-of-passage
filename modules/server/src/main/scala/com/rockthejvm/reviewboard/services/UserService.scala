@@ -1,14 +1,15 @@
 package com.rockthejvm.reviewboard.services
 
+import com.rockthejvm.reviewboard.domain.data.User
+import com.rockthejvm.reviewboard.domain.data.UserToken
+import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
+import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
+import com.rockthejvm.reviewboard.repositories.UserRepository
 import zio.*
 
-import com.rockthejvm.reviewboard.repositories.UserRepository
 import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
-import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
-import com.rockthejvm.reviewboard.domain.data.{User, UserToken}
-import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
 
 trait UserService {
   def registerUser(email: String, password: String): Task[User]

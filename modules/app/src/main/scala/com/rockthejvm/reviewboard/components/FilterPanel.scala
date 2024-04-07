@@ -1,8 +1,8 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L._
-import com.raquo.laminar.codecs._
-import com.rockthejvm.reviewboard.core.ZJS._
+import com.raquo.laminar.api.L.*
+import com.raquo.laminar.codecs.*
+import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.CompanyFilter
 
 /** A filter panel for the companies page.

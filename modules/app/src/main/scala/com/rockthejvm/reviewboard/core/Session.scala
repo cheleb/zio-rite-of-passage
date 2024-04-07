@@ -1,7 +1,7 @@
 package com.rockthejvm.reviewboard.core
 
 import com.raquo.airstream.core.Signal
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
 
 import scala.scalajs.js.Date
@@ -12,9 +12,10 @@ object Session {
   private val userTokenKey = "userToken"
 
   def apply[A](withSession: => A)(withoutSession: => A): Signal[Option[A]] =
-    userState.signal.map:
+    userState.signal.map {
       case Some(_) => Some(withSession)
       case None    => Some(withoutSession)
+    }
 
   /** This method is used to produce an Option when the user is active.
     *
@@ -44,10 +45,10 @@ object Session {
     Storage.get[UserToken](userTokenKey)
       .foreach {
         case UserToken(_, _, _, expiration) if expiration * 1000 < new Date().getTime() => Storage.remove(userTokenKey)
-        case token                                                                     => userState.now() match
+        case token => userState.now() match
             case Some(value) if token != value => userState.set(Some(token))
-            case None => userState.set(Some(token))
-            case _ => () 
+            case None                          => userState.set(Some(token))
+            case _                             => ()
       }
 
   def clearUserState(): Unit =

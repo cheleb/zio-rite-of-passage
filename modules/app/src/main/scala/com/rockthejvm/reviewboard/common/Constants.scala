@@ -1,7 +1,7 @@
 package com.rockthejvm.reviewboard.common
 
 import scala.scalajs.js
-import scala.scalajs.js.annotation._
+import scala.scalajs.js.annotation.*
 
 object Constants:
   @js.native

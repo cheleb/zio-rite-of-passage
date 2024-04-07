@@ -1,8 +1,8 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L._
-import com.rockthejvm.reviewboard.pages._
-import frontroute._
+import com.raquo.laminar.api.L.*
+import com.rockthejvm.reviewboard.pages.*
+import frontroute.*
 import org.scalajs.dom
 
 object Router:

@@ -1,7 +1,6 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L._
-
+import com.raquo.laminar.api.L.*
 
 //
 object Anchors:

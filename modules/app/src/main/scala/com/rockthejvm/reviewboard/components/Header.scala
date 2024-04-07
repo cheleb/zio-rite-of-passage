@@ -1,7 +1,7 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L._
-import com.raquo.laminar.codecs._
+import com.raquo.laminar.api.L.*
+import com.raquo.laminar.codecs.*
 import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.domain.data.UserToken
@@ -67,7 +67,7 @@ object Header:
       renderNavLink("Logout", "/logout")
     )
 
-    constantLinks ++ (if (maybeUserState.isDefined) authedLinks else unauthedLinks)
+    constantLinks ++ (if maybeUserState.isDefined then authedLinks else unauthedLinks)
 
   }
   //

@@ -52,19 +52,19 @@ object ReviewControllerSpec extends ZIOSpecDefault {
 
     override def getById(id: Long): Task[Option[Review]] =
       ZIO.succeed {
-        if (id == 1) Some(goodReview)
+        if id == 1 then Some(goodReview)
         else None
       }
 
     override def getByCompanyId(companyId: Long): Task[List[Review]] =
       ZIO.succeed(
-        if (companyId == 1) List(goodReview)
+        if companyId == 1 then List(goodReview)
         else List.empty
       )
 
     override def getByUserId(userId: Long): Task[List[Review]] =
       ZIO.succeed(
-        if (userId == 1) List(goodReview)
+        if userId == 1 then List(goodReview)
         else List.empty
       )
 

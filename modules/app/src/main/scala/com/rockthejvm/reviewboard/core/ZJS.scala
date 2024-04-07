@@ -1,9 +1,9 @@
 package com.rockthejvm.reviewboard.core
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import sttp.tapir.Endpoint
 import zio.ZIO.ServiceWithZIOPartiallyApplied
-import zio._
+import zio.*
 
 import scala.annotation.targetName
 

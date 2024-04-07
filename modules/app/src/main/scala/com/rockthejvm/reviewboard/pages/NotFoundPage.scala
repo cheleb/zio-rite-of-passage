@@ -1,6 +1,6 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 
 object NotFoundPage:
   def apply() =

@@ -1,9 +1,9 @@
 package com.rockthejvm.reviewboard.http.controllers
 
 import com.rockthejvm.reviewboard.http.endpoints.HealthEndpoint
-import zio.*
 import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
+import zio.*
 
 class HealthController private extends BaseController with HealthEndpoint {
 

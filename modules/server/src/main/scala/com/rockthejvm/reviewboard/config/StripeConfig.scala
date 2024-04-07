@@ -1,7 +1,7 @@
 package com.rockthejvm.reviewboard.config
 
-import zio.config.magnolia.deriveConfig
 import zio.Config
+import zio.config.magnolia.deriveConfig
 
 final case class StripeConfig(
     apiKey: String,

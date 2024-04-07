@@ -1,19 +1,17 @@
 package com.rockthejvm.reviewboard.services
 
-import zio.*
-
+import com.rockthejvm.reviewboard.config.Configs
+import com.rockthejvm.reviewboard.config.OpenIAConfig
+import com.rockthejvm.reviewboard.domain.errors.HttpError
+import com.rockthejvm.reviewboard.http.requests.*
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.*
 import sttp.client3.httpclient.zio.HttpClientZioBackend
 import sttp.tapir.*
-import sttp.tapir.json.zio.*
-import sttp.tapir.generic.auto.*
 import sttp.tapir.client.sttp.SttpClientInterpreter
-
-import com.rockthejvm.reviewboard.config.OpenIAConfig
-import com.rockthejvm.reviewboard.config.Configs
-import com.rockthejvm.reviewboard.domain.errors.HttpError
-import com.rockthejvm.reviewboard.http.requests.*
+import sttp.tapir.generic.auto.*
+import sttp.tapir.json.zio.*
+import zio.*
 
 trait OpenAIService {
   def getCompletion(prompt: String): Task[Option[String]]

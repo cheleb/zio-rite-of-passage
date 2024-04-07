@@ -1,14 +1,14 @@
 package com.rockthejvm.reviewboard.http.controllers
 
 import com.rockthejvm.reviewboard
+import com.rockthejvm.reviewboard.http.responses.*
+import com.rockthejvm.reviewboard.services.*
+import sttp.tapir.server.ServerEndpoint
+import sttp.tapir.ztapir.*
+import zio.*
+
 import reviewboard.http.endpoints.InviteEndpoints
 import reviewboard.services.JWTService
-import sttp.tapir.server.ServerEndpoint
-import zio.*
-import sttp.tapir.ztapir.*
-
-import com.rockthejvm.reviewboard.services.*
-import com.rockthejvm.reviewboard.http.responses.*
 
 class InviteController private (jwtService: JWTService, inviteService: InviteService, paymentService: PaymentService)
     extends SecuredBaseController(jwtService)

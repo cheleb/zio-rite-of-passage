@@ -1,17 +1,14 @@
 package com.rockthejvm.reviewboard.http.controllers
 
-import com.rockthejvm.reviewboard.services.UserService
-
+import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
-
-import sttp.tapir.*
-import sttp.tapir.ztapir.*
-import sttp.tapir.server.ServerEndpoint
-
-import zio.*
 import com.rockthejvm.reviewboard.http.responses.UserResponse
 import com.rockthejvm.reviewboard.services.JWTService
-import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
+import com.rockthejvm.reviewboard.services.UserService
+import sttp.tapir.*
+import sttp.tapir.server.ServerEndpoint
+import sttp.tapir.ztapir.*
+import zio.*
 
 class UserController(userService: UserService, jwtService: JWTService)
     extends SecuredBaseController(jwtService)

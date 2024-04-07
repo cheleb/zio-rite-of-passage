@@ -1,17 +1,15 @@
 package com.rockthejvm.reviewboard
 
-import zio.*
-
-import zio.http.Server
-import sttp.tapir.server.ziohttp.ZioHttpInterpreter
-import sttp.tapir.server.ziohttp.ZioHttpServerOptions
-
 import com.rockthejvm.reviewboard.http.HttpApi
-import com.rockthejvm.reviewboard.services.*
 import com.rockthejvm.reviewboard.repositories.*
+import com.rockthejvm.reviewboard.services.*
 import sttp.tapir.server.interceptor.cors.CORSInterceptor
 import sttp.tapir.server.interceptor.log.DefaultServerLog
 import sttp.tapir.server.interceptor.log.ServerLog
+import sttp.tapir.server.ziohttp.ZioHttpInterpreter
+import sttp.tapir.server.ziohttp.ZioHttpServerOptions
+import zio.*
+import zio.http.Server
 import zio.logging.backend.SLF4J
 
 object Application extends ZIOAppDefault:

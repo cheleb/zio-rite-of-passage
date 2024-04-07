@@ -1,8 +1,8 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L._
-import com.rockthejvm.reviewboard.common._
-import com.rockthejvm.reviewboard.domain.data._
+import com.raquo.laminar.api.L.*
+import com.rockthejvm.reviewboard.common.*
+import com.rockthejvm.reviewboard.domain.data.*
 
 object CompagnyComponents {
 

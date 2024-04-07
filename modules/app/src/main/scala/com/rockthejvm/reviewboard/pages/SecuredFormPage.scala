@@ -1,12 +1,11 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.domain.data.UserToken
 import org.scalajs.dom
 import org.scalajs.dom.HTMLDivElement
-import zio._
 
 abstract class SecuredFormPage[S <: FormState](title: String) extends FormPage[S](title) {
 

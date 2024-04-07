@@ -1,11 +1,10 @@
 package com.rockthejvm.reviewboard.pages
 
-import com.raquo.laminar.api.L._
+import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.common.Constants
 import org.scalajs.dom
 import org.scalajs.dom.HTMLDivElement
-import zio._
 
 trait FormState {
 

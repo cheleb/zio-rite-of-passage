@@ -1,7 +1,7 @@
 package com.rockthejvm.reviewboard.config
 
-import zio.config.magnolia.DeriveConfig
 import zio.Config
+import zio.config.magnolia.DeriveConfig
 
 final case class RecoveryTokensConfig(duration: Long)
 import zio.config.magnolia.deriveConfig
