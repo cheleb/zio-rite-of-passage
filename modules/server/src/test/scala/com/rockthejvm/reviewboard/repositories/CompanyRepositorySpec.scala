@@ -1,13 +1,14 @@
 package com.rockthejvm.reviewboard.repositories
 
 import zio.*
-import zio.test.*
 import zio.test.Assertion.*
-import com.rockthejvm.reviewboard.domain.data.Company
+import zio.test.*
 
-import com.rockthejvm.reviewboard.syntax.*
 import java.sql.SQLException
+
+import com.rockthejvm.reviewboard.domain.data.Company
 import com.rockthejvm.reviewboard.domain.data.CompanyFilter
+import com.rockthejvm.reviewboard.syntax.*
 
 object CompanyRepositorySpec extends ZIOSpecDefault with RepositorySpec("sql/companies.sql") {
 

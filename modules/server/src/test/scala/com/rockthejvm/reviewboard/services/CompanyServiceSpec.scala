@@ -1,15 +1,16 @@
 package com.rockthejvm.reviewboard.services
 
 import zio.*
-import zio.test.*
 import zio.test.Assertion.*
-import com.rockthejvm.reviewboard.services.CompanyService
-import com.rockthejvm.reviewboard.syntax.*
+import zio.test.*
+
 import scala.collection.mutable
+
 import com.rockthejvm.reviewboard.domain.data.Company
+import com.rockthejvm.reviewboard.domain.data.CompanyFilter
 import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
 import com.rockthejvm.reviewboard.repositories.CompanyRepository
-import com.rockthejvm.reviewboard.domain.data.CompanyFilter
+import com.rockthejvm.reviewboard.syntax.*
 
 object CompanyServiceSpec extends ZIOSpecDefault {
 

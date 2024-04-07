@@ -1,5 +1,7 @@
 package com.rockthejvm.reviewboard.core
 
+import zio.*
+
 import com.rockthejvm.reviewboard.config.*
 import com.rockthejvm.reviewboard.http.endpoints.*
 import sttp.capabilities.WebSockets
@@ -8,7 +10,6 @@ import sttp.client3.*
 import sttp.client3.impl.zio.FetchZioBackend
 import sttp.tapir.Endpoint
 import sttp.tapir.client.sttp.SttpClientInterpreter
-import zio.*
 
 case class RestrictedEndpointException(message: String) extends RuntimeException(message)
 

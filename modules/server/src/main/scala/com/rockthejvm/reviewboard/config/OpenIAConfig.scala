@@ -1,9 +1,10 @@
 package com.rockthejvm.reviewboard.config
 
-import sttp.model.Uri
 import zio.Config
 import zio.config.magnolia.DeriveConfig
 import zio.config.magnolia.deriveConfig
+
+import sttp.model.Uri
 
 final case class OpenIAConfig(baseUrl: Option[Uri], apiKey: String)
 

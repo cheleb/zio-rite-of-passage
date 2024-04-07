@@ -1,5 +1,9 @@
 package com.rockthejvm.reviewboard.services
 
+import zio.*
+
+import scala.jdk.OptionConverters.*
+
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.StripeConfig
 import com.stripe.Stripe
@@ -7,9 +11,6 @@ import com.stripe.model.Event
 import com.stripe.model.checkout.Session
 import com.stripe.net.Webhook
 import com.stripe.param.checkout.SessionCreateParams
-import zio.*
-
-import scala.jdk.OptionConverters.*
 
 trait PaymentService {
   def createCheckoutSession(invitePackId: Long, userName: String): Task[Option[Session]]

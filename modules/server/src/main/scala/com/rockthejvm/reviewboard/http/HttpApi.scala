@@ -1,8 +1,9 @@
 package com.rockthejvm.reviewboard.http
 
+import zio.*
+
 import com.rockthejvm.reviewboard.http.controllers.*
 import sttp.tapir.server.ServerEndpoint
-import zio.*
 
 object HttpApi {
 

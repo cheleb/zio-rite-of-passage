@@ -1,7 +1,8 @@
 package com.rockthejvm.reviewboard.http.controllers
 
-import sttp.tapir.server.ServerEndpoint
 import zio.*
+
+import sttp.tapir.server.ServerEndpoint
 
 trait BaseController {
 

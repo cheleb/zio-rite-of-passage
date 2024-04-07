@@ -1,9 +1,10 @@
 package com.rockthejvm.reviewboard.repositories
 
+import zio.ZLayer
+
 import io.getquill.SnakeCase
 import io.getquill.jdbczio.Quill
 import io.getquill.jdbczio.Quill.Postgres
-import zio.ZLayer
 
 object Repository {
 

@@ -1,11 +1,12 @@
 package com.rockthejvm.reviewboard.http.controllers
 
+import zio.*
+
 import com.rockthejvm.reviewboard.domain.data.UserID
 import com.rockthejvm.reviewboard.services.JWTService
 import sttp.tapir.Endpoint
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
-import zio.*
 
 /** A base controller for all secured endpoints
   *

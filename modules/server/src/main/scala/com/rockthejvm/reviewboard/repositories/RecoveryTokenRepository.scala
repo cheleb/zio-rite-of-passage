@@ -1,14 +1,15 @@
 package com.rockthejvm.reviewboard.repositories
 
+import zio.*
+
+import java.lang.System
+
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.RecoveryTokensConfig
 import com.rockthejvm.reviewboard.domain.data.PasswordRecoveryToken
 import io.getquill.SnakeCase
 import io.getquill.*
 import io.getquill.jdbczio.Quill
-import zio.*
-
-import java.lang.System
 
 trait RecoveryTokenRepository {
   def getToken(email: String): Task[Option[String]]

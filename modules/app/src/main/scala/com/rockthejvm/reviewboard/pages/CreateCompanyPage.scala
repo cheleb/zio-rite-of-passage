@@ -1,5 +1,10 @@
 package com.rockthejvm.reviewboard.pages
 
+import zio.*
+import zio.prelude.ZValidation.Failure
+import zio.prelude.ZValidation.Success
+import zio.prelude.*
+
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.common.Constants
@@ -10,10 +15,6 @@ import org.scalajs.dom
 import org.scalajs.dom.HTMLCanvasElement
 import org.scalajs.dom.HTMLImageElement
 import org.scalajs.dom.html
-import zio.*
-import zio.prelude.ZValidation.Failure
-import zio.prelude.ZValidation.Success
-import zio.prelude.*
 
 case class CreateCompanyState(
     name: String = "",

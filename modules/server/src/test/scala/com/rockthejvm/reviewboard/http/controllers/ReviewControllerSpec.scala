@@ -1,23 +1,21 @@
 package com.rockthejvm.reviewboard.http.controllers
 
 import zio.*
-import zio.test.*
-import zio.test.Assertion.*
 import zio.json.*
-import sttp.tapir.server.stub.TapirStubInterpreter
-import sttp.client3.testing.SttpBackendStub
-import sttp.monad.MonadError
-import sttp.tapir.ztapir.RIOMonadError
-import sttp.tapir.generic.auto.*
-import sttp.client3.*
-import sttp.tapir.server.ServerEndpoint
+import zio.test.*
 
-import com.rockthejvm.reviewboard.syntax.*
-
-import com.rockthejvm.reviewboard.services.*
 import java.time.Instant
+
 import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
+import com.rockthejvm.reviewboard.services.*
+import com.rockthejvm.reviewboard.syntax.*
+import sttp.client3.*
+import sttp.client3.testing.SttpBackendStub
+import sttp.monad.MonadError
+import sttp.tapir.server.ServerEndpoint
+import sttp.tapir.server.stub.TapirStubInterpreter
+import sttp.tapir.ztapir.RIOMonadError
 
 object ReviewControllerSpec extends ZIOSpecDefault {
 

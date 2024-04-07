@@ -2,10 +2,11 @@ package com.rockthejvm.reviewboard.repositories
 
 import zio.*
 import zio.test.*
-import com.rockthejvm.reviewboard.domain.data.Review
-import com.rockthejvm.reviewboard.repositories.ReviewRepository
-import com.rockthejvm.reviewboard.syntax.*
+
 import java.time.Instant
+
+import com.rockthejvm.reviewboard.domain.data.Review
+import com.rockthejvm.reviewboard.syntax.*
 
 object ReviewRepositortySpec extends ZIOSpecDefault with RepositorySpec("sql/reviews.sql") {
 

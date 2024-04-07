@@ -1,13 +1,12 @@
 package com.rockthejvm.reviewboard.repositories
 
-import org.testcontainers.containers.PostgreSQLContainer
-import org.postgresql.ds.PGSimpleDataSource
-import javax.sql.DataSource
-import java.sql.SQLException
-
 import zio.*
 import zio.test.*
-import zio.test.Assertion.*
+
+import javax.sql.DataSource
+
+import org.postgresql.ds.PGSimpleDataSource
+import org.testcontainers.containers.PostgreSQLContainer
 
 /** A trait that provides a PostgreSQL container for integration tests.
   */

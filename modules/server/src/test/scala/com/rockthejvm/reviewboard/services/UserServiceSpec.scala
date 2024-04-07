@@ -1,14 +1,15 @@
 package com.rockthejvm.reviewboard.services
 
-import zio.test.ZIOSpecDefault
 import zio.Scope
-import zio.test.*
 import zio.*
-import sttp.model.Uri
-import com.rockthejvm.reviewboard.repositories.UserRepository
-import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
+import zio.test.ZIOSpecDefault
+import zio.test.*
+
+import com.rockthejvm.reviewboard.domain.data.User
+import com.rockthejvm.reviewboard.domain.data.UserID
+import com.rockthejvm.reviewboard.domain.data.UserToken
 import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepository
-import com.rockthejvm.reviewboard.domain.data.{User, UserID, UserToken}
+import com.rockthejvm.reviewboard.repositories.UserRepository
 object UserServiceSpec extends ZIOSpecDefault {
 
   val daniel = User(

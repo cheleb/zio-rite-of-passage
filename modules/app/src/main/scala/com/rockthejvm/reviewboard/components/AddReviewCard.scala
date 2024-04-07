@@ -1,12 +1,13 @@
 package com.rockthejvm.reviewboard.components
 
+import zio.*
+
 import com.raquo.airstream.eventbus.EventBus
 import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.core.*
 import com.rockthejvm.reviewboard.domain.data.Review
 import com.rockthejvm.reviewboard.http.requests.*
-import zio.*
 
 class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus[Unit]) {
 

@@ -1,11 +1,12 @@
 package com.rockthejvm.reviewboard.pages
 
+import zio.*
+
 import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.components.FilterPanel
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.*
-import zio.*
 
 object CompagniesPage {
 

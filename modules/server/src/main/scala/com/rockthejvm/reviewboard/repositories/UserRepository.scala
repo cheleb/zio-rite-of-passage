@@ -1,10 +1,11 @@
 package com.rockthejvm.reviewboard.repositories
 
+import zio.Task
+import zio.ZLayer
+
 import com.rockthejvm.reviewboard.domain.data.User
 import io.getquill.*
 import io.getquill.jdbczio.Quill
-import zio.Task
-import zio.ZLayer
 
 trait UserRepository {
   def create(user: User): Task[User]

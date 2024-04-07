@@ -1,5 +1,12 @@
 package com.rockthejvm.reviewboard.services
 
+import zio.*
+
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.ChronoUnit
+import java.time.{Clock as JavaClock}
+
 import com.auth0.jwt.JWTVerifier.BaseVerification
 import com.auth0.jwt.*
 import com.auth0.jwt.algorithms.Algorithm
@@ -8,12 +15,6 @@ import com.rockthejvm.reviewboard.config.JWTConfig
 import com.rockthejvm.reviewboard.domain.data.User
 import com.rockthejvm.reviewboard.domain.data.UserID
 import com.rockthejvm.reviewboard.domain.data.UserToken
-import zio.*
-
-import java.time.Duration
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.time.Clock as JavaClock
 
 trait JWTService {
   def createToken(user: User): Task[UserToken]

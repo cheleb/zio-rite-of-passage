@@ -1,9 +1,10 @@
 package com.rockthejvm.reviewboard.repositories
 
+import zio.*
+
 import com.rockthejvm.reviewboard.domain.data.*
 import io.getquill.*
 import io.getquill.jdbczio.Quill
-import zio.*
 
 trait ReviewRepository {
   def create(review: Review): Task[Review]

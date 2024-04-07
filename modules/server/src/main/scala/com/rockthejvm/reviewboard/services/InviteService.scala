@@ -1,10 +1,11 @@
 package com.rockthejvm.reviewboard.services
 
+import zio.*
+
 import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.InvitePackConfig
 import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.repositories.*
-import zio.*
 
 trait InviteService {
   def getByUserName(userName: String): Task[List[InviteNamedRecord]]

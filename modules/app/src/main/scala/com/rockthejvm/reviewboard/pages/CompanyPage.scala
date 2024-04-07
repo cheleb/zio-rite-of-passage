@@ -1,5 +1,7 @@
 package com.rockthejvm.reviewboard.pages
 
+import zio.*
+
 import com.raquo.laminar.DomApi
 import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.components.*
@@ -8,7 +10,6 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.http.requests.InvitePackRequest
 import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
-import zio.*
 
 object CompanyPage {
 

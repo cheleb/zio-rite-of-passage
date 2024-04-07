@@ -1,10 +1,10 @@
 package com.rockthejvm.reviewboard.core
 
+import scala.scalajs.js.Date
+
 import com.raquo.airstream.core.Signal
 import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
-
-import scala.scalajs.js.Date
 
 object Session {
   val userState: Var[Option[UserToken]] = Var(Option.empty[UserToken])

@@ -3,7 +3,7 @@ package com.rockthejvm.reviewboard.domain.data
 import zio.test.Spec
 import zio.test.ZIOSpecDefault
 import zio.test.*
-import zio.ZIO
+
 import com.rockthejvm.reviewboard.domain.data.Company
 // For more information on writing tests, see
 // https://scalameta.org/munit/docs/getting-started.html

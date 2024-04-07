@@ -1,13 +1,14 @@
 package com.rockthejvm.reviewboard.services
 
-import com.rockthejvm.reviewboard.config.Configs
-import com.rockthejvm.reviewboard.config.EmailServiceConfig
-import com.rockthejvm.reviewboard.domain.data.Company
 import zio.*
 
 import java.util.Properties
 import javax.mail.*
 import javax.mail.internet.MimeMessage
+
+import com.rockthejvm.reviewboard.config.Configs
+import com.rockthejvm.reviewboard.config.EmailServiceConfig
+import com.rockthejvm.reviewboard.domain.data.Company
 
 trait EmailService {
   def sendEmail(to: String, subject: String, content: String): Task[Unit]

@@ -1,8 +1,9 @@
 package com.rockthejvm.reviewboard.repositories
 
 import zio.*
-import zio.test.*
 import zio.test.Assertion.*
+import zio.test.*
+
 import com.rockthejvm.reviewboard.syntax.*
 
 object InviteRepositorySpec extends ZIOSpecDefault with RepositorySpec("sql/invites.sql") {

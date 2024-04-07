@@ -1,5 +1,10 @@
 package com.rockthejvm.reviewboard.pages
 
+import zio.*
+import zio.prelude.ZValidation.Failure
+import zio.prelude.ZValidation.Success
+import zio.prelude.*
+
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.core.ZJS.*
@@ -7,10 +12,6 @@ import com.rockthejvm.reviewboard.domain.data.UserToken
 import com.rockthejvm.reviewboard.http.requests.*
 import org.scalajs.dom
 import org.scalajs.dom.html
-import zio.*
-import zio.prelude.ZValidation.Failure
-import zio.prelude.ZValidation.Success
-import zio.prelude.*
 
 case class ChangePasswordState(
     password: String = "",

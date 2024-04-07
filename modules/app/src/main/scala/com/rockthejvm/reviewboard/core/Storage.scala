@@ -1,6 +1,7 @@
 package com.rockthejvm.reviewboard.core
-import org.scalajs.dom
 import zio.json.*
+
+import org.scalajs.dom
 
 object Storage {
 

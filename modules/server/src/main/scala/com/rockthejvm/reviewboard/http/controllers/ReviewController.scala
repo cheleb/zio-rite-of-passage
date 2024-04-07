@@ -1,11 +1,12 @@
 package com.rockthejvm.reviewboard.http.controllers
 
+import zio.*
+
 import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoints
 import com.rockthejvm.reviewboard.services.JWTService
 import com.rockthejvm.reviewboard.services.ReviewService
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
-import zio.*
 
 class ReviewController private (jwtService: JWTService, reviewService: ReviewService)
     extends SecuredBaseController(jwtService)

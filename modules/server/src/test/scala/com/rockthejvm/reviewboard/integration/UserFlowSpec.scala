@@ -1,36 +1,32 @@
 package com.rockthejvm.reviewboard.integration
 
 import zio.*
+import zio.json.*
 import zio.test.*
 
-import zio.json.*
-
-import com.rockthejvm.reviewboard.services.*
-
-import com.rockthejvm.reviewboard.http.controllers.*
-import sttp.tapir.server.stub.TapirStubInterpreter
-import sttp.client3.testing.SttpBackendStub
-import sttp.monad.MonadError
-import sttp.tapir.ztapir.RIOMonadError
-import sttp.client3.*
-import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
-import com.rockthejvm.reviewboard.repositories.UserRepository
-import com.rockthejvm.reviewboard.repositories.UserRepositoryLive
-import com.rockthejvm.reviewboard.repositories.Repository
-import com.rockthejvm.reviewboard.repositories.RepositorySpec
 import com.rockthejvm.reviewboard.config.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
-import sttp.client3.SttpBackend
-import sttp.model.Method
+import com.rockthejvm.reviewboard.http.controllers.*
+import com.rockthejvm.reviewboard.http.requests.DeleteUserRequest
+import com.rockthejvm.reviewboard.http.requests.ForgotPasswordRequest
+import com.rockthejvm.reviewboard.http.requests.LoginRequest
+import com.rockthejvm.reviewboard.http.requests.RecoverPasswordRequest
 import com.rockthejvm.reviewboard.http.requests.UpdatePasswordRequest
-import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
-import com.rockthejvm.reviewboard.http.requests.{
-  DeleteUserRequest,
-  ForgotPasswordRequest,
-  LoginRequest,
-  RecoverPasswordRequest
-}
+import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
 import com.rockthejvm.reviewboard.http.responses.UserResponse
+import com.rockthejvm.reviewboard.repositories.RecoveryTokenRepositoryLive
+import com.rockthejvm.reviewboard.repositories.Repository
+import com.rockthejvm.reviewboard.repositories.RepositorySpec
+import com.rockthejvm.reviewboard.repositories.UserRepository
+import com.rockthejvm.reviewboard.repositories.UserRepositoryLive
+import com.rockthejvm.reviewboard.services.*
+import sttp.client3.SttpBackend
+import sttp.client3.*
+import sttp.client3.testing.SttpBackendStub
+import sttp.model.Method
+import sttp.monad.MonadError
+import sttp.tapir.server.stub.TapirStubInterpreter
+import sttp.tapir.ztapir.RIOMonadError
 
 object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.sql") {
   // Http controller

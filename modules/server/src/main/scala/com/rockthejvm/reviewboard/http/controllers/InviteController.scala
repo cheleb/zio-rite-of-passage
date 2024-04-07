@@ -1,11 +1,12 @@
 package com.rockthejvm.reviewboard.http.controllers
 
+import zio.*
+
 import com.rockthejvm.reviewboard
 import com.rockthejvm.reviewboard.http.responses.*
 import com.rockthejvm.reviewboard.services.*
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
-import zio.*
 
 import reviewboard.http.endpoints.InviteEndpoints
 import reviewboard.services.JWTService

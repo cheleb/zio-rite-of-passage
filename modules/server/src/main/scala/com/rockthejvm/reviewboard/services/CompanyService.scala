@@ -1,10 +1,11 @@
 package com.rockthejvm.reviewboard.services
 
+import zio.*
+
 import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.http.requests.CreateCompanyRequest
 import com.rockthejvm.reviewboard.repositories.CompanyRepository
 import com.rockthejvm.reviewboard.repositories.ReviewRepository
-import zio.*
 
 trait CompanyService {
   def create(req: CreateCompanyRequest): Task[Company]
