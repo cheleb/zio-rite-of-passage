@@ -103,7 +103,7 @@ object CompanyPage {
       ),
       div(
         cls := "container-fluid",
-        renderCompanySummary,
+        renderCompanySummary(company),
         child <-- addReviewCardActive.signal.map {
           case true  => AddReviewCard(company.id, () => addReviewCardActive.set(false), triggerRefreshBus).reviewCard()
           case false => div()
@@ -144,17 +144,31 @@ object CompanyPage {
         }
       )
 
-  def renderCompanySummary =
+  def renderCompanySummary(company: Company) = {
+    val summaryBus      = EventBus[Option[ReviewSummary]]()
+    val buttonStatusBus = EventBus[Option[String]]()
+
+    val getSummary = useBackend(_.review.getSummaryEndpoint(company.id))
+
     div(
+      onMountCallback(_ => getSummary.emitTo(summaryBus)),
       cls := "container",
       div(
         cls := "markdown-body overview-section",
+        h3(span("Review Summary")),
         div(
           cls := "company-description",
-          "TODO company summary"
+          child <-- summaryBus.events.map(_.map(_.content).getOrElse("Loading...")),
+          div(cls := "review-posted", s"Generated ${Time.unixToHumanReadable(1000000)}")
+        ),
+        button(
+          `type` := "button",
+          cls    := "rock-action-btn",
+          "Generate a review"
         )
       )
     )
+  }
 
   def renderStaticReview(review: Review) =
     div(
