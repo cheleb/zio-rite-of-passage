@@ -9,6 +9,7 @@ import com.rockthejvm.reviewboard.domain.data.Review
 import com.rockthejvm.reviewboard.domain.data.ReviewSummary
 import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
 import com.rockthejvm.reviewboard.repositories.ReviewRepository
+import com.rockthejvm.reviewboard.config.SummaryConfig
 
 object ReviewServiceSpec extends ZIOSpecDefault {
 
@@ -42,11 +43,12 @@ object ReviewServiceSpec extends ZIOSpecDefault {
 
   val reviewRepositoryLayer = ZLayer.succeed(new ReviewRepository {
 
-    override def insertSummary(companyId: Long, summary: String): Task[ReviewSummary] = ???
+    override def insertSummary(companyId: Long, summary: String): Task[ReviewSummary] =
+      ZIO.succeed(ReviewSummary(companyId, summary, Instant.now()))
 
-    override def getSummary(companyId: Long): Task[Option[ReviewSummary]] = ???
+    override def getSummary(companyId: Long): Task[Option[ReviewSummary]] = ZIO.none
 
-    override def deleteByCompanyId(companyId: Long): Task[List[Review]] = ???
+    override def deleteByCompanyId(companyId: Long): Task[List[Review]] = ZIO.succeed(List(goodReview, badReview))
 
     override def create(review: Review): Task[Review] =
       ZIO.succeed(goodReview)
@@ -83,6 +85,14 @@ object ReviewServiceSpec extends ZIOSpecDefault {
       getById(reviewId).someOrFail(new Exception("Review not found")).map(op)
 
   })
+
+  val stubOpenAIService = ZLayer.succeed(new OpenAIService {
+
+    override def getCompletion(prompt: String): Task[Option[String]] = ZIO.none
+
+  })
+
+  val summaryConfigLayer = ZLayer.succeed(SummaryConfig(1, 2))
 
   override def spec: Spec[TestEnvironment & Scope, Any] =
     suite("ReviewServiceSpec")(
@@ -144,8 +154,9 @@ object ReviewServiceSpec extends ZIOSpecDefault {
         )
       }
     ).provide(
-      ReviewServiceLive.configuredLayer,
+      summaryConfigLayer,
+      ReviewServiceLive.layer,
       reviewRepositoryLayer,
-      OpenAIServiceLive.configuredLayer
+      stubOpenAIService
     )
 }

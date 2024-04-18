@@ -26,3 +26,33 @@
     resize: vertical;
     padding: 0.5rem 1rem;
 }
+
+.generate-btn {
+    margin-top: 1rem;
+}
+
+.review-summary-contents {
+    margin-bottom: 1rem;
+}
+
+.simple-titled-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.simple-titled-page h1,
+h2,
+h3 {
+    color: var(--background-color);
+}
+
+.main-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+}

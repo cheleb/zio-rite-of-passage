@@ -39,7 +39,6 @@ class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus
   def reviewCard() =
     div(
       cls := "container",
-      child <-- stateVar.signal.map(_.toString()),
       div(
         cls := "markdown-body overview-section",
         div(

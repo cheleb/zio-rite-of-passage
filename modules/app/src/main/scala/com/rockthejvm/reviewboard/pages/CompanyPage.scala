@@ -150,6 +150,17 @@ object CompanyPage {
 
     val getSummary = useBackend(_.review.getSummaryEndpoint(company.id))
 
+    val refresher = Observer[Unit] { _ =>
+      val program =
+        for
+          _          <- ZIO.succeed(buttonStatusBus.emit(Some("Loading...")))
+          newSummary <- useBackend(_.review.makeSummaryEndpoint(company.id))
+          _          <- ZIO.succeed(buttonStatusBus.emit(None))
+        yield newSummary
+
+      program.emitTo(summaryBus)
+    }
+
     div(
       onMountCallback(_ => getSummary.emitTo(summaryBus)),
       cls := "container",
@@ -157,14 +168,25 @@ object CompanyPage {
         cls := "markdown-body overview-section",
         h3(span("Review Summary")),
         div(
-          cls := "company-description",
-          child <-- summaryBus.events.map(_.map(_.content).getOrElse("Loading...")),
-          div(cls := "review-posted", s"Generated ${Time.unixToHumanReadable(1000000)}")
+          cls := "company-description review-summary-contents",
+          child.maybe <-- summaryBus.events.map(_.map(_.content))
         ),
+        child.maybe <-- summaryBus.events.map(_.map(t =>
+          div(
+            cls := "review-posted",
+            Time.unixToHumanReadable(t.created.toEpochMilli())
+          )
+        )),
         button(
           `type` := "button",
-          cls    := "rock-action-btn",
-          "Generate a review"
+          cls    := "rock-action-btn generate-btn",
+          disabled <-- summaryBus.events.map(_.map(t => Time.pastDay(t.created, 1)).getOrElse(false))
+            .mergeWith(buttonStatusBus.events.mapTo(true))
+            .startWith(false),
+          onClick.mapToUnit --> refresher,
+          child.text <-- buttonStatusBus.events.map(_.getOrElse("Generate new summary")).startWith(
+            "Generate new summary"
+          )
         )
       )
     )
@@ -221,6 +243,23 @@ object CompanyPage {
       )
     )
 
+  def renderLoading() =
+    List(div(
+      cls := "simple-titled-page",
+      h1("Loading...")
+    ))
+
+  def renderNotFound() =
+    List(div(
+      cls := "simple-titled-page",
+      h1("Oops!"),
+      h2("Company not found"),
+      a(
+        href := "/",
+        "Go back to the homepage"
+      )
+    ))
+
   def apply(companyId: Long) = {
     div(
       cls := "container-fluid the-rock",
@@ -228,8 +267,8 @@ object CompanyPage {
         useBackend(_.company.findByIdEndpoint(companyId.toString)).emitTo(fetchCompanyBus)
       ),
       children <-- status.map {
-        case Status.Loading     => List(div("Loading..."))
-        case Status.NOT_FOUND   => List(div("Company not found"))
+        case Status.Loading     => renderLoading()
+        case Status.NOT_FOUND   => renderNotFound()
         case Status.OK(company) => render(company)
       }
     )

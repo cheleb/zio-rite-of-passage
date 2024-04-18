@@ -3,6 +3,7 @@ package com.rockthejvm.reviewboard.components
 import scala.scalajs.*
 import scala.scalajs.js.*
 import scala.scalajs.js.annotation.*
+import java.time.Instant
 
 @js.native
 @JSGlobal
@@ -21,4 +22,7 @@ object Time {
   def unixToHumanReadable(millis: Long): String = {
     MomentLib.unix(millis / 1000).fromNow()
   }
+
+  def pastDay(instant: Instant, n: Int) =
+    (new Date().getTime.toLong - instant.toEpochMilli()) < n * 24 * 3600000
 }

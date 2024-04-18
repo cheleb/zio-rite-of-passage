@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS reviews(
     benefits int NOT NULL,
     would_recommend int NOT NULL,
     review text NOT NULL,
-    created timestamp NOT NULL DEFAULT now(),
-    updated timestamp NOT NULL DEFAULT now()
+    created timestamp with time zone NOT NULL DEFAULT now(),
+    updated timestamp with time zone NOT NULL DEFAULT now()
 );
 
 CREATE TABLE IF NOT EXISTS users(
@@ -50,6 +50,6 @@ CREATE TABLE IF NOT EXISTS invites(
 CREATE TABLE IF NOT EXISTS review_summaries(
     company_id bigint PRIMARY KEY,
     content text,
-    created timestamp NOT NULL DEFAULT now()
+    created timestamp with time zone NOT NULL DEFAULT now()
 );
 
