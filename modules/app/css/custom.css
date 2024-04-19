@@ -56,3 +56,17 @@ h3 {
     width: 100%;
     margin: 2rem 0;
 }
+
+.image-upload {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.image-upload-thumbnail {
+    max-width: 4rem;
+    max-height: 4rem;
+    border: 1px solid var(--background-color);
+    margin-left: 1rem;
+}

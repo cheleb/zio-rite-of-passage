@@ -15,6 +15,7 @@ import org.scalajs.dom
 import org.scalajs.dom.HTMLCanvasElement
 import org.scalajs.dom.HTMLImageElement
 import org.scalajs.dom.html
+import org.scalajs.dom.File
 
 case class CreateCompanyState(
     name: String = "",
@@ -59,6 +60,32 @@ case class CreateCompanyState(
 object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Company") {
 
   override def basicState: CreateCompanyState = CreateCompanyState()
+
+  private val fileUploader = Observer[List[File]] { files =>
+    files.headOption match
+      case None => stateVar.update(_.copy(image = None))
+      case Some(file) =>
+        val reader = new dom.FileReader()
+        reader.onload = _ => {
+          val fakeImg = dom.document.createElement("img").asInstanceOf[HTMLImageElement]
+          fakeImg.addEventListener(
+            "load",
+            _ => {
+              val canvas          = dom.document.createElement("canvas").asInstanceOf[HTMLCanvasElement]
+              val (width, height) = computeDimensions(fakeImg.width, fakeImg.height)
+              canvas.width = width
+              canvas.height = height
+              val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
+              ctx.drawImage(fakeImg, 0, 0, width, height)
+              val dataUrl = canvas.toDataURL(file.`type`)
+              stateVar.update(_.copy(image = Option(dataUrl)))
+            }
+          )
+          fakeImg.src = reader.result.toString
+        }
+        reader.readAsDataURL(file)
+
+  }
 
   override def renderChildren(user: UserToken): List[ReactiveHtmlElement[html.Element]] = List(
     renderInput("Company name", "Name", "text", true, "ACME Inc", (s, v) => s.copy(name = v)),
@@ -121,43 +148,26 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
           if isRequired then span("*") else span(),
           name
         ),
-        input(
-          `type` := "file",
-          cls    := "form-control",
-          idAttr := uid,
-          accept := "image/*",
-          onChange.mapToFiles --> { files =>
-            files.headOption match
-              case None => stateVar.update(_.copy(image = None))
-              case Some(file) =>
-                val reader = new dom.FileReader()
-                reader.onload = _ => {
-                  val fakeImg = dom.document.createElement("img").asInstanceOf[HTMLImageElement]
-                  fakeImg.addEventListener(
-                    "load",
-                    _ => {
-                      val canvas          = dom.document.createElement("canvas").asInstanceOf[HTMLCanvasElement]
-                      val (width, height) = computeDimensions(fakeImg.width, fakeImg.height)
-                      println(s"$width, $height")
-                      canvas.width = width
-                      canvas.height = height
-                      val ctx = canvas.getContext("2d").asInstanceOf[dom.CanvasRenderingContext2D]
-                      ctx.drawImage(fakeImg, 0, 0, width, height)
-                      val dataUrl = canvas.toDataURL(file.`type`)
-                      stateVar.update(_.copy(image = Option(dataUrl)))
-                    }
-                  )
-                  fakeImg.src = reader.result.toString
-                }
-                reader.readAsDataURL(file)
-
-          }
+        div(
+          cls := "image-upload",
+          input(
+            `type` := "file",
+            cls    := "form-control",
+            idAttr := uid,
+            accept := "image/*",
+            onChange.mapToFiles --> fileUploader
+          ),
+          img(
+            cls := "image-upload-thumbnail",
+            src <-- stateVar.signal.map(_.image.getOrElse(Constants.companyLogoPlaceHolder)),
+            alt := "Preview"
+          )
         )
       )
     )
   )
   private def computeDimensions(width: Int, height: Int): (Int, Int) =
-    if width > height then
+    if width >= height then
       val aspectRatio = width * 1.0 / 128
       val newWidth    = width / aspectRatio
       val newHeight   = height / aspectRatio
