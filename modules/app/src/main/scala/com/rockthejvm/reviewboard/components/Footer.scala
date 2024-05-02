@@ -1,6 +1,6 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L.{*, given}
+import com.raquo.laminar.api.L.*
 import scala.scalajs.js.Date
 
 object Footer {

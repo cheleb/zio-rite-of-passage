@@ -2,6 +2,7 @@ package com.rockthejvm.reviewboard
 
 import zio.*
 import zio.http.Server
+
 import zio.logging.backend.SLF4J
 
 import com.rockthejvm.reviewboard.http.HttpApi
@@ -12,6 +13,9 @@ import sttp.tapir.server.interceptor.log.DefaultServerLog
 import sttp.tapir.server.interceptor.log.ServerLog
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpServerOptions
+import com.rockthejvm.reviewboard.config.Configs
+import com.rockthejvm.reviewboard.config.HttpConfig
+import java.net.InetSocketAddress
 
 object Application extends ZIOAppDefault:
 
@@ -26,9 +30,22 @@ object Application extends ZIOAppDefault:
     logAllDecodeFailures = true
   )
 
+  private val configuredServer = Configs.makeConfigLayer[HttpConfig]("rockthejvm.http")
+    >>> ZLayer(ZIO.service[HttpConfig]
+      .map(config => Server.Config.default.copy(address = InetSocketAddress(config.port))))
+    >>> Server.live
   override val bootstrap: ZLayer[ZIOAppArgs, Any, Any] = Runtime.removeDefaultLoggers >>> SLF4J.slf4j
 
-  val serrverProgram =
+  val runMigrations = for {
+    flyway <- ZIO.service[FlywayService]
+    _ <- flyway.runMigrations()
+      .catchSome {
+        case e => ZIO.logError(s"Error running migrations: ${e.getMessage()}")
+            *> flyway.runRepair() *> flyway.runMigrations()
+      }
+  } yield ()
+
+  val startServer =
     for
       _         <- ZIO.logWarning("Running the server")
       endpoints <- HttpApi.endpointsZIO
@@ -41,11 +58,17 @@ object Application extends ZIOAppDefault:
       )
     yield ()
 
+  val program = for {
+    _ <- runMigrations
+    _ <- startServer
+  } yield ()
+
   override def run =
-    serrverProgram
+    program
       .provide(
-        Server.default,
+        configuredServer,
         // Service layers
+        FlywayServiceLive.configuredLayer,
         CompanyServiceLive.layer,
         ReviewServiceLive.configuredLayer,
         EmailServiceLive.configuredLayer,
