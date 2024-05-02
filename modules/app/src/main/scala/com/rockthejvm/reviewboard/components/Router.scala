@@ -14,38 +14,38 @@ object Router:
         div(
           cls := "container-fluid",
           // potentially children
-          (pathEnd | path("companies")) { // Localhost:8080/companies
+          (pathEnd | path("companies")) {
             CompagniesPage()
           },
-          path("login") { // Localhost:8080/login
+          path("login") {
             LoginPage()
           },
-          path("signup") { // Localhost:8080/signup
+          path("signup") {
             SignUpPage()
           },
-          path("change-password") { // Localhost:8080/signup
+          path("change-password") {
             ChangePasswordPage()
           },
-          path("forgot-password") { // Localhost:8080/forgot-password
+          path("forgot-password") {
             ForgotPasswordPage()
           },
-          path("recover-password") { // Localhost:8080/recover-password
+          path("recover-password") {
             RecoverPasswordPage()
           },
-          path("logout") { // Localhost:8080/logout
+          path("logout") {
             LogoutPage()
           },
-          path("profile") { // Localhost:8080/profile
+          path("profile") {
             ProfilePage()
           },
-          path("post") { // Localhost:8080/post
+          path("post") {
             CreateCompanyPage()
           },
-          path("company" / long) { // Localhost:8080/company/42
+          path("company" / long) {
             companyId =>
               CompanyPage(companyId)
           },
-          noneMatched { // Localhost:8080/whatever
+          noneMatched {
             NotFoundPage()
           }
         )

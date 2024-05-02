@@ -92,7 +92,7 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
     ): Task[Option[Response]] =
       sendRequest[Response](Method.DELETE, path, request, token)
 
-  class EmailServiceProbe extends EmailService {
+  class EmailServiceProbe extends EmailService("http://localhost:1234") {
 
     private val mutableEmails = collection.mutable.Map[String, String]()
     override def sendEmail(to: String, subject: String, content: String): Task[Unit] = ???

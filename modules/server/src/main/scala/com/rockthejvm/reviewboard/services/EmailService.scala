@@ -10,7 +10,7 @@ import com.rockthejvm.reviewboard.config.Configs
 import com.rockthejvm.reviewboard.config.EmailServiceConfig
 import com.rockthejvm.reviewboard.domain.data.Company
 
-trait EmailService {
+trait EmailService(baseURL: String) {
   def sendEmail(to: String, subject: String, content: String): Task[Unit]
   def sendPasswordRecoveryEmail(to: String, token: String): Task[Unit] = {
     val subject = "Password recovery"
@@ -23,7 +23,7 @@ trait EmailService {
       <p>
         If you did request a password recovery, please click on the following link to reset your password:
       </p>
-      <a href="http://localhost:8080/reset-password?token=$token">Reset password</a>
+      <a href="$baseURL/reset-password?token=$token">Reset password</a>
     Your password recovery token is: $token"""
     sendEmail(to, subject, content)
   }
@@ -39,13 +39,13 @@ trait EmailService {
       <p>
         If you did request to review a pull request, please click on the following link to access the review:
       </p>
-      <a href="http://localhost:8080/company/${company.id}">Review plz</a>
+      <a href="$baseURL/company/${company.id}">Review plz</a>
     """
     sendEmail(to, subject, content)
   }
 }
 
-class EmailServiceLive private (config: EmailServiceConfig) extends EmailService {
+class EmailServiceLive private (config: EmailServiceConfig) extends EmailService(config.baseURL) {
 
   private val host: String     = config.host
   private val port: Int        = config.port
