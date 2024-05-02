@@ -47,6 +47,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "io.getquill"                   %% "quill-jdbc-zio"                    % "4.8.3",
   "org.postgresql"                 % "postgresql"                        % "42.7.3",
   "org.flywaydb"                   % "flyway-core"                       % "10.11.1",
+  "org.flywaydb"                   % "flyway-database-postgresql"        % "10.4.1",
   "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.10.0",
   "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC23",
   "com.auth0"                      % "java-jwt"                          % "4.4.0",
