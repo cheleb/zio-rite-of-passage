@@ -21,7 +21,7 @@ case class ChangePasswordState(
     upstreamStatus: Option[Either[String, String]] = None
 ) extends FormState {
 
-  private def passwordValidation = Validation.fromEither(
+  private def passwordValidation: Validation[String, String] = Validation.fromEither(
     if password.nonEmpty then Right(password)
     else Left("Password must be provided")
   )
@@ -72,7 +72,6 @@ object ChangePasswordPage extends SecuredFormPage[ChangePasswordState]("Profile"
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password successfully changed."))))
         }
         .tapError(e =>
-          println(e.getMessage)
           ZIO.succeed(stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Left(e.getMessage)))))
         )
         .runJs
