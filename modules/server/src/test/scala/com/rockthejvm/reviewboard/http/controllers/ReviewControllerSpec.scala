@@ -85,7 +85,7 @@ object ReviewControllerSpec extends ZIOSpecDefault {
         val program = for {
           backendStub <- backendStubZIO(_.create)
           response <- basicRequest
-            .post(uri"/reviews")
+            .post(uri"/api/reviews")
             .auth
             .bearer("It is me")
             .body(
@@ -113,10 +113,10 @@ object ReviewControllerSpec extends ZIOSpecDefault {
         for {
           backendStub <- backendStubZIO(_.getById)
           response <- basicRequest
-            .get(uri"/reviews/1")
+            .get(uri"/api/reviews/1")
             .send(backendStub)
           respoonseNotFound <- basicRequest
-            .get(uri"/reviews/999")
+            .get(uri"/api/reviews/999")
             .send(backendStub)
 
         } yield assertTrue(
@@ -132,10 +132,10 @@ object ReviewControllerSpec extends ZIOSpecDefault {
         for {
           backendStub <- backendStubZIO(_.getByCompanyId)
           response <- basicRequest
-            .get(uri"/reviews/company/1")
+            .get(uri"/api/reviews/company/1")
             .send(backendStub)
           respoonseNotFound <- basicRequest
-            .get(uri"/reviews/company/999")
+            .get(uri"/api/reviews/company/999")
             .send(backendStub)
 
         } yield assertTrue(

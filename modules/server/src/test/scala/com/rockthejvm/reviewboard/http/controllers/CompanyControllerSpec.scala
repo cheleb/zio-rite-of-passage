@@ -75,7 +75,7 @@ object CompanyControllerSpec extends ZIOSpecDefault {
 
           backend <- backendStubZIO(_.create)
           response <- basicRequest
-            .post(uri"/companies")
+            .post(uri"/api/companies")
             .auth
             .bearer("It is me")
             .body(CreateCompanyRequest("Rock the JVM", "rockthejvm.com").toJson)
@@ -94,7 +94,7 @@ object CompanyControllerSpec extends ZIOSpecDefault {
         val program = for {
           backend <- backendStubZIO(_.getAll)
           response <- basicRequest
-            .get(uri"/companies")
+            .get(uri"/api/companies")
             .send(backend)
         } yield response.body
         program.assert { responseBody =>
@@ -109,7 +109,7 @@ object CompanyControllerSpec extends ZIOSpecDefault {
         val program = for {
           backend <- backendStubZIO(_.findById)
           response <- basicRequest
-            .get(uri"/companies/rock-the-jvm")
+            .get(uri"/api/companies/rock-the-jvm")
             .send(backend)
         } yield response.body
         program.assert { responseBody =>

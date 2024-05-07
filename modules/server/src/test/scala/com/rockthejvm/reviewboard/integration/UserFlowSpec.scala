@@ -109,13 +109,13 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
   def createUser(backend: SttpBackend[Task, Nothing]) =
     backend
       .post[UserResponse](
-        "/users",
+        "/api/users",
         UserRegistrationRequest(danielEmail, "rockthejvm")
       )
   def loginUser(backend: SttpBackend[Task, Nothing]) =
     backend
       .post[UserToken](
-        "/users/login",
+        "/api/users/login",
         LoginRequest(danielEmail, "rockthejvm")
       )
 
@@ -145,14 +145,14 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
           tokenResponse <- loginUser(backend)
             .someOrFail(new RuntimeException("Authentication failed"))
           passwordChangeResponse <- backend.put[UserResponse](
-            "/users/password",
+            "/api/users/password",
             UpdatePasswordRequest(danielEmail, "rockthejvm", "zozo"),
             Some(tokenResponse.token)
           )
           oldTokenResponse <- backend
-            .post[UserToken]("/users/login", LoginRequest(danielEmail, "rockthejvm"))
+            .post[UserToken]("/api/users/login", LoginRequest(danielEmail, "rockthejvm"))
           newTokenResponse <- backend
-            .post[UserToken]("/users/login", LoginRequest(danielEmail, "zozo"))
+            .post[UserToken]("/api/users/login", LoginRequest(danielEmail, "zozo"))
         yield assertTrue(
           passwordChangeResponse.contains(
             UserResponse(
@@ -170,7 +170,7 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
           userRepo <- ZIO.service[UserRepository]
           someUser <- userRepo.getByEmail(danielEmail)
           passwordChangeResponse <- backend.delete[UserResponse](
-            "/users",
+            "/api/users",
             DeleteUserRequest(danielEmail, "rockthejvm"),
             Some(tokenResponse.token)
           )
@@ -188,20 +188,20 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
           backend            <- backendStubZIO
           createUserResponse <- createUser(backend)
           // Send a forgot password request
-          _ <- backend.postNoResponse("/users/forgot", ForgotPasswordRequest(danielEmail))
+          _ <- backend.postNoResponse("/api/users/forgot", ForgotPasswordRequest(danielEmail))
           // Fetch the token from the
           emailServiceProbe <- ZIO.service[EmailServiceProbe]
           token <- emailServiceProbe
             .probeTo(danielEmail)
             .someOrFail(new RuntimeException("No token found"))
           _ <- backend.postNoResponse(
-            "/users/recover",
+            "/api/users/recover",
             RecoverPasswordRequest(danielEmail, token, "scalarulez")
           )
           oldTokenResponse <- backend
-            .post[UserToken]("/users/login", LoginRequest(danielEmail, "rockthejvm"))
+            .post[UserToken]("/api/users/login", LoginRequest(danielEmail, "rockthejvm"))
           newTokenResponse <- backend
-            .post[UserToken]("/users/login", LoginRequest(danielEmail, "scalarulez"))
+            .post[UserToken]("/api/users/login", LoginRequest(danielEmail, "scalarulez"))
         yield assertTrue(
           oldTokenResponse.isEmpty && newTokenResponse.nonEmpty
         )
