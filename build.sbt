@@ -12,10 +12,10 @@ ThisBuild / run / fork := true
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 val zioVersion        = "2.0.22"
-val tapirVersion      = "1.10.3"
-val zioLoggingVersion = "2.2.2"
-val zioConfigVersion  = "4.0.1"
-val sttpVersion       = "3.9.5"
+val tapirVersion      = "1.10.6"
+val zioLoggingVersion = "2.2.3"
+val zioConfigVersion  = "4.0.2"
+val sttpVersion       = "3.9.6"
 val javaMailVersion   = "1.6.2"
 val stripeVersion     = "24.3.0"
 
@@ -44,7 +44,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "dev.zio"                       %% "zio-config"                        % zioConfigVersion,
   "dev.zio"                       %% "zio-config-magnolia"               % zioConfigVersion,
   "dev.zio"                       %% "zio-config-typesafe"               % zioConfigVersion,
-  "io.getquill"                   %% "quill-jdbc-zio"                    % "4.8.3",
+  "io.getquill"                   %% "quill-jdbc-zio"                    % "4.8.4",
   "org.postgresql"                 % "postgresql"                        % "42.7.3",
   "org.flywaydb"                   % "flyway-core"                       % "10.12.0",
   "org.flywaydb"                   % "flyway-database-postgresql"        % "10.12.0",
@@ -84,9 +84,9 @@ lazy val app = (project in file("modules/app"))
       "com.softwaremill.sttp.tapir"   %%% "tapir-sttp-client" % tapirVersion,
       "com.softwaremill.sttp.tapir"   %%% "tapir-json-zio"    % tapirVersion,
       "com.softwaremill.sttp.client3" %%% "zio"               % sttpVersion,
-      "dev.zio"                       %%% "zio-json"          % "0.4.2",
+      "dev.zio"                       %%% "zio-json"          % "0.6.2",
       "dev.zio"                       %%% "zio-prelude"       % "1.0.0-RC23",
-      "io.frontroute"                 %%% "frontroute"        % "0.18.1" // Brings in Laminar 16
+      "io.frontroute"                 %%% "frontroute"        % "0.18.2" // Brings in Laminar 16
     ),
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
     semanticdbEnabled               := true,
