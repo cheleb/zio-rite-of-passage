@@ -11,7 +11,7 @@ ThisBuild / run / fork := true
 
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
-val zioVersion        = "2.0.22"
+val zioVersion        = "2.1.0"
 val tapirVersion      = "1.10.6"
 val zioLoggingVersion = "2.2.3"
 val zioConfigVersion  = "4.0.2"
@@ -86,7 +86,8 @@ lazy val app = (project in file("modules/app"))
       "com.softwaremill.sttp.client3" %%% "zio"               % sttpVersion,
       "dev.zio"                       %%% "zio-json"          % "0.6.2",
       "dev.zio"                       %%% "zio-prelude"       % "1.0.0-RC25",
-      "io.frontroute"                 %%% "frontroute"        % "0.18.2" // Brings in Laminar 16
+      "com.raquo"                     %%% "laminar"           % "17.0.0",
+      "io.frontroute"                 %%% "frontroute"        % "0.19.0-RC1" // Brings in Laminar 16
     ),
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
     semanticdbEnabled               := true,

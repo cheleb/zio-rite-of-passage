@@ -30,12 +30,11 @@ object CompanyPage {
 
   val reviewsSignal: Signal[List[Review]] = {
 
-    fetchCompanyBus.events.flatMap {
+    fetchCompanyBus.events.flatMapMerge {
       case None => EventStream.empty
       case Some(company) =>
         def refreshReview = useBackend(_.review.getByCompanyIdEndpoint(company.id)).toEventStream
-        refreshReview.mergeWith(triggerRefreshBus.events.flatMap(_ => refreshReview))
-
+        refreshReview.mergeWith(triggerRefreshBus.events.flatMapMerge(_ => refreshReview))
     }.scanLeft(List.empty)((_, newReviews) => newReviews)
   }
 
@@ -199,8 +198,10 @@ object CompanyPage {
         cls := "markdown-body overview-section",
         // TODO add a highlight if this is "your" review
         div(
-          cls := "company-description",
-          cls.toggle("review-highlighted") <-- Session.userState.signal.map(_.exists(_.id == review.userId)),
+          cls <-- Session.userState.signal.map(_.exists(_.id == review.userId)).map {
+            case true  => "company-description review-highlighted"
+            case false => "company-description"
+          },
           div(
             cls := "review-summary",
             renderStaticReviewDetail("Would Recommend", review.wouldRecommend),
