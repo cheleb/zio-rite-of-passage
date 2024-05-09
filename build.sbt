@@ -17,7 +17,7 @@ val zioLoggingVersion = "2.2.3"
 val zioConfigVersion  = "4.0.2"
 val sttpVersion       = "3.9.6"
 val javaMailVersion   = "1.6.2"
-val stripeVersion     = "25.5.0"
+val stripeVersion     = "25.7.0"
 
 val commonDependencies = Seq(
   "com.softwaremill.sttp.tapir"   %% "tapir-sttp-client" % tapirVersion,
