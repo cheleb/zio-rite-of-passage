@@ -11,7 +11,7 @@ ThisBuild / run / fork := true
 
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
-val zioVersion        = "2.1.0"
+val zioVersion        = "2.1.1"
 val tapirVersion      = "1.10.6"
 val zioLoggingVersion = "2.2.3"
 val zioConfigVersion  = "4.0.2"
