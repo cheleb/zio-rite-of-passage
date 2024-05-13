@@ -1,10 +1,11 @@
 package com.rockthejvm.reviewboard.core
 
-import zio.*
+import zio.Task
+import zio.ZIO
+import zio.ZLayer
 
 import com.rockthejvm.reviewboard.config.*
 import com.rockthejvm.reviewboard.http.endpoints.*
-import sttp.capabilities.WebSockets
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.*
 import sttp.client3.impl.zio.FetchZioBackend
@@ -59,7 +60,7 @@ trait BackendClient {
   * @param config
   */
 private class BackendClientLive(
-    backend: SttpBackend[Task, ZioStreams & WebSockets],
+    backend: SttpBackend[Task, ZioStreams],
     interpreter: SttpClientInterpreter,
     config: BackendClientConfig
 ) extends BackendClient {
@@ -104,9 +105,9 @@ object BackendClientLive {
   val layer = ZLayer.fromFunction(BackendClientLive(_, _, _))
 
   val configuredLayer = {
-    val backend     = FetchZioBackend()
-    val interpreter = SttpClientInterpreter()
-    val config      = BackendClientConfig(Some(uri"${Constants.backendBaseURL}"))
+    val backend: SttpBackend[Task, ZioStreams] = FetchZioBackend()
+    val interpreter                            = SttpClientInterpreter()
+    val config                                 = BackendClientConfig(Some(uri"${Constants.backendBaseURL}"))
 
     ZLayer.succeed(backend) ++ ZLayer.succeed(interpreter) ++ ZLayer.succeed(config) >>> layer
   }
