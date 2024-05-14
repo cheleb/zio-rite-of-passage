@@ -13,7 +13,7 @@ ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 val zioVersion        = "2.1.1"
 val tapirVersion      = "1.10.7"
-val zioLoggingVersion = "2.2.3"
+val zioLoggingVersion = "2.2.4"
 val zioConfigVersion  = "4.0.2"
 val sttpVersion       = "3.9.6"
 val javaMailVersion   = "1.6.2"
