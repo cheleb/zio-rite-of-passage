@@ -12,14 +12,14 @@ ThisBuild / run / fork := true
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 val Versions = new {
-  val zio        = "2.1.1"
+  val zio        = "2.1.2"
   val tapir      = "1.10.7"
   val zioLogging = "2.2.4"
   val zioConfig  = "4.0.2"
   val sttp       = "3.9.6"
   val javaMail   = "1.6.2"
-  val stripe     = "25.7.0"
-  val flywaydb   = "10.13.0"
+  val stripe     = "25.10.0"
+  val flywaydb   = "10.14.0"
 }
 
 val commonDependencies = Seq(
