@@ -13,6 +13,7 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.*
 import org.scalajs.dom
 import org.scalajs.dom.html
+import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
 case class ForgotPasswordState(
     email: String = "",
@@ -50,9 +51,9 @@ object ForgotPasswordPage extends FormPage[ForgotPasswordState]("Forgot Password
     if state.hasErrors then
       stateVar.update(_.copy(showStatus = true))
     else
-      useBackend(_.user.forgotPasswordEndpoint(ForgotPasswordRequest(
+      UserEndpoints.forgotPasswordEndpoint(ForgotPasswordRequest(
         state.email
-      )))
+      ))
         .map { user =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password request submited."))))
         }

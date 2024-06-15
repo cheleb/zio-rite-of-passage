@@ -4,6 +4,7 @@ import com.raquo.laminar.api.L.*
 import com.raquo.laminar.codecs.*
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.CompanyFilter
+import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 
 /** A filter panel for the companies page.
   */
@@ -51,7 +52,7 @@ class FilterPanel {
   def apply() = div(
     onMountCallback(_ =>
 //      useBackend(_.company.allFiltersEndpoint(())).map(possibleFilter.set).runJs
-      useBackend(_.company.allFiltersEndpoint(())).emitTo(possibleFilter)
+      CompanyEndpoints.allFiltersEndpoint(()).emitTo(possibleFilter)
     ),
     cls    := "accordion accordion-flush",
     idAttr := "accordionFlushExample",

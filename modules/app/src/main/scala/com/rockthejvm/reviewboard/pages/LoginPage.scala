@@ -12,6 +12,7 @@ import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.*
 import frontroute.*
+import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
 case class LoginState(
     email: String = "",
@@ -52,7 +53,7 @@ object LoginPage extends FormPage[LoginState]("Log In") {
     if state.hasErrors then
       stateVar.update(_.copy(showStatus = true))
     else
-      useBackend(_.user.loginEndpoint(LoginRequest(state.email, state.password)))
+      UserEndpoints.login(LoginRequest(state.email, state.password))
         .map { userToken =>
           Session.setUserState(userToken)
           stateVar.set(LoginState())

@@ -16,6 +16,7 @@ import org.scalajs.dom.HTMLCanvasElement
 import org.scalajs.dom.HTMLImageElement
 import org.scalajs.dom.html
 import org.scalajs.dom.File
+import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 
 case class CreateCompanyState(
     name: String = "",
@@ -119,7 +120,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
       println("Errors")
       stateVar.update(_.copy(showStatus = true))
     else
-      useBackend(_.company.createEndpoint(CreateCompanyRequest(
+      CompanyEndpoints.createEndpoint(CreateCompanyRequest(
         state.name,
         state.url,
         state.location,
@@ -127,7 +128,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
         state.industry,
         state.image,
         Option(state.tags).filter(_.nonEmpty)
-      )))
+      ))
         .map { user =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Company posted successfully."))))
         }

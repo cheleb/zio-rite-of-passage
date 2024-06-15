@@ -8,7 +8,7 @@ import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
 import com.rockthejvm.reviewboard.domain.data.ReviewSummary
 
-trait ReviewEndpoints extends BaseEndpoint {
+object ReviewEndpoints extends BaseEndpoint {
 
   val createEndpoint =
     baseSecuredEndpoint.post

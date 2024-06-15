@@ -8,7 +8,7 @@ import reviewboard.http.requests.*
 import reviewboard.http.responses.*
 import reviewboard.domain.data.*
 
-trait InviteEndpoints extends BaseEndpoint {
+object InviteEndpoints extends BaseEndpoint {
 
   val inviteEndpoint =
     baseSecuredEndpoint

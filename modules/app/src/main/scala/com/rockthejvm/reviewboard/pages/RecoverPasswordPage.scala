@@ -13,6 +13,7 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.*
 import org.scalajs.dom
 import org.scalajs.dom.html
+import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
 case class RecoverPasswordState(
     email: String = "",
@@ -71,11 +72,11 @@ object RecoverPasswordPage extends FormPage[RecoverPasswordState]("Recover Passw
     if state.hasErrors then
       stateVar.update(_.copy(showStatus = true))
     else
-      useBackend(_.user.recoverPasswordEndpoint(RecoverPasswordRequest(
+      UserEndpoints.recoverPasswordEndpoint(RecoverPasswordRequest(
         state.email,
         state.token,
         state.newPassword
-      )))
+      ))
         .map { _ =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Success, welcome back."))))
         }

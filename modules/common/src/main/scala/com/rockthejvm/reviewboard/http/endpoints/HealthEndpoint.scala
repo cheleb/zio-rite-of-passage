@@ -2,7 +2,7 @@ package com.rockthejvm.reviewboard.http.endpoints
 
 import sttp.tapir.*
 
-trait HealthEndpoint extends BaseEndpoint {
+object HealthEndpoint extends BaseEndpoint {
   val healthEndpoint = baseEndpoint
     .tag("health")
     .name("health")

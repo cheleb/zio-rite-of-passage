@@ -12,6 +12,7 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
 import org.scalajs.dom
 import org.scalajs.dom.html
+import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
 case class SignupFormState(
     email: String = "",
@@ -64,7 +65,7 @@ object SignUpPage extends FormPage[SignupFormState]("Sign Up") {
       println("Errors")
       stateVar.update(_.copy(showStatus = true))
     else
-      useBackend(_.user.createUserEndpoint(UserRegistrationRequest(state.email, state.password)))
+      UserEndpoints.create(UserRegistrationRequest(state.email, state.password))
         .map { user =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Account created successfully."))))
         }

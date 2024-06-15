@@ -6,7 +6,7 @@ import sttp.tapir.json.zio.*
 import sttp.tapir.generic.auto.*
 import com.rockthejvm.reviewboard.domain.data.*
 
-trait CompanyEndpoints extends BaseEndpoint:
+object CompanyEndpoints extends BaseEndpoint:
   val createEndpoint = baseSecuredEndpoint.post
     .tag("Companies")
     .name("create")

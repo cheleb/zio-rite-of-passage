@@ -8,8 +8,11 @@ import com.rockthejvm.reviewboard.components.*
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.*
+import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoints
 import com.rockthejvm.reviewboard.http.requests.InvitePackRequest
 import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
+import com.rockthejvm.reviewboard.http.endpoints.InviteEndpoints
+import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 
 object CompanyPage {
 
@@ -33,13 +36,13 @@ object CompanyPage {
     fetchCompanyBus.events.flatMapMerge {
       case None => EventStream.empty
       case Some(company) =>
-        def refreshReview = useBackend(_.review.getByCompanyIdEndpoint(company.id)).toEventStream
+        def refreshReview = ReviewEndpoints.getByCompanyIdEndpoint(company.id).toEventStream
         refreshReview.mergeWith(triggerRefreshBus.events.flatMapMerge(_ => refreshReview))
     }.scanLeft(List.empty)((_, newReviews) => newReviews)
   }
 
   def startPaymentFlow(company: Company) =
-    useBackend(_.invite.addPackPromotedEndpoint(InvitePackRequest(company.id)))
+    InviteEndpoints.addPackPromotedEndpoint(InvitePackRequest(company.id))
       .tapError(error => ZIO.succeed(inviteErrorBus.emit(error.getMessage())))
       .emitTo(Router.externalUrlBus)
 
@@ -147,13 +150,13 @@ object CompanyPage {
     val summaryBus      = EventBus[Option[ReviewSummary]]()
     val buttonStatusBus = EventBus[Option[String]]()
 
-    val getSummary = useBackend(_.review.getSummaryEndpoint(company.id))
+    val getSummary = ReviewEndpoints.getSummaryEndpoint(company.id)
 
     val refresher = Observer[Unit] { _ =>
       val program =
         for
           _          <- ZIO.succeed(buttonStatusBus.emit(Some("Loading...")))
-          newSummary <- useBackend(_.review.makeSummaryEndpoint(company.id))
+          newSummary <- ReviewEndpoints.makeSummaryEndpoint(company.id)
           _          <- ZIO.succeed(buttonStatusBus.emit(None))
         yield newSummary
 
@@ -265,7 +268,7 @@ object CompanyPage {
     div(
       cls := "container-fluid the-rock",
       onMountCallback(_ =>
-        useBackend(_.company.findByIdEndpoint(companyId.toString)).emitTo(fetchCompanyBus)
+        CompanyEndpoints.findByIdEndpoint(companyId.toString).emitTo(fetchCompanyBus)
       ),
       children <-- status.map {
         case Status.Loading     => renderLoading()

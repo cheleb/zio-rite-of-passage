@@ -7,6 +7,7 @@ import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.InviteNamedRecord
 import com.rockthejvm.reviewboard.http.requests.InviteRequest
+import com.rockthejvm.reviewboard.http.endpoints.InviteEndpoints
 
 object InviteAction {
 
@@ -20,7 +21,7 @@ object InviteAction {
     )
 
   def refreshInviteList() =
-    useBackend(_.invite.getByUserIdEndpoint(()))
+    InviteEndpoints.getByUserIdEndpoint(())
 
   def renderInviteSection(record: InviteNamedRecord) = {
     val emailListVar  = Var(Array.empty[String])
@@ -35,7 +36,7 @@ object InviteAction {
           maybeErrorVar.update(_ => Some("Please provide valid emails."))
         else {
           val refreshProgram = for {
-            _       <- useBackend(_.invite.inviteEndpoint(InviteRequest(record.companyId, emails.toList)))
+            _       <- InviteEndpoints.inviteEndpoint(InviteRequest(record.companyId, emails.toList))
             invites <- refreshInviteList()
           } yield invites
 

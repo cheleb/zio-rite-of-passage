@@ -8,9 +8,9 @@ import com.rockthejvm.reviewboard.http.responses.UserResponse
 import com.rockthejvm.reviewboard.domain.data.UserToken
 import com.rockthejvm.reviewboard.http.requests.*
 
-trait UserEndpoints extends BaseEndpoint {
+object UserEndpoints extends BaseEndpoint {
 
-  val createUserEndpoint =
+  val create =
     baseEndpoint
       .tag("Users")
       .name("register")
@@ -22,7 +22,7 @@ trait UserEndpoints extends BaseEndpoint {
       .out(jsonBody[UserResponse])
 
   // TODO - should be an authorized endpoint
-  val updatePasswordEndpoint =
+  val updatePassword =
     baseSecuredEndpoint
       .tag("Users")
       .name("update password")
@@ -33,7 +33,7 @@ trait UserEndpoints extends BaseEndpoint {
       .out(jsonBody[UserResponse])
 
   // TODO - should be an authorized endpoint
-  val deleteEndpoint =
+  val delete =
     baseSecuredEndpoint
       .tag("Users")
       .name("delete account")
@@ -43,7 +43,7 @@ trait UserEndpoints extends BaseEndpoint {
       .in(jsonBody[DeleteUserRequest])
       .out(jsonBody[UserResponse])
 
-  val loginEndpoint =
+  val login =
     baseEndpoint
       .tag("Users")
       .name("login")

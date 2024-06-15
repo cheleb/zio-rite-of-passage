@@ -10,6 +10,7 @@ import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
 import com.rockthejvm.reviewboard.http.requests.*
+import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 import org.scalajs.dom
 import org.scalajs.dom.html
 
@@ -63,11 +64,11 @@ object ChangePasswordPage extends SecuredFormPage[ChangePasswordState]("Profile"
     if state.hasErrors then
       stateVar.update(_.copy(showStatus = true))
     else
-      useBackend(_.user.updatePasswordEndpoint(UpdatePasswordRequest(
+      UserEndpoints.updatePassword(UpdatePasswordRequest(
         email,
         state.password,
         state.newPassword
-      )))
+      ))
         .map { user =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password successfully changed."))))
         }

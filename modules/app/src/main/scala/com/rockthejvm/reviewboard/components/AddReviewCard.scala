@@ -8,6 +8,7 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.core.*
 import com.rockthejvm.reviewboard.domain.data.Review
 import com.rockthejvm.reviewboard.http.requests.*
+import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoints
 
 class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus[Unit]) {
 
@@ -23,7 +24,7 @@ class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus
     if state.hasErrors then
       stateVar.update(_.copy(showErrors = true))
     else
-      useBackend(_.review.createEndpoint(CreateReviewRequest.fromReview(state.review)))
+      ReviewEndpoints.createEndpoint(CreateReviewRequest.fromReview(state.review))
         .map { user =>
           // stateVar.update(_.copy(showErrors = true, upstreamErrors = None))
           onDisable()

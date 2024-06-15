@@ -5,7 +5,7 @@ import zio.ZIO
 import zio.ZLayer
 
 import com.rockthejvm.reviewboard.config.*
-import com.rockthejvm.reviewboard.http.endpoints.*
+
 import sttp.capabilities.zio.ZioStreams
 import sttp.client3.*
 import sttp.client3.impl.zio.FetchZioBackend
@@ -18,10 +18,6 @@ case class RestrictedEndpointException(message: String) extends RuntimeException
 /** A client to the backend, extending the endpoints as methods.
   */
 trait BackendClient {
-  val company = new CompanyEndpoints {}
-  val user    = new UserEndpoints {}
-  val review  = new ReviewEndpoints {}
-  val invite  = new InviteEndpoints {}
 
   /** Call an endpoint with a payload.
     *

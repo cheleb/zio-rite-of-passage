@@ -7,6 +7,7 @@ import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.components.FilterPanel
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.*
+import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 
 object CompagniesPage {
 
@@ -18,12 +19,12 @@ object CompagniesPage {
     firstBatch.events.mergeWith(
       filterPanel.triggerFilters.flatMapMerge(filter =>
         filterPanel.updateAppliedFilters(filter)
-        useBackend(_.company.searchEndpoint(filter)).toEventStream
+        CompanyEndpoints.searchEndpoint(filter).toEventStream
       )
     )
 
   def apply() = sectionTag(
-    onMountCallback(_ => useBackend(_.company.getAllEndpoint(())).emitTo(firstBatch)),
+    onMountCallback(_ => CompanyEndpoints.getAllEndpoint(()).emitTo(firstBatch)),
     cls := "section-1",
     div(
       cls := "container company-list-hero",
