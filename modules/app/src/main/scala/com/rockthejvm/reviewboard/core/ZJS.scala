@@ -1,6 +1,5 @@
 package com.rockthejvm.reviewboard.core
 
-import zio.ZIO.ServiceWithZIOPartiallyApplied
 import zio.*
 
 import scala.annotation.targetName
@@ -15,15 +14,6 @@ import sttp.tapir.Endpoint
   *   - extension methods for ZIO that are specific to the Laminar JS environment.
   */
 object ZJS {
-
-  /** The backend client, which allows us to call endpoints.
-    *
-    * eg. useBackend(_.company.getAllEndpoint(()))
-    *
-    * @return
-    */
-  def useBackend[A]: ServiceWithZIOPartiallyApplied[BackendClient] =
-    ZIO.serviceWithZIO[BackendClient]
 
   /** Extension to ZIO[BakendClient, E, A] that allows us to run in JS.
     *
