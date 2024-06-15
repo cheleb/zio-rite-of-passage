@@ -10,7 +10,7 @@ import reviewboard.domain.data.*
 
 object InviteEndpoints extends BaseEndpoint {
 
-  val inviteEndpoint =
+  val invite =
     baseSecuredEndpoint
       .tag("Invites")
       .name("Invite")
@@ -20,7 +20,7 @@ object InviteEndpoints extends BaseEndpoint {
       .in(jsonBody[InviteRequest])
       .out(jsonBody[InviteResponse])
 
-  val getByUserIdEndpoint =
+  val getByUserId =
     baseSecuredEndpoint
       .tag("Invites")
       .name("Get invites by user id")
@@ -30,7 +30,7 @@ object InviteEndpoints extends BaseEndpoint {
       .get
       .out(jsonBody[List[InviteNamedRecord]])
 
-  val addPackEndpoint =
+  val addPack =
     baseSecuredEndpoint
       .tag("Invites")
       .name("Add an invites")
@@ -40,7 +40,7 @@ object InviteEndpoints extends BaseEndpoint {
       .in(jsonBody[InvitePackRequest])
       .out(stringBody)
 
-  val addPackPromotedEndpoint =
+  val addPackPromoted =
     baseSecuredEndpoint
       .tag("Invites")
       .name("Add an invites (promoted)")
@@ -50,7 +50,7 @@ object InviteEndpoints extends BaseEndpoint {
       .in(jsonBody[InvitePackRequest])
       .out(stringBody)
 
-  val webhookEndpoint =
+  val webhook =
     baseEndpoint
       .tag("Invites")
       .name("Webhook")

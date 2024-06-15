@@ -21,7 +21,7 @@ object InviteAction {
     )
 
   def refreshInviteList() =
-    InviteEndpoints.getByUserIdEndpoint(())
+    InviteEndpoints.getByUserId(())
 
   def renderInviteSection(record: InviteNamedRecord) = {
     val emailListVar  = Var(Array.empty[String])
@@ -36,7 +36,7 @@ object InviteAction {
           maybeErrorVar.update(_ => Some("Please provide valid emails."))
         else {
           val refreshProgram = for {
-            _       <- InviteEndpoints.inviteEndpoint(InviteRequest(record.companyId, emails.toList))
+            _       <- InviteEndpoints.invite(InviteRequest(record.companyId, emails.toList))
             invites <- refreshInviteList()
           } yield invites
 

@@ -3,7 +3,7 @@ package com.rockthejvm.reviewboard.http.endpoints
 import sttp.tapir.*
 
 object HealthEndpoint extends BaseEndpoint {
-  val healthEndpoint = baseEndpoint
+  val health = baseEndpoint
     .tag("health")
     .name("health")
     .get
@@ -11,7 +11,7 @@ object HealthEndpoint extends BaseEndpoint {
     .out(plainBody[String])
     .description("Health check")
 
-  val errorEndpoint = baseEndpoint
+  val error = baseEndpoint
     .tag("health")
     .name("error health")
     .description("Health check - should fail")

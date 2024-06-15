@@ -36,13 +36,13 @@ object CompanyPage {
     fetchCompanyBus.events.flatMapMerge {
       case None => EventStream.empty
       case Some(company) =>
-        def refreshReview = ReviewEndpoints.getByCompanyIdEndpoint(company.id).toEventStream
+        def refreshReview = ReviewEndpoints.getByCompanyId(company.id).toEventStream
         refreshReview.mergeWith(triggerRefreshBus.events.flatMapMerge(_ => refreshReview))
     }.scanLeft(List.empty)((_, newReviews) => newReviews)
   }
 
   def startPaymentFlow(company: Company) =
-    InviteEndpoints.addPackPromotedEndpoint(InvitePackRequest(company.id))
+    InviteEndpoints.addPackPromoted(InvitePackRequest(company.id))
       .tapError(error => ZIO.succeed(inviteErrorBus.emit(error.getMessage())))
       .emitTo(Router.externalUrlBus)
 
@@ -150,13 +150,13 @@ object CompanyPage {
     val summaryBus      = EventBus[Option[ReviewSummary]]()
     val buttonStatusBus = EventBus[Option[String]]()
 
-    val getSummary = ReviewEndpoints.getSummaryEndpoint(company.id)
+    val getSummary = ReviewEndpoints.getSummary(company.id)
 
     val refresher = Observer[Unit] { _ =>
       val program =
         for
           _          <- ZIO.succeed(buttonStatusBus.emit(Some("Loading...")))
-          newSummary <- ReviewEndpoints.makeSummaryEndpoint(company.id)
+          newSummary <- ReviewEndpoints.makeSummary(company.id)
           _          <- ZIO.succeed(buttonStatusBus.emit(None))
         yield newSummary
 
@@ -268,7 +268,7 @@ object CompanyPage {
     div(
       cls := "container-fluid the-rock",
       onMountCallback(_ =>
-        CompanyEndpoints.findByIdEndpoint(companyId.toString).emitTo(fetchCompanyBus)
+        CompanyEndpoints.findById(companyId.toString).emitTo(fetchCompanyBus)
       ),
       children <-- status.map {
         case Status.Loading     => renderLoading()

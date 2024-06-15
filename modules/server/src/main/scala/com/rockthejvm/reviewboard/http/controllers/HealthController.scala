@@ -6,12 +6,12 @@ import com.rockthejvm.reviewboard.http.endpoints.HealthEndpoint
 import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
 
-class HealthController private extends BaseController with HealthEndpoint {
+class HealthController private extends BaseController {
 
-  val health = healthEndpoint
+  val health = HealthEndpoint.health
     .serverLogicSuccess[Task](_ => ZIO.succeed("OK"))
 
-  val error = errorEndpoint
+  val error = HealthEndpoint.error
     .serverLogic[Task](_ => ZIO.fail(new RuntimeException("boom!")).either)
   override val routes: List[ServerEndpoint[Any, Task]] = List(health, error)
 }

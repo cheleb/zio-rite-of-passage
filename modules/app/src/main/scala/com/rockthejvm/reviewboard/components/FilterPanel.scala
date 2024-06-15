@@ -52,7 +52,7 @@ class FilterPanel {
   def apply() = div(
     onMountCallback(_ =>
 //      useBackend(_.company.allFiltersEndpoint(())).map(possibleFilter.set).runJs
-      CompanyEndpoints.allFiltersEndpoint(()).emitTo(possibleFilter)
+      CompanyEndpoints.allFilters(()).emitTo(possibleFilter)
     ),
     cls    := "accordion accordion-flush",
     idAttr := "accordionFlushExample",

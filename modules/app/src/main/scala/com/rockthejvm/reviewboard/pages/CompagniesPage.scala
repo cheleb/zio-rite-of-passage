@@ -1,7 +1,5 @@
 package com.rockthejvm.reviewboard.pages
 
-import zio.*
-
 import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.components.FilterPanel
@@ -19,12 +17,12 @@ object CompagniesPage {
     firstBatch.events.mergeWith(
       filterPanel.triggerFilters.flatMapMerge(filter =>
         filterPanel.updateAppliedFilters(filter)
-        CompanyEndpoints.searchEndpoint(filter).toEventStream
+        CompanyEndpoints.search(filter).toEventStream
       )
     )
 
   def apply() = sectionTag(
-    onMountCallback(_ => CompanyEndpoints.getAllEndpoint(()).emitTo(firstBatch)),
+    onMountCallback(_ => CompanyEndpoints.getAll(()).emitTo(firstBatch)),
     cls := "section-1",
     div(
       cls := "container company-list-hero",

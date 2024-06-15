@@ -51,7 +51,7 @@ object ForgotPasswordPage extends FormPage[ForgotPasswordState]("Forgot Password
     if state.hasErrors then
       stateVar.update(_.copy(showStatus = true))
     else
-      UserEndpoints.forgotPasswordEndpoint(ForgotPasswordRequest(
+      UserEndpoints.forgotPassword(ForgotPasswordRequest(
         state.email
       ))
         .map { user =>

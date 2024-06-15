@@ -120,7 +120,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
       println("Errors")
       stateVar.update(_.copy(showStatus = true))
     else
-      CompanyEndpoints.createEndpoint(CreateCompanyRequest(
+      CompanyEndpoints.create(CreateCompanyRequest(
         state.name,
         state.url,
         state.location,

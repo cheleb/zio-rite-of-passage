@@ -9,35 +9,34 @@ import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
 
 class ReviewController private (jwtService: JWTService, reviewService: ReviewService)
-    extends SecuredBaseController(jwtService)
-    with ReviewEndpoints {
+    extends SecuredBaseController(jwtService) {
 
   val create: ServerEndpoint[Any, Task] =
-    createEndpoint
+    ReviewEndpoints.create
       .securedServerLogic { userId => request =>
         reviewService.create(request, userId.id)
       }
 
   val getById: ServerEndpoint[Any, Task] =
-    getByIdEndpoint
+    ReviewEndpoints.getById
       .zServerLogic { id =>
         reviewService.getById(id)
       }
 
   val getByCompanyId: ServerEndpoint[Any, Task] =
-    getByCompanyIdEndpoint
+    ReviewEndpoints.getByCompanyId
       .zServerLogic { companyId =>
         reviewService.getByCompanyId(companyId)
       }
 
   val getSummary: ServerEndpoint[Any, Task] =
-    getSummaryEndpoint
+    ReviewEndpoints.getSummary
       .zServerLogic { companyId =>
         reviewService.getSummary(companyId)
       }
 
   val makeSummary: ServerEndpoint[Any, Task] =
-    makeSummaryEndpoint
+    ReviewEndpoints.makeSummary
       .securedServerLogic { userId => companyId =>
         reviewService.makeSummary(companyId, userId.id)
       }

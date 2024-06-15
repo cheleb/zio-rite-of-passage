@@ -54,7 +54,7 @@ object UserEndpoints extends BaseEndpoint {
       .out(jsonBody[UserToken])
 
   // Forgot password
-  val forgotPasswordEndpoint =
+  val forgotPassword =
     baseEndpoint
       .tag("Users")
       .name("forgot password")
@@ -63,7 +63,7 @@ object UserEndpoints extends BaseEndpoint {
       .post
       .in(jsonBody[ForgotPasswordRequest])
   // Recover password
-  val recoverPasswordEndpoint =
+  val recoverPassword =
     baseEndpoint
       .tag("Users")
       .name("recover password")

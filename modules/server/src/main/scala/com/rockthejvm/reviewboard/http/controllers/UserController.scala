@@ -12,22 +12,21 @@ import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
 
 class UserController(userService: UserService, jwtService: JWTService)
-    extends SecuredBaseController(jwtService)
-    with UserEndpoints {
+    extends SecuredBaseController(jwtService) {
 
-  val create: ServerEndpoint[Any, Task] = createUserEndpoint.zServerLogic(request =>
+  val create: ServerEndpoint[Any, Task] = UserEndpoints.create.zServerLogic(request =>
     userService
       .registerUser(request.email, request.password)
       .map(user => UserResponse(user.email))
   )
 
-  val login: ServerEndpoint[Any, Task] = loginEndpoint.zServerLogic(request =>
+  val login: ServerEndpoint[Any, Task] = UserEndpoints.login.zServerLogic(request =>
     userService
       .generateToken(request.email, request.password)
       .someOrFail(UnauthorizedException("Invalid credentials"))
   )
 
-  val updatePassword: ServerEndpoint[Any, Task] = updatePasswordEndpoint
+  val updatePassword: ServerEndpoint[Any, Task] = UserEndpoints.updatePassword
     .securedServerLogic(userId =>
       request =>
         userService
@@ -35,7 +34,7 @@ class UserController(userService: UserService, jwtService: JWTService)
           .map(user => UserResponse(user.email))
     )
 
-  val delete: ServerEndpoint[Any, Task] = deleteEndpoint
+  val delete: ServerEndpoint[Any, Task] = UserEndpoints.delete
     .securedServerLogic(userId =>
       request =>
         userService
@@ -44,11 +43,11 @@ class UserController(userService: UserService, jwtService: JWTService)
     )
 
   val forgotPassword: ServerEndpoint[Any, Task] =
-    forgotPasswordEndpoint.serverLogic(req =>
+    UserEndpoints.forgotPassword.serverLogic(req =>
       userService.sendPasswordRecoveryEmain(req.email).either
     )
 
-  val recoverPassword: ServerEndpoint[Any, Task] = recoverPasswordEndpoint.zServerLogic(req =>
+  val recoverPassword: ServerEndpoint[Any, Task] = UserEndpoints.recoverPassword.zServerLogic(req =>
     userService
       .recoverPasswordFromToken(req.email, req.token, req.newPassword)
       .filterOrFail(identity)(UnauthorizedException("Invalid token"))

@@ -12,17 +12,16 @@ import reviewboard.http.endpoints.InviteEndpoints
 import reviewboard.services.JWTService
 
 class InviteController private (jwtService: JWTService, inviteService: InviteService, paymentService: PaymentService)
-    extends SecuredBaseController(jwtService)
-    with InviteEndpoints {
+    extends SecuredBaseController(jwtService) {
 
   val addPack: ServerEndpoint[Any, Task] =
-    addPackEndpoint.securedServerLogic(userId =>
+    InviteEndpoints.addPack.securedServerLogic(userId =>
       req =>
         inviteService.addInvitePack(userId.email, req.companyId).map(_.toString())
     )
 
   val invite: ServerEndpoint[Any, Task] =
-    inviteEndpoint.securedServerLogic(userId =>
+    InviteEndpoints.invite.securedServerLogic(userId =>
       req =>
         inviteService.sendInvite(userId.email, req.companyId, req.emails)
           .map {
@@ -33,10 +32,10 @@ class InviteController private (jwtService: JWTService, inviteService: InviteSer
     )
 
   val getByUserId: ServerEndpoint[Any, Task] =
-    getByUserIdEndpoint.securedServerLogic(userId => _ => inviteService.getByUserName(userId.email))
+    InviteEndpoints.getByUserId.securedServerLogic(userId => _ => inviteService.getByUserName(userId.email))
 
   val addPackPromoted: ServerEndpoint[Any, Task] =
-    addPackPromotedEndpoint
+    InviteEndpoints.addPackPromoted
       .securedServerLogic {
         userId => req =>
           for {
@@ -47,7 +46,7 @@ class InviteController private (jwtService: JWTService, inviteService: InviteSer
       }
 
   val webhook: ServerEndpoint[Any, Task] =
-    webhookEndpoint.zServerLogic { (signature, payload) =>
+    InviteEndpoints.webhook.zServerLogic { (signature, payload) =>
       paymentService.handleWebhookEvent(signature, payload, inviteService.activatePack).unit
 
     }

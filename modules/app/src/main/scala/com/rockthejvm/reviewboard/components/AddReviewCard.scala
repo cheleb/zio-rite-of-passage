@@ -24,7 +24,7 @@ class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus
     if state.hasErrors then
       stateVar.update(_.copy(showErrors = true))
     else
-      ReviewEndpoints.createEndpoint(CreateReviewRequest.fromReview(state.review))
+      ReviewEndpoints.create(CreateReviewRequest.fromReview(state.review))
         .map { user =>
           // stateVar.update(_.copy(showErrors = true, upstreamErrors = None))
           onDisable()

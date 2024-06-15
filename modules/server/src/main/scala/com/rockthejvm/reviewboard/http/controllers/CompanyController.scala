@@ -9,17 +9,16 @@ import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
 
 class CompanyController private (jwtService: JWTService, companyService: CompanyService)
-    extends SecuredBaseController(jwtService)
-    with CompanyEndpoints {
+    extends SecuredBaseController(jwtService) {
   // implement your company endpoint logic here
 
-  val create: ServerEndpoint[Any, Task] = createEndpoint
+  val create: ServerEndpoint[Any, Task] = CompanyEndpoints.create
     .securedServerLogic(userId => req => companyService.create(req))
 
   val getAll: ServerEndpoint[Any, Task] =
-    getAllEndpoint.zServerLogic(_ => companyService.getAll)
+    CompanyEndpoints.getAll.zServerLogic(_ => companyService.getAll)
 
-  val findById: ServerEndpoint[Any, Task] = findByIdEndpoint.zServerLogic { id =>
+  val findById: ServerEndpoint[Any, Task] = CompanyEndpoints.findById.zServerLogic { id =>
     ZIO
       .attempt(id.toLong)
       .flatMap(companyService.getById)
@@ -29,16 +28,16 @@ class CompanyController private (jwtService: JWTService, companyService: Company
 
   }
 
-  val delete: ServerEndpoint[Any, Task] = deleteEndpoint
+  val delete: ServerEndpoint[Any, Task] = CompanyEndpoints.delete
     .securedServerLogic { userId => id =>
       companyService.delete(id)
     }
 
   val allFilters: ServerEndpoint[Any, Task] =
-    allFiltersEndpoint.zServerLogic(_ => companyService.allFilters)
+    CompanyEndpoints.allFilters.zServerLogic(_ => companyService.allFilters)
 
   val search: ServerEndpoint[Any, Task] =
-    searchEndpoint.zServerLogic(filter => companyService.search(filter))
+    CompanyEndpoints.search.zServerLogic(filter => companyService.search(filter))
   val routes: List[ServerEndpoint[Any, Task]] =
     List(create, getAll, allFilters, search, findById, delete)
 }

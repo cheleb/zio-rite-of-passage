@@ -72,7 +72,7 @@ object RecoverPasswordPage extends FormPage[RecoverPasswordState]("Recover Passw
     if state.hasErrors then
       stateVar.update(_.copy(showStatus = true))
     else
-      UserEndpoints.recoverPasswordEndpoint(RecoverPasswordRequest(
+      UserEndpoints.recoverPassword(RecoverPasswordRequest(
         state.email,
         state.token,
         state.newPassword

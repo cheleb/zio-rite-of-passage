@@ -7,7 +7,7 @@ import sttp.tapir.generic.auto.*
 import com.rockthejvm.reviewboard.domain.data.*
 
 object CompanyEndpoints extends BaseEndpoint:
-  val createEndpoint = baseSecuredEndpoint.post
+  val create = baseSecuredEndpoint.post
     .tag("Companies")
     .name("create")
     .in("companies")
@@ -16,7 +16,7 @@ object CompanyEndpoints extends BaseEndpoint:
     .in(jsonBody[CreateCompanyRequest])
     .out(jsonBody[Company])
 
-  val getAllEndpoint = baseEndpoint.get
+  val getAll = baseEndpoint.get
     .tag("Companies")
     .name("getAll")
     .in("companies")
@@ -24,7 +24,7 @@ object CompanyEndpoints extends BaseEndpoint:
     .get
     .out(jsonBody[List[Company]])
 
-  val findByIdEndpoint = baseEndpoint.get
+  val findById = baseEndpoint.get
     .tag("Companies")
     .name("findById")
     .in("companies" / path[String]("id"))
@@ -32,7 +32,7 @@ object CompanyEndpoints extends BaseEndpoint:
     .get
     .out(jsonBody[Option[Company]])
 
-  val deleteEndpoint = baseSecuredEndpoint.delete
+  val delete = baseSecuredEndpoint.delete
     .tag("Companies")
     .name("delete")
     .in("companies" / path[Long]("id"))
@@ -40,7 +40,7 @@ object CompanyEndpoints extends BaseEndpoint:
     .delete
     .out(jsonBody[Company])
 
-  val allFiltersEndpoint = baseEndpoint.get
+  val allFilters = baseEndpoint.get
     .tag("Companies")
     .name("allFilters")
     .in("companies" / "filters")
@@ -48,7 +48,7 @@ object CompanyEndpoints extends BaseEndpoint:
     .get
     .out(jsonBody[CompanyFilter])
 
-  val searchEndpoint =
+  val search =
     baseEndpoint.tag("Companies")
       .name("search")
       .description("Get companies based on filters")
@@ -59,10 +59,10 @@ object CompanyEndpoints extends BaseEndpoint:
 
   val companyEndpoints =
     List(
-      createEndpoint,
-      getAllEndpoint,
-      searchEndpoint,
-      findByIdEndpoint,
-      deleteEndpoint,
-      allFiltersEndpoint
+      create,
+      getAll,
+      search,
+      findById,
+      delete,
+      allFilters
     )
