@@ -12,6 +12,7 @@ import sttp.client3.impl.zio.FetchZioBackend
 import sttp.tapir.Endpoint
 import sttp.tapir.client.sttp.SttpClientInterpreter
 import com.rockthejvm.reviewboard.common.Constants
+import sttp.capabilities.WebSockets
 
 case class RestrictedEndpointException(message: String) extends RuntimeException(message)
 
