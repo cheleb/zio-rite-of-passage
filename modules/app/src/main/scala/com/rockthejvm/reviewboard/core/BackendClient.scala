@@ -14,6 +14,8 @@ import sttp.tapir.client.sttp.SttpClientInterpreter
 import com.rockthejvm.reviewboard.common.Constants
 import sttp.capabilities.WebSockets
 
+type ZioStreamsWithWebSockets = ZioStreams & WebSockets
+
 case class RestrictedEndpointException(message: String) extends RuntimeException(message)
 
 /** A client to the backend, extending the endpoints as methods.
@@ -57,7 +59,7 @@ trait BackendClient {
   * @param config
   */
 private class BackendClientLive(
-    backend: SttpBackend[Task, ZioStreams],
+    backend: SttpBackend[Task, ZioStreamsWithWebSockets],
     interpreter: SttpClientInterpreter,
     config: BackendClientConfig
 ) extends BackendClient {
@@ -99,12 +101,12 @@ private class BackendClientLive(
 }
 
 object BackendClientLive {
-  val layer = ZLayer.fromFunction(BackendClientLive(_, _, _))
+  val layer = ZLayer.derive[BackendClientLive]
 
   val configuredLayer = {
-    val backend: SttpBackend[Task, ZioStreams] = FetchZioBackend()
-    val interpreter                            = SttpClientInterpreter()
-    val config                                 = BackendClientConfig(Some(uri"${Constants.backendBaseURL}"))
+    val backend: SttpBackend[Task, ZioStreamsWithWebSockets] = FetchZioBackend()
+    val interpreter                                          = SttpClientInterpreter()
+    val config = BackendClientConfig(Some(uri"${Constants.backendBaseURL}"))
 
     ZLayer.succeed(backend) ++ ZLayer.succeed(interpreter) ++ ZLayer.succeed(config) >>> layer
   }
