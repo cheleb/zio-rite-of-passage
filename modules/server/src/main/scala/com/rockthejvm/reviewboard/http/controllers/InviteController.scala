@@ -10,9 +10,10 @@ import sttp.tapir.ztapir.*
 
 import reviewboard.http.endpoints.InviteEndpoints
 import reviewboard.services.JWTService
+import com.rockthejvm.reviewboard.domain.data.UserID
 
 class InviteController private (jwtService: JWTService, inviteService: InviteService, paymentService: PaymentService)
-    extends SecuredBaseController(jwtService) {
+    extends SecuredBaseController[String, UserID](jwtService.verifyToken) {
 
   val addPack: ServerEndpoint[Any, Task] =
     InviteEndpoints.addPack.securedServerLogic(userId =>

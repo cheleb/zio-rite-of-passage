@@ -2,8 +2,6 @@ package com.rockthejvm.reviewboard.http.controllers
 
 import zio.*
 
-import com.rockthejvm.reviewboard.domain.data.UserID
-import com.rockthejvm.reviewboard.services.JWTService
 import sttp.tapir.Endpoint
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
@@ -12,10 +10,10 @@ import sttp.tapir.ztapir.*
   *
   * @param jwtService
   */
-trait SecuredBaseController(jwtService: JWTService) extends BaseController:
+trait SecuredBaseController[SI, Principal](principal: SI => Task[Principal]) extends BaseController:
   /** Enriches an endpoint with security logic
     */
-  extension [I, O, R](endpoint: Endpoint[String, I, Throwable, O, R])
+  extension [I, O, R](endpoint: Endpoint[SI, I, Throwable, O, R])
     /** ZIO security logic for a server endpoint
       *
       * Extracts the user ID from the request and verifies the JWT token
@@ -23,7 +21,7 @@ trait SecuredBaseController(jwtService: JWTService) extends BaseController:
       *   curryied function from user ID to request to response
       * @return
       */
-    def securedServerLogic(logic: UserID => I => Task[O]): ServerEndpoint[R, Task] =
+    def securedServerLogic(logic: Principal => I => Task[O]): ServerEndpoint[R, Task] =
       endpoint
-        .zServerSecurityLogic(token => jwtService.verifyToken(token))
+        .zServerSecurityLogic(token => principal(token))
         .serverLogic(userId => input => logic(userId)(input))

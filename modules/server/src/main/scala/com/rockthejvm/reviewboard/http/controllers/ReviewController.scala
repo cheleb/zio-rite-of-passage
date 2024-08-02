@@ -7,9 +7,10 @@ import com.rockthejvm.reviewboard.services.JWTService
 import com.rockthejvm.reviewboard.services.ReviewService
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
+import com.rockthejvm.reviewboard.domain.data.UserID
 
 class ReviewController private (jwtService: JWTService, reviewService: ReviewService)
-    extends SecuredBaseController(jwtService) {
+    extends SecuredBaseController[String, UserID](jwtService.verifyToken) {
 
   val create: ServerEndpoint[Any, Task] =
     ReviewEndpoints.create

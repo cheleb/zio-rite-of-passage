@@ -10,9 +10,10 @@ import com.rockthejvm.reviewboard.services.UserService
 import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
+import com.rockthejvm.reviewboard.domain.data.UserID
 
 class UserController(userService: UserService, jwtService: JWTService)
-    extends SecuredBaseController(jwtService) {
+    extends SecuredBaseController[String, UserID](jwtService.verifyToken) {
 
   val create: ServerEndpoint[Any, Task] = UserEndpoints.create.zServerLogic(request =>
     userService

@@ -9,7 +9,7 @@ import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
 
 class CompanyController private (jwtService: JWTService, companyService: CompanyService)
-    extends SecuredBaseController(jwtService) {
+    extends SecuredBaseController(jwtService.verifyToken) {
   // implement your company endpoint logic here
 
   val create: ServerEndpoint[Any, Task] = CompanyEndpoints.create
