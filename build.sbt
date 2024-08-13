@@ -1,5 +1,5 @@
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "3.4.2"
+ThisBuild / scalaVersion := "3.5.0"
 ThisBuild / scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
@@ -18,8 +18,8 @@ val Versions = new {
   val zioConfig  = "4.0.2"
   val sttp       = "3.9.6"
   val javaMail   = "1.6.2"
-  val stripe     = "26.1.0"
-  val flywaydb   = "10.15.0"
+  val stripe     = "26.7.0"
+  val flywaydb   = "10.17.1"
 }
 
 val commonDependencies = Seq(
