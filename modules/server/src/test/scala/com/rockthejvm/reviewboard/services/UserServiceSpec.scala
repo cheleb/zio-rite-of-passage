@@ -1,8 +1,7 @@
 package com.rockthejvm.reviewboard.services
 
-import zio.Scope
 import zio.*
-import zio.test.ZIOSpecDefault
+
 import zio.test.*
 
 import com.rockthejvm.reviewboard.domain.data.User

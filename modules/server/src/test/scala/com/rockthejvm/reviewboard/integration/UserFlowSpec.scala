@@ -20,7 +20,7 @@ import com.rockthejvm.reviewboard.repositories.RepositorySpec
 import com.rockthejvm.reviewboard.repositories.UserRepository
 import com.rockthejvm.reviewboard.repositories.UserRepositoryLive
 import com.rockthejvm.reviewboard.services.*
-import sttp.client3.SttpBackend
+
 import sttp.client3.*
 import sttp.client3.testing.SttpBackendStub
 import sttp.model.Method

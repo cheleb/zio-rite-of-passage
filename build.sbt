@@ -1,11 +1,30 @@
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.5.0"
+
+val filterConsoleScalacOptions = { options: Seq[String] =>
+  options.filterNot(Set(
+    "-Xfatal-warnings",
+    "-Werror",
+    "-Wdead-code",
+    "-Wunused:imports",
+    "-Ywarn-unused:imports",
+    "-Ywarn-unused-import",
+    "-Ywarn-dead-code"
+  ))
+}
+
+// ...
+
 ThisBuild / scalacOptions ++= Seq(
   "-unchecked",
   "-deprecation",
   "-feature",
-  "-Wunused:all"
+  "-Wunused:all",
+  "-Xfatal-warnings"
 )
+
+ThisBuild / scalacOptions.in(Compile, console) ~= filterConsoleScalacOptions
+ThisBuild / scalacOptions.in(Test, console) ~= filterConsoleScalacOptions
 
 ThisBuild / run / fork := true
 
