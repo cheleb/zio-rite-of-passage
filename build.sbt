@@ -66,7 +66,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "dev.zio"                       %% "zio-config"                        % Versions.zioConfig,
   "dev.zio"                       %% "zio-config-magnolia"               % Versions.zioConfig,
   "dev.zio"                       %% "zio-config-typesafe"               % Versions.zioConfig,
-  "io.getquill"                   %% "quill-jdbc-zio"                    % "4.8.5",
+  "io.getquill"                   %% "quill-jdbc-zio"                    % "4.8.6",
   "org.postgresql"                 % "postgresql"                        % "42.7.4",
   "org.flywaydb"                   % "flyway-core"                       % Versions.flywaydb,
   "org.flywaydb"                   % "flyway-database-postgresql"        % Versions.flywaydb,
