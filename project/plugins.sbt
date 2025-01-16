@@ -1,5 +1,5 @@
 addSbtPlugin("nl.gn0s1s"          % "sbt-dotenv"               % "3.1.1")
-addSbtPlugin("org.scalameta"      % "sbt-scalafmt"             % "2.5.3")
+addSbtPlugin("org.scalameta"      % "sbt-scalafmt"             % "2.5.4")
 addSbtPlugin("com.github.sbt"     % "sbt-native-packager"      % "1.11.0")
 addSbtPlugin("ch.epfl.scala"      % "sbt-scalafix"             % "0.14.0")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "1.18.2")
