@@ -71,7 +71,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "org.flywaydb"                   % "flyway-core"                       % Versions.flywaydb,
   "org.flywaydb"                   % "flyway-database-postgresql"        % Versions.flywaydb,
   "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.10.0",
-  "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC36",
+  "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC37",
   "com.auth0"                      % "java-jwt"                          % "4.5.0",
   "com.sun.mail"                   % "javax.mail"                        % Versions.javaMail,
   "com.stripe"                     % "stripe-java"                       % Versions.stripe
@@ -107,7 +107,7 @@ lazy val app = (project in file("modules/app"))
       "com.softwaremill.sttp.tapir"   %%% "tapir-json-zio"    % Versions.tapir,
       "com.softwaremill.sttp.client3" %%% "zio"               % Versions.sttp,
       "dev.zio"                       %%% "zio-json"          % "0.7.10",
-      "dev.zio"                       %%% "zio-prelude"       % "1.0.0-RC36",
+      "dev.zio"                       %%% "zio-prelude"       % "1.0.0-RC37",
       "com.raquo"                     %%% "laminar"           % "17.0.0",
       "io.frontroute"                 %%% "frontroute"        % "0.19.0" // Brings in Laminar 16
     ),
