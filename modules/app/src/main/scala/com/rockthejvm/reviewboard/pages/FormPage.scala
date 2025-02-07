@@ -4,7 +4,6 @@ import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.common.Constants
 import org.scalajs.dom
-import org.scalajs.dom.HTMLDivElement
 
 trait FormState {
 

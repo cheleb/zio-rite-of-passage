@@ -5,7 +5,6 @@ import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.domain.data.UserToken
 import org.scalajs.dom
-import org.scalajs.dom.HTMLDivElement
 
 abstract class SecuredFormPage[S <: FormState](title: String) extends FormPage[S](title) {
 
