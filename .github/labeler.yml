@@ -1,13 +1,15 @@
-Documentation:
-- changed-files:
-  - any-glob-to-any-file:
-    - docs/*
-    - guides/*
-    - README.md
-- enhancements:
+documentation:
+  - changed-files:
     - any-glob-to-any-file:
-    - modules/*
-- build:
-  - any-glob-to-any-file:
-    - build.sbt
-    - project/**
+      - docs/*
+      - guides/*
+      - README.md
+enhancements:
+  - changed-files:
+    - any-glob-to-any-file:
+      - modules/*
+build:
+  - changed-files:
+    - any-glob-to-any-file:
+      - build.sbt
+      - project/**
