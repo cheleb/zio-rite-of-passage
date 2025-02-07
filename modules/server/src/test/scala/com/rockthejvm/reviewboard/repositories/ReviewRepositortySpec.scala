@@ -83,7 +83,7 @@ object ReviewRepositortySpec extends ZIOSpecDefault with RepositorySpec("sql/rev
         for {
           repository <- ZIO.service[ReviewRepository]
           review     <- repository.create(goodReview)
-          updated    <- repository.update(review.id, _.copy(review = "All bad"))
+          updated    <- repository.update(review.id, _.copy(review = "All bad", updated = Instant.now()))
         } yield assertTrue(updated.review == "All bad" && updated.updated != review.updated)
       },
       test("Delete review") {
