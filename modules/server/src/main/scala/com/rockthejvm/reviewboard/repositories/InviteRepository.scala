@@ -3,7 +3,6 @@ package com.rockthejvm.reviewboard.repositories
 import zio.*
 
 import com.rockthejvm.reviewboard.domain.data.*
-
 import io.getquill.*
 import io.getquill.jdbczio.Quill
 

@@ -1,18 +1,18 @@
 package com.rockthejvm.reviewboard.pages
 
 import zio.*
+import zio.prelude.*
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
-import zio.prelude.*
 
 import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.core.ZJS.*
+import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 import com.rockthejvm.reviewboard.http.requests.*
 import frontroute.*
-import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
 case class LoginState(
     email: String = "",

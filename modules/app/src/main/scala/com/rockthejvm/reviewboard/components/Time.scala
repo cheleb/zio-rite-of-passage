@@ -1,9 +1,10 @@
 package com.rockthejvm.reviewboard.components
 
+import java.time.Instant
+
 import scala.scalajs.*
 import scala.scalajs.js.*
 import scala.scalajs.js.annotation.*
-import java.time.Instant
 
 @js.native
 @JSGlobal

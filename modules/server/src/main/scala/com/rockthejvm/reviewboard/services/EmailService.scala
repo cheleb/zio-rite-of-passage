@@ -29,7 +29,7 @@ trait EmailService(baseURL: String) {
   }
 
   def sendReviewInviteEmail(from: String, to: String, company: Company): Task[Unit] = {
-    val subject = s"You've been invited to review ${company.name}"
+    val subject = s"You've been invited to review ${company.name} ($from)"
     val content = s"""
     <div>
       <h1>You've been invited to review ${company.name} request</h1>

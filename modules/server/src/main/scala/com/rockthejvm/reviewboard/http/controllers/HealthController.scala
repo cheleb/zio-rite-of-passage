@@ -3,7 +3,6 @@ package com.rockthejvm.reviewboard.http.controllers
 import zio.*
 
 import com.rockthejvm.reviewboard.http.endpoints.HealthEndpoint
-import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
 
 class HealthController private extends BaseController {

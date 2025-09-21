@@ -20,7 +20,6 @@ import com.rockthejvm.reviewboard.repositories.RepositorySpec
 import com.rockthejvm.reviewboard.repositories.UserRepository
 import com.rockthejvm.reviewboard.repositories.UserRepositoryLive
 import com.rockthejvm.reviewboard.services.*
-
 import sttp.client3.*
 import sttp.client3.testing.SttpBackendStub
 import sttp.model.Method
@@ -70,8 +69,8 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
 
     def postNoResponse(
         path: String,
-        request: Request,
-        token: Option[String] = None
+        request: Request
+//        token: Option[String] = None
     ): Task[Unit] =
       basicRequest
         .post(uri"$path")
@@ -129,9 +128,9 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
       },
       test("create and log in user") {
         for
-          backend  <- backendStubZIO
-          response <- createUser(backend)
-          token    <- loginUser(backend)
+          backend <- backendStubZIO
+          _       <- createUser(backend)
+          token   <- loginUser(backend)
         yield assertTrue(
           token
             .filter(_.email == danielEmail)
@@ -140,8 +139,8 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
       },
       test("change user password") {
         for
-          backend            <- backendStubZIO
-          createUserResponse <- createUser(backend)
+          backend       <- backendStubZIO
+          _             <- createUser(backend)
           tokenResponse <- loginUser(backend)
             .someOrFail(new RuntimeException("Authentication failed"))
           passwordChangeResponse <- backend.put[UserResponse](
@@ -163,12 +162,12 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
       },
       test("delete user") {
         for
-          backend            <- backendStubZIO
-          createUserResponse <- createUser(backend)
+          backend       <- backendStubZIO
+          _             <- createUser(backend)
           tokenResponse <- loginUser(backend)
             .someOrFail(new RuntimeException("Authentication failed"))
-          userRepo <- ZIO.service[UserRepository]
-          someUser <- userRepo.getByEmail(danielEmail)
+          userRepo               <- ZIO.service[UserRepository]
+          someUser               <- userRepo.getByEmail(danielEmail)
           passwordChangeResponse <- backend.delete[UserResponse](
             "/api/users",
             DeleteUserRequest(danielEmail, "rockthejvm"),
@@ -185,13 +184,13 @@ object UserFlowSpec extends ZIOSpecDefault with RepositorySpec("sql/integration.
       },
       test("recover password") {
         for
-          backend            <- backendStubZIO
-          createUserResponse <- createUser(backend)
+          backend <- backendStubZIO
+          _       <- createUser(backend)
           // Send a forgot password request
           _ <- backend.postNoResponse("/api/users/forgot", ForgotPasswordRequest(danielEmail))
           // Fetch the token from the
           emailServiceProbe <- ZIO.service[EmailServiceProbe]
-          token <- emailServiceProbe
+          token             <- emailServiceProbe
             .probeTo(danielEmail)
             .someOrFail(new RuntimeException("No token found"))
           _ <- backend.postNoResponse(

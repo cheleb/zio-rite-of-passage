@@ -1,7 +1,6 @@
 package com.rockthejvm.reviewboard.services
 
 import zio.*
-
 import zio.test.*
 
 import com.rockthejvm.reviewboard.domain.data.User
@@ -109,7 +108,7 @@ object UserServiceSpec extends ZIOSpecDefault {
       test("update a password") {
         for
           userService <- ZIO.service[UserService]
-          updatedUser <- userService.updatePassword(daniel.email, "rockthejvm", "scala")
+          _           <- userService.updatePassword(daniel.email, "rockthejvm", "scala")
           oldValid    <- userService.verifyPassword(daniel.email, "rockthejvm")
           newValid    <- userService.verifyPassword(daniel.email, "scala")
         yield assertTrue(newValid && !oldValid)

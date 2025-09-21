@@ -3,6 +3,7 @@ package com.rockthejvm.reviewboard.http.controllers
 import zio.*
 
 import com.rockthejvm.reviewboard
+import com.rockthejvm.reviewboard.domain.data.UserID
 import com.rockthejvm.reviewboard.http.responses.*
 import com.rockthejvm.reviewboard.services.*
 import sttp.tapir.server.ServerEndpoint
@@ -10,7 +11,6 @@ import sttp.tapir.ztapir.*
 
 import reviewboard.http.endpoints.InviteEndpoints
 import reviewboard.services.JWTService
-import com.rockthejvm.reviewboard.domain.data.UserID
 
 class InviteController private (jwtService: JWTService, inviteService: InviteService, paymentService: PaymentService)
     extends SecuredBaseController[String, UserID](jwtService.verifyToken) {

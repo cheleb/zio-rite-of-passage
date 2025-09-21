@@ -5,10 +5,9 @@ import zio.*
 import com.raquo.airstream.eventbus.EventBus
 import com.raquo.laminar.api.L.*
 import com.rockthejvm.reviewboard.core.ZJS.*
-import com.rockthejvm.reviewboard.core.*
 import com.rockthejvm.reviewboard.domain.data.Review
-import com.rockthejvm.reviewboard.http.requests.*
 import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoints
+import com.rockthejvm.reviewboard.http.requests.*
 
 class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus[Unit]) {
 
@@ -25,7 +24,7 @@ class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus
       stateVar.update(_.copy(showErrors = true))
     else
       ReviewEndpoints.create(CreateReviewRequest.fromReview(state.review))
-        .map { user =>
+        .map { _ =>
           // stateVar.update(_.copy(showErrors = true, upstreamErrors = None))
           onDisable()
         }
@@ -98,7 +97,7 @@ class AddReviewCard(companyId: Long, onDisable: () => Unit, triggerBus: EventBus
         (1 to 5).reverse.map { v =>
           option(v.toString)
 
-        // TODO set state here
+          // TODO set state here
         },
         onInput.mapToValue --> stateVar.updater { (state: State, value: String) =>
           state.copy(review = updateFn(state.review, value.toInt))

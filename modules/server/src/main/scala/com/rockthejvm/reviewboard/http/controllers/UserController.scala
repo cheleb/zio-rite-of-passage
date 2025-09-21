@@ -2,6 +2,7 @@ package com.rockthejvm.reviewboard.http.controllers
 
 import zio.*
 
+import com.rockthejvm.reviewboard.domain.data.UserID
 import com.rockthejvm.reviewboard.domain.errors.UnauthorizedException
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 import com.rockthejvm.reviewboard.http.responses.UserResponse
@@ -10,7 +11,6 @@ import com.rockthejvm.reviewboard.services.UserService
 import sttp.tapir.*
 import sttp.tapir.server.ServerEndpoint
 import sttp.tapir.ztapir.*
-import com.rockthejvm.reviewboard.domain.data.UserID
 
 class UserController(userService: UserService, jwtService: JWTService)
     extends SecuredBaseController[String, UserID](jwtService.verifyToken) {
@@ -28,7 +28,7 @@ class UserController(userService: UserService, jwtService: JWTService)
   )
 
   val updatePassword: ServerEndpoint[Any, Task] = UserEndpoints.updatePassword
-    .securedServerLogic(userId =>
+    .securedServerLogic(_ =>
       request =>
         userService
           .updatePassword(request.email, request.oldPassword, request.newPassword)
@@ -36,7 +36,7 @@ class UserController(userService: UserService, jwtService: JWTService)
     )
 
   val delete: ServerEndpoint[Any, Task] = UserEndpoints.delete
-    .securedServerLogic(userId =>
+    .securedServerLogic(_ =>
       request =>
         userService
           .deleteUser(request.email, request.password)

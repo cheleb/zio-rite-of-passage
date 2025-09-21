@@ -7,9 +7,9 @@ import org.scalajs.dom
 
 object Router:
   val externalUrlBus = EventBus[String]()
-  def apply() =
+  def apply()        =
     mainTag(
-      onMountCallback(ctx => externalUrlBus.events.foreach(url => dom.window.location.href = url)(ctx.owner)),
+      onMountCallback(ctx => externalUrlBus.events.foreach(url => dom.window.location.href = url)(using ctx.owner)),
       routes(
         div(
           cls := "container-fluid",

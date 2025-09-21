@@ -40,7 +40,7 @@ class InviteServiceLive private (
   // Invariant violation: Only one pack per company.
   override def addInvitePack(userName: String, companyId: Long): Task[Long] =
     for {
-      company <-
+      _ <-
         companyRepository.getById(companyId)
           .someOrFail(new RuntimeException(s"Company with ID $companyId not found."))
       currentPack <- inviteRepository.getInvitePack(userName, companyId)

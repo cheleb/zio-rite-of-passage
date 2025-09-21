@@ -2,7 +2,6 @@ package com.rockthejvm.reviewboard.http.controllers
 
 import zio.*
 
-import com.rockthejvm.reviewboard.domain.data.*
 import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import com.rockthejvm.reviewboard.services.*
 import sttp.tapir.server.ServerEndpoint
@@ -13,7 +12,7 @@ class CompanyController private (jwtService: JWTService, companyService: Company
   // implement your company endpoint logic here
 
   val create: ServerEndpoint[Any, Task] = CompanyEndpoints.create
-    .securedServerLogic(userId => req => companyService.create(req))
+    .securedServerLogic(_ => req => companyService.create(req))
 
   val getAll: ServerEndpoint[Any, Task] =
     CompanyEndpoints.getAll.zServerLogic(_ => companyService.getAll)
@@ -29,7 +28,7 @@ class CompanyController private (jwtService: JWTService, companyService: Company
   }
 
   val delete: ServerEndpoint[Any, Task] = CompanyEndpoints.delete
-    .securedServerLogic { userId => id =>
+    .securedServerLogic { _ => id =>
       companyService.delete(id)
     }
 

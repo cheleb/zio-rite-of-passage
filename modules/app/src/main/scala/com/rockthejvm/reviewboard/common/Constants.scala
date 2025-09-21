@@ -1,8 +1,8 @@
 package com.rockthejvm.reviewboard.common
 
+import scala.scalajs.LinkingInfo
 import scala.scalajs.js
 import scala.scalajs.js.annotation.*
-import scala.scalajs.LinkingInfo
 
 import org.scalajs.dom.window
 

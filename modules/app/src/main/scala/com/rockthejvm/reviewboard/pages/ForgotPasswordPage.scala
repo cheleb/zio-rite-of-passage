@@ -1,19 +1,18 @@
 package com.rockthejvm.reviewboard.pages
 
 import zio.*
+import zio.prelude.*
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
-import zio.prelude.*
 
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.core.ZJS.*
-import com.rockthejvm.reviewboard.http.requests.*
-import org.scalajs.dom
-import org.scalajs.dom.html
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
+import com.rockthejvm.reviewboard.http.requests.*
+import org.scalajs.dom.html
 
 case class ForgotPasswordState(
     email: String = "",
@@ -54,7 +53,7 @@ object ForgotPasswordPage extends FormPage[ForgotPasswordState]("Forgot Password
       UserEndpoints.forgotPassword(ForgotPasswordRequest(
         state.email
       ))
-        .map { user =>
+        .map { _ =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password request submited."))))
         }
         .tapError(e =>

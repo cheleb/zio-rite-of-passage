@@ -1,10 +1,10 @@
 package com.rockthejvm.reviewboard.services
 
 import zio.*
-import org.flywaydb.core.Flyway
 
-import com.rockthejvm.reviewboard.config.FlywayConfig
 import com.rockthejvm.reviewboard.config.Configs
+import com.rockthejvm.reviewboard.config.FlywayConfig
+import org.flywaydb.core.Flyway
 
 trait FlywayService {
   def runClean(): Task[Unit]
