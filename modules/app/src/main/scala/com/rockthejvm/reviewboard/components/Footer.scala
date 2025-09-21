@@ -1,7 +1,8 @@
 package com.rockthejvm.reviewboard.components
 
-import com.raquo.laminar.api.L.*
 import scala.scalajs.js.Date
+
+import com.raquo.laminar.api.L.*
 
 object Footer {
   def apply() = div(

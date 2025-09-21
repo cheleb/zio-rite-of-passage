@@ -1,17 +1,16 @@
 package com.rockthejvm.reviewboard.pages
 
 import zio.*
+import zio.prelude.*
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
-import zio.prelude.*
 
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
-import com.rockthejvm.reviewboard.http.requests.*
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
-import org.scalajs.dom
+import com.rockthejvm.reviewboard.http.requests.*
 import org.scalajs.dom.html
 
 case class ChangePasswordState(
@@ -69,7 +68,7 @@ object ChangePasswordPage extends SecuredFormPage[ChangePasswordState]("Profile"
         state.password,
         state.newPassword
       ))
-        .map { user =>
+        .map { _ =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password successfully changed."))))
         }
         .tapError(e =>

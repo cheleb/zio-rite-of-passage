@@ -8,11 +8,11 @@ import com.rockthejvm.reviewboard.components.*
 import com.rockthejvm.reviewboard.core.Session
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.*
+import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
+import com.rockthejvm.reviewboard.http.endpoints.InviteEndpoints
 import com.rockthejvm.reviewboard.http.endpoints.ReviewEndpoints
 import com.rockthejvm.reviewboard.http.requests.InvitePackRequest
 import com.rockthejvm.reviewboard.pages.CompagnyComponents.renderCompanyOverview
-import com.rockthejvm.reviewboard.http.endpoints.InviteEndpoints
-import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 
 object CompanyPage {
 

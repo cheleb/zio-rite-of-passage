@@ -31,8 +31,8 @@ ThisBuild / run / fork := true
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 val Versions = new {
-  val zio        = "2.1.5"
-  val tapir      = "1.10.7"
+  val zio        = "2.1.21"
+  val tapir      = "1.11.44"
   val zioLogging = "2.2.4"
   val zioConfig  = "4.0.2"
   val sttp       = "3.9.6"
@@ -59,10 +59,10 @@ val serverDependencies = commonDependencies ++ Seq(
   "dev.zio"                       %% "zio-logging-slf4j"                 % Versions.zioLogging,
   "ch.qos.logback"                 % "logback-classic"                   % "1.5.18",
   "dev.zio"                       %% "zio-test"                          % Versions.zio,
-  "dev.zio"                       %% "zio-test-junit"                    % Versions.zio % "test",
-  "dev.zio"                       %% "zio-test-sbt"                      % Versions.zio % "test",
-  "dev.zio"                       %% "zio-test-magnolia"                 % Versions.zio % "test",
-  "dev.zio"                       %% "zio-mock"                          % "1.0.0-RC12" % "test",
+  "dev.zio"                       %% "zio-test-junit"                    % Versions.zio   % "test",
+  "dev.zio"                       %% "zio-test-sbt"                      % Versions.zio   % "test",
+  "dev.zio"                       %% "zio-test-magnolia"                 % Versions.zio   % "test",
+  "dev.zio"                       %% "zio-mock"                          % "1.0.0-RC12"   % "test",
   "dev.zio"                       %% "zio-config"                        % Versions.zioConfig,
   "dev.zio"                       %% "zio-config-magnolia"               % Versions.zioConfig,
   "dev.zio"                       %% "zio-config-typesafe"               % Versions.zioConfig,
@@ -70,7 +70,7 @@ val serverDependencies = commonDependencies ++ Seq(
   "org.postgresql"                 % "postgresql"                        % "42.7.7",
   "org.flywaydb"                   % "flyway-core"                       % Versions.flywaydb,
   "org.flywaydb"                   % "flyway-database-postgresql"        % Versions.flywaydb,
-  "io.github.scottweaver"         %% "zio-2-0-testcontainers-postgresql" % "0.10.0",
+  "io.github.kitlangton"          %% "zio-2-0-testcontainers-postgresql" % "0.11.2",
   "dev.zio"                       %% "zio-prelude"                       % "1.0.0-RC40",
   "com.auth0"                      % "java-jwt"                          % "4.5.0",
   "com.sun.mail"                   % "javax.mail"                        % Versions.javaMail,
@@ -111,6 +111,7 @@ lazy val app = (project in file("modules/app"))
       "com.raquo"                     %%% "laminar"           % "17.0.0",
       "io.frontroute"                 %%% "frontroute"        % "0.19.0" // Brings in Laminar 16
     ),
+    dependencyOverrides += "org.scala-lang" %% "scala3-library" % scalaVersion.value,
     scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
     semanticdbEnabled               := true,
     autoAPIMappings                 := true,

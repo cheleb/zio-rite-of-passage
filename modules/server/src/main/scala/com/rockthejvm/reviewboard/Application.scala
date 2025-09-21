@@ -2,9 +2,12 @@ package com.rockthejvm.reviewboard
 
 import zio.*
 import zio.http.Server
-
 import zio.logging.backend.SLF4J
 
+import java.net.InetSocketAddress
+
+import com.rockthejvm.reviewboard.config.Configs
+import com.rockthejvm.reviewboard.config.HttpConfig
 import com.rockthejvm.reviewboard.http.HttpApi
 import com.rockthejvm.reviewboard.repositories.*
 import com.rockthejvm.reviewboard.services.*
@@ -13,9 +16,6 @@ import sttp.tapir.server.interceptor.log.DefaultServerLog
 import sttp.tapir.server.interceptor.log.ServerLog
 import sttp.tapir.server.ziohttp.ZioHttpInterpreter
 import sttp.tapir.server.ziohttp.ZioHttpServerOptions
-import com.rockthejvm.reviewboard.config.Configs
-import com.rockthejvm.reviewboard.config.HttpConfig
-import java.net.InetSocketAddress
 
 object Application extends ZIOAppDefault:
 

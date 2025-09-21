@@ -1,22 +1,22 @@
 package com.rockthejvm.reviewboard.pages
 
 import zio.*
+import zio.prelude.*
 import zio.prelude.ZValidation.Failure
 import zio.prelude.ZValidation.Success
-import zio.prelude.*
 
 import com.raquo.laminar.api.L.*
 import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
+import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 import com.rockthejvm.reviewboard.http.requests.*
 import org.scalajs.dom
+import org.scalajs.dom.File
 import org.scalajs.dom.HTMLCanvasElement
 import org.scalajs.dom.HTMLImageElement
 import org.scalajs.dom.html
-import org.scalajs.dom.File
-import com.rockthejvm.reviewboard.http.endpoints.CompanyEndpoints
 
 case class CreateCompanyState(
     name: String = "",
@@ -64,7 +64,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
 
   private val fileUploader = Observer[List[File]] { files =>
     files.headOption match
-      case None => stateVar.update(_.copy(image = None))
+      case None       => stateVar.update(_.copy(image = None))
       case Some(file) =>
         val reader = new dom.FileReader()
         reader.onload = _ => {
@@ -129,7 +129,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
         state.image,
         Option(state.tags).filter(_.nonEmpty)
       ))
-        .map { user =>
+        .map { _ =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Company posted successfully."))))
         }
         .tapError(e =>

@@ -5,11 +5,11 @@ import zio.test.*
 
 import java.time.Instant
 
+import com.rockthejvm.reviewboard.config.SummaryConfig
 import com.rockthejvm.reviewboard.domain.data.Review
 import com.rockthejvm.reviewboard.domain.data.ReviewSummary
 import com.rockthejvm.reviewboard.http.requests.CreateReviewRequest
 import com.rockthejvm.reviewboard.repositories.ReviewRepository
-import com.rockthejvm.reviewboard.config.SummaryConfig
 
 object ReviewServiceSpec extends ZIOSpecDefault {
 
