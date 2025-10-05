@@ -1,6 +1,6 @@
 addSbtPlugin("nl.gn0s1s"          % "sbt-dotenv"               % "3.2.0")
 addSbtPlugin("org.scalameta"      % "sbt-scalafmt"             % "2.5.4")
-addSbtPlugin("com.github.sbt"     % "sbt-native-packager"      % "1.11.3")
+addSbtPlugin("com.github.sbt"     % "sbt-native-packager"      % "1.11.4")
 addSbtPlugin("ch.epfl.scala"      % "sbt-scalafix"             % "0.14.3")
 addSbtPlugin("org.scala-js"       % "sbt-scalajs"              % "1.20.1")
 addSbtPlugin("org.portable-scala" % "sbt-scalajs-crossproject" % "1.3.2")
