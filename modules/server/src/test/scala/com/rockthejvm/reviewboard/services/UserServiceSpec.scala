@@ -109,7 +109,7 @@ object UserServiceSpec extends ZIOSpecDefault {
       test("update a password") {
         for
           userService <- ZIO.service[UserService]
-          updatedUser <- userService.updatePassword(daniel.email, "rockthejvm", "scala")
+          _           <- userService.updatePassword(daniel.email, "rockthejvm", "scala")
           oldValid    <- userService.verifyPassword(daniel.email, "rockthejvm")
           newValid    <- userService.verifyPassword(daniel.email, "scala")
         yield assertTrue(newValid && !oldValid)

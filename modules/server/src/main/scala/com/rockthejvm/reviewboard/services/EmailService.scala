@@ -34,7 +34,7 @@ trait EmailService(baseURL: String) {
     <div>
       <h1>You've been invited to review ${company.name} request</h1>
       <p>
-        You've been invited to review a company on our platform. If you did not request this, please ignore this email.
+        You've been invited by $from to review a company on our platform. If you did not request this, please ignore this email.
       </p>
       <p>
         If you did request to review a pull request, please click on the following link to access the review:

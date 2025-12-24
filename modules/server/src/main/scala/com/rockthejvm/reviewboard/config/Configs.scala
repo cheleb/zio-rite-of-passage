@@ -1,7 +1,7 @@
 package com.rockthejvm.reviewboard.config
 
 import zio.*
-import zio.config.*
+
 import zio.config.typesafe.TypesafeConfigProvider
 
 import com.typesafe.config.ConfigFactory

@@ -11,7 +11,7 @@ import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.domain.data.UserToken
 import com.rockthejvm.reviewboard.http.requests.*
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
-import org.scalajs.dom
+
 import org.scalajs.dom.html
 
 case class ChangePasswordState(
@@ -69,7 +69,7 @@ object ChangePasswordPage extends SecuredFormPage[ChangePasswordState]("Profile"
         state.password,
         state.newPassword
       ))
-        .map { user =>
+        .map { _ =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Password successfully changed."))))
         }
         .tapError(e =>

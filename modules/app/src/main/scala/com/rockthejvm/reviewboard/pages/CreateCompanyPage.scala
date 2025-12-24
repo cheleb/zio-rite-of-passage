@@ -64,7 +64,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
 
   private val fileUploader = Observer[List[File]] { files =>
     files.headOption match
-      case None => stateVar.update(_.copy(image = None))
+      case None       => stateVar.update(_.copy(image = None))
       case Some(file) =>
         val reader = new dom.FileReader()
         reader.onload = _ => {
@@ -129,7 +129,7 @@ object CreateCompanyPage extends SecuredFormPage[CreateCompanyState]("Create Com
         state.image,
         Option(state.tags).filter(_.nonEmpty)
       ))
-        .map { user =>
+        .map { _ =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Company posted successfully."))))
         }
         .tapError(e =>

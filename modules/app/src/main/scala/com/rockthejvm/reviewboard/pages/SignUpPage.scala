@@ -10,7 +10,7 @@ import com.raquo.laminar.nodes.ReactiveHtmlElement
 import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.UserRegistrationRequest
-import org.scalajs.dom
+
 import org.scalajs.dom.html
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 
@@ -66,7 +66,7 @@ object SignUpPage extends FormPage[SignupFormState]("Sign Up") {
       stateVar.update(_.copy(showStatus = true))
     else
       UserEndpoints.create(UserRegistrationRequest(state.email, state.password))
-        .map { user =>
+        .map { _ =>
           stateVar.update(_.copy(showStatus = true, upstreamStatus = Option(Right("Account created successfully."))))
         }
         .tapError(e =>

@@ -11,7 +11,7 @@ import com.rockthejvm.reviewboard.common.Constants
 import com.rockthejvm.reviewboard.components.Anchors
 import com.rockthejvm.reviewboard.core.ZJS.*
 import com.rockthejvm.reviewboard.http.requests.*
-import org.scalajs.dom
+
 import org.scalajs.dom.html
 import com.rockthejvm.reviewboard.http.endpoints.UserEndpoints
 

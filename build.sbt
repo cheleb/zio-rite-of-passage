@@ -1,5 +1,6 @@
+val scala3 = "3.7.4"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
-ThisBuild / scalaVersion := "3.7.4"
+ThisBuild / scalaVersion := scala3
 
 val filterConsoleScalacOptions = { options: Seq[String] =>
   options.filterNot(Set(
@@ -22,6 +23,8 @@ ThisBuild / scalacOptions ++= Seq(
   "-Wunused:all",
   "-Xfatal-warnings"
 )
+
+ThisBuild / dependencyOverrides += "org.scala-lang" %% "scala3-library" % scala3 // ScalaJS workaround
 
 ThisBuild / scalacOptions.in(Compile, console) ~= filterConsoleScalacOptions
 ThisBuild / scalacOptions.in(Test, console) ~= filterConsoleScalacOptions
@@ -59,10 +62,10 @@ val serverDependencies = commonDependencies ++ Seq(
   "dev.zio"                       %% "zio-logging-slf4j"                 % Versions.zioLogging,
   "ch.qos.logback"                 % "logback-classic"                   % "1.5.23",
   "dev.zio"                       %% "zio-test"                          % Versions.zio,
-  "dev.zio"                       %% "zio-test-junit"                    % Versions.zio % "test",
-  "dev.zio"                       %% "zio-test-sbt"                      % Versions.zio % "test",
-  "dev.zio"                       %% "zio-test-magnolia"                 % Versions.zio % "test",
-  "dev.zio"                       %% "zio-mock"                          % "1.0.0-RC12" % "test",
+  "dev.zio"                       %% "zio-test-junit"                    % Versions.zio   % "test",
+  "dev.zio"                       %% "zio-test-sbt"                      % Versions.zio   % "test",
+  "dev.zio"                       %% "zio-test-magnolia"                 % Versions.zio   % "test",
+  "dev.zio"                       %% "zio-mock"                          % "1.0.0-RC12"   % "test",
   "dev.zio"                       %% "zio-config"                        % Versions.zioConfig,
   "dev.zio"                       %% "zio-config-magnolia"               % Versions.zioConfig,
   "dev.zio"                       %% "zio-config-typesafe"               % Versions.zioConfig,
@@ -88,11 +91,11 @@ lazy val common = crossProject(JVMPlatform, JSPlatform)
   .settings(
     libraryDependencies ++= commonDependencies
   )
-  .jsSettings(
-    libraryDependencies ++= Seq(
-      "io.github.cquiroz" %%% "scala-java-time" % "2.6.0" // implementations of java.time classes for Scala.JS,
-    )
-  )
+// .jsSettings(
+//   libraryDependencies ++= Seq(
+//     "io.github.cquiroz" %%% "scala-java-time" % "2.6.0" // implementations of java.time classes for Scala.JS,
+//   )
+// )
 
 lazy val server = (project in file("modules/server"))
   .settings(

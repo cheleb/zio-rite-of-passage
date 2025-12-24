@@ -28,7 +28,7 @@ class UserController(userService: UserService, jwtService: JWTService)
   )
 
   val updatePassword: ServerEndpoint[Any, Task] = UserEndpoints.updatePassword
-    .securedServerLogic(userId =>
+    .securedServerLogic(_ =>
       request =>
         userService
           .updatePassword(request.email, request.oldPassword, request.newPassword)
@@ -36,7 +36,7 @@ class UserController(userService: UserService, jwtService: JWTService)
     )
 
   val delete: ServerEndpoint[Any, Task] = UserEndpoints.delete
-    .securedServerLogic(userId =>
+    .securedServerLogic(_ =>
       request =>
         userService
           .deleteUser(request.email, request.password)
