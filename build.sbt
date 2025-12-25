@@ -1,3 +1,5 @@
+import java.nio.charset.StandardCharsets
+
 val scala3 = "3.7.4"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := scala3
@@ -99,6 +101,9 @@ lazy val common = crossProject(JVMPlatform, JSPlatform)
 
 lazy val server = (project in file("modules/server"))
   .settings(
+    DeploymentSettings.staticGenerationSettings(app)
+  )
+  .settings(
     libraryDependencies ++= serverDependencies
   )
   .dependsOn(common.jvm)
@@ -114,7 +119,7 @@ lazy val app = (project in file("modules/app"))
       "com.raquo"                     %%% "laminar"           % "17.0.0",
       "io.frontroute"                 %%% "frontroute"        % "0.19.0" // Brings in Laminar 16
     ),
-    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
+    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
     semanticdbEnabled               := true,
     autoAPIMappings                 := true,
     scalaJSUseMainModuleInitializer := true,
@@ -124,8 +129,44 @@ lazy val app = (project in file("modules/app"))
   .dependsOn(common.js)
 
 lazy val root = (project in file("."))
+  .disablePlugins(RevolverPlugin)
   .settings(
     name := "zio-rite-of-passage"
   )
   .aggregate(server, app)
   .dependsOn(server, app)
+
+//
+// This is a global setting that will generate a build-env.sh file in the target directory.
+// This file will contain the SCALA_VERSION variable that can be used in the build process
+//
+Global / onLoad := {
+
+  val buildEnvShPath = sys.env.get("BUILD_ENV_SH_PATH")
+  buildEnvShPath.foreach { path =>
+    val outputFile = Path(path).asFile
+    println(s"🍺 Generating build-env.sh at $outputFile")
+
+    val SCALA_VERSION = (app / scalaVersion).value
+
+    val MAIN_JS_PATH =
+      app.base.getAbsoluteFile / "target" / s"scala-$SCALA_VERSION" / "app-fastopt/main.js"
+
+    val NPM_DEV_PATH =
+      root.base.getAbsoluteFile / "target" / "npm-dev-server-running.marker"
+
+    IO.writeLines(
+      outputFile,
+      s"""
+         |# Generated file see build.sbt
+         |SCALA_VERSION="$SCALA_VERSION"
+         |# Marker file to indicate that npm dev server has been started
+         |MAIN_JS_PATH="${MAIN_JS_PATH}"
+         |# Marker file to indicate that npm dev server has been started
+         |NPM_DEV_PATH="${NPM_DEV_PATH}"
+         |""".stripMargin.split("\n").toList,
+      StandardCharsets.UTF_8
+    )
+  }
+  (Global / onLoad).value
+}
