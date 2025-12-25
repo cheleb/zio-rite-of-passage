@@ -68,12 +68,12 @@ object CompanyControllerSpec extends ZIOSpecDefault {
       ZIO.succeed(UserID(1, "daniel@rockthejvm.com"))
   }
 
-  override def spec: Spec[TestEnvironment & Scope, Any] =
+  override def spec =
     suite("CompanyControllerSpec")(
       test("post company") {
         val program = for {
 
-          backend <- backendStubZIO(_.create)
+          backend  <- backendStubZIO(_.create)
           response <- basicRequest
             .post(uri"/api/companies")
             .auth
@@ -92,7 +92,7 @@ object CompanyControllerSpec extends ZIOSpecDefault {
       },
       test("get all companies") {
         val program = for {
-          backend <- backendStubZIO(_.getAll)
+          backend  <- backendStubZIO(_.getAll)
           response <- basicRequest
             .get(uri"/api/companies")
             .send(backend)
@@ -107,7 +107,7 @@ object CompanyControllerSpec extends ZIOSpecDefault {
       },
       test("get company by id") {
         val program = for {
-          backend <- backendStubZIO(_.findById)
+          backend  <- backendStubZIO(_.findById)
           response <- basicRequest
             .get(uri"/api/companies/rock-the-jvm")
             .send(backend)
