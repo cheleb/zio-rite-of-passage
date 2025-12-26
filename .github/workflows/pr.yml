@@ -23,7 +23,4 @@ jobs:
       - name: Install sbt
         uses: sbt/setup-sbt@v1
       - name: Compile Scala code
-        run: sbt compile
-
-      - name: Run tests
-        run: sbt test
+        run: ./scripts/ci-build.sh
