@@ -8,8 +8,8 @@
             },
             "dependsOrder": "sequence",
             "dependsOn": [
-                "npmInstall",
-                "runAll"
+                "setup",
+                "runDemo"
             ],
             "problemMatcher": [],
             "group": {
@@ -17,9 +17,9 @@
             }
         },
         {
-            "label": "npmInstall",
+            "label": "setup",
             "type": "shell",
-            "command": "pushd modules/app; npm i; popd; NODE_OPTIONS='--openssl-legacy-provider' DEV=1 sbt \"app/fastLinkJS\"",
+            "command": "./scripts/setup.sc",
             "presentation": {
                 "panel": "dedicated",
                 "group": "runDevCmd",
@@ -28,21 +28,24 @@
             "group": "build"
         },
         {
-            "label": "runAll",
-            "dependsOrder": "parallel",
-            "dependsOn": [
-                "runFront",
-                "runBack"
-            ],
-            "problemMatcher": [],
-            "group": {
-                "kind": "build"
-            }
+            "label": "docker",
+            "icon": {
+                "id": "database"
+            },
+            "type": "shell",
+            "command": "docker-compose up",
+            "presentation": {
+                "panel": "dedicated",
+                "group": "back"
+            },
+            "group": "build"
         },
         {
-            "label": "runFront",
+            "label": "runDemo",
             "dependsOrder": "parallel",
             "dependsOn": [
+                "docker",
+                "serverRun",
                 "fastLink",
                 "npmDev"
             ],
@@ -53,31 +56,40 @@
         },
         {
             "label": "fastLink",
+            "icon": {
+                "id": "browser"
+            },
             "type": "shell",
-            "command": "NODE_OPTIONS='--openssl-legacy-provider' DEV=1 sbt \"~app/fastOptJS\"",
+            "command": "./scripts/fastLink.sh",
             "presentation": {
-                "panel": "dedicated",
-                "group": "runDevCmd"
+                "panel": "shared",
+                "group": "front"
+            },
+            "group": "build"
+        },
+        {
+            "label": "serverRun",
+            "icon": {
+                "id": "server-process"
+            },
+            "type": "shell",
+            "command": "./scripts/serverRun.sh",
+            "presentation": {
+                "panel": "shared",
+                "group": "back"
             },
             "group": "build"
         },
         {
             "label": "npmDev",
-            "type": "shell",
-            "command": "cd modules/app; npm run start",
-            "presentation": {
-                "panel": "dedicated",
-                "group": "runDevCmd"
+            "icon": {
+                "id": "package"
             },
-            "group": "build"
-        },
-        {
-            "label": "runBack",
             "type": "shell",
-            "command": "sleep 5; sbt -mem 4096 \"~server/run\"",
+            "command": "./scripts/npmDev.sh",
             "presentation": {
-                "panel": "dedicated",
-                "group": "runDevCmd"
+                "panel": "shared",
+                "group": "front"
             },
             "group": "build"
         }
