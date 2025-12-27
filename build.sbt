@@ -1,5 +1,3 @@
-import java.nio.charset.StandardCharsets
-
 val scala3 = "3.7.4"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := scala3
@@ -145,31 +143,7 @@ lazy val root = (project in file("."))
 //
 Global / onLoad := {
 
-  val buildEnvShPath = sys.env.get("BUILD_ENV_SH_PATH")
-  buildEnvShPath.foreach { path =>
-    val outputFile = Path(path).asFile
-    println(s"🍺 Generating build-env.sh at $outputFile")
+  OnLoad.apply((app / scalaVersion).value, root, app)
 
-    val SCALA_VERSION = (app / scalaVersion).value
-
-    val MAIN_JS_PATH =
-      app.base.getAbsoluteFile / "target" / s"scala-$SCALA_VERSION" / "app-fastopt/main.js"
-
-    val NPM_DEV_PATH =
-      root.base.getAbsoluteFile / "target" / "npm-dev-server-running.marker"
-
-    IO.writeLines(
-      outputFile,
-      s"""
-         |# Generated file see build.sbt
-         |SCALA_VERSION="$SCALA_VERSION"
-         |# Marker file to indicate that npm dev server has been started
-         |MAIN_JS_PATH="${MAIN_JS_PATH}"
-         |# Marker file to indicate that npm dev server has been started
-         |NPM_DEV_PATH="${NPM_DEV_PATH}"
-         |""".stripMargin.split("\n").toList,
-      StandardCharsets.UTF_8
-    )
-  }
   (Global / onLoad).value
 }

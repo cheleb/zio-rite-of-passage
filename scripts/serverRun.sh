@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 
-sbt '~server/reStart'
+INIT=server sbt '~server/reStart'

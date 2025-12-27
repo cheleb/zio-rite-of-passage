@@ -13,21 +13,23 @@ import scala.math.Ordered.orderingToOrdered
 
 val buildSbt = os.pwd / "build.sbt"
 val buildEnv = os.pwd / "scripts" / "target" / "build-env.sh"
+val devMarker    = os.pwd / "target" / "dev-server-running.marker"
+val npmDevMarker    = os.pwd / "target" / "npm-dev-server-running.marker"
 
 val client          = os.pwd / "modules" / "app"
 val nodeModule      = client / "node_modules" / ".package-lock.json"
 val packageJson     = client / "package.json"
 val packageLockJson = client / "package-lock.json"
-val npmDevMarker    = client / "target" / "npm-dev-server-running.marker"
 
+os.remove(devMarker)
 os.remove(npmDevMarker)
 
-if shouldImportProject then
+if buildSbt isYoungerThan buildEnv then
   println(s"Importing project settings into build-env.sh ($buildEnv)...")
   os.proc("sbt", "projects")
     .call(
       cwd = os.pwd,
-      env = Map("BUILD_ENV_SH_PATH" -> buildEnv.toString),
+      env = Map("INIT" -> buildEnv.toString),
       stdout = os.ProcessOutput.Readlines(line => println(s"  $line"))
     )
 
@@ -35,20 +37,6 @@ npmCommand foreach: command =>
   println(s"✨ Installing ($command) node modules...")
   os.proc("npm", command).call(cwd = client)
   println("Node modules installation complete.")
-
-def shouldImportProject: Boolean = if os.exists(buildEnv) then {
-  if buildSbt isYoungerThan buildEnv then {
-    println(
-      "⚠️  build.sbt has been modified since the last build-env.sh generation.\n\t - regenerating build-env.sh."
-    )
-    os.remove(buildEnv)
-    true
-  } else
-    false
-} else {
-  println("✨ Creating build-env.sh...")
-  true
-}
 
 def npmCommand: Option[String] =
   if packageLockJson.isMissing then

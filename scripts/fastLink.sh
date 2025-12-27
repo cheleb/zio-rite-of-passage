@@ -21,4 +21,4 @@ echo "  ✅"
 echo "⏱️ Watching client-fastopt/main.js for changes..."
 
 
-sbt '~app/fastLinkJS'
+sbt --client '~app/fastLinkJS'
