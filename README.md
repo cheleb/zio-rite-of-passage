@@ -13,14 +13,14 @@ More generaly, if you want to learn any JVM related technology, I highly recomme
 
 
 * Fullstack Scala 3 application
- * isomorphic code sharing between backend and frontend
- * ZIO powered backend and frontend
+  * isomorphic code sharing between backend and frontend
+  * ZIO powered backend and frontend
 * A ZIO backend
- * Tapir
- * ZIO quill
+  * Tapir
+  * ZIO quill
 * A laminar frontend
- * ZIO
- * Tapir client
+  * ZIO
+  * Tapir client
 
 ## Usage
 
