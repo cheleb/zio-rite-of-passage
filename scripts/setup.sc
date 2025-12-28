@@ -1,6 +1,6 @@
 #!/usr/bin/env -S scala-cli -S 3
 
-//> using scala "3.8.0-RC3"
+//> using scala "3.8.0-RC4"
 // using javaOptions "--sun-misc-unsafe-memory-access=allow" // Example option to set maximum heap size
 //> using dep "com.lihaoyi::os-lib:0.11.6"
 import java.time.temporal.ChronoUnit

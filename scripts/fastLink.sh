@@ -20,5 +20,5 @@ done
 echo "  ✅"
 echo "⏱️ Watching client-fastopt/main.js for changes..."
 
+sbt --batch -Dsbt.supershell=false '~app/fastLinkJS'
 
-sbt --client '~app/fastLinkJS'
