@@ -26,16 +26,19 @@ ThisBuild / scalacOptions ++= Seq(
 
 ThisBuild / dependencyOverrides += "org.scala-lang" %% "scala3-library" % scala3 // ScalaJS workaround
 
-ThisBuild / scalacOptions.in(Compile, console) ~= filterConsoleScalacOptions
-ThisBuild / scalacOptions.in(Test, console) ~= filterConsoleScalacOptions
+// ThisBuild / Test / scalacOptions ~= filterConsoleScalacOptions
+// ThisBuild / console / scalacOptions ~= filterConsoleScalacOptions
+// ThisBuild / Test / scalacOptions ~= filterConsoleScalacOptions
+// ThisBuild / console / scalacOptions ~= filterConsoleScalacOptions
 
 ThisBuild / run / fork := true
 
 ThisBuild / testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 
 val Versions = new {
-  val zio        = "2.1.5"
+  val zio        = "2.1.23"
   val tapir      = "1.10.7"
+  val zioJson    = "0.7.1"
   val zioLogging = "2.2.4"
   val zioConfig  = "4.0.2"
   val sttp       = "3.9.6"
@@ -99,6 +102,9 @@ lazy val common = crossProject(JVMPlatform, JSPlatform)
 
 lazy val server = (project in file("modules/server"))
   .settings(
+    DeploymentSettings.staticGenerationSettings(app)
+  )
+  .settings(
     libraryDependencies ++= serverDependencies
   )
   .dependsOn(common.jvm)
@@ -109,12 +115,12 @@ lazy val app = (project in file("modules/app"))
       "com.softwaremill.sttp.tapir"   %%% "tapir-sttp-client" % Versions.tapir,
       "com.softwaremill.sttp.tapir"   %%% "tapir-json-zio"    % Versions.tapir,
       "com.softwaremill.sttp.client3" %%% "zio"               % Versions.sttp,
-      "dev.zio"                       %%% "zio-json"          % "0.8.0",
+      "dev.zio"                       %%% "zio-json"          % Versions.zioJson,
       "dev.zio"                       %%% "zio-prelude"       % "1.0.0-RC44",
       "com.raquo"                     %%% "laminar"           % "17.0.0",
       "io.frontroute"                 %%% "frontroute"        % "0.19.0" // Brings in Laminar 16
     ),
-    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.CommonJSModule) },
+    scalaJSLinkerConfig ~= { _.withModuleKind(ModuleKind.ESModule) },
     semanticdbEnabled               := true,
     autoAPIMappings                 := true,
     scalaJSUseMainModuleInitializer := true,
@@ -124,8 +130,20 @@ lazy val app = (project in file("modules/app"))
   .dependsOn(common.js)
 
 lazy val root = (project in file("."))
+  .disablePlugins(RevolverPlugin)
   .settings(
     name := "zio-rite-of-passage"
   )
   .aggregate(server, app)
   .dependsOn(server, app)
+
+//
+// This is a global setting that will generate a build-env.sh file in the target directory.
+// This file will contain the SCALA_VERSION variable that can be used in the build process
+//
+Global / onLoad := {
+
+  OnLoad.apply((app / scalaVersion).value, root, app)
+
+  (Global / onLoad).value
+}

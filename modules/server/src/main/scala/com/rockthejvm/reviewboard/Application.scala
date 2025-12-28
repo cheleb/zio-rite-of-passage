@@ -8,6 +8,8 @@ import zio.logging.backend.SLF4J
 import com.rockthejvm.reviewboard.http.HttpApi
 import com.rockthejvm.reviewboard.repositories.*
 import com.rockthejvm.reviewboard.services.*
+import sttp.tapir.*
+import sttp.tapir.files.*
 import sttp.tapir.server.interceptor.cors.CORSInterceptor
 import sttp.tapir.server.interceptor.log.DefaultServerLog
 import sttp.tapir.server.interceptor.log.ServerLog
@@ -38,23 +40,34 @@ object Application extends ZIOAppDefault:
 
   val runMigrations = for {
     flyway <- ZIO.service[FlywayService]
-    _ <- flyway.runMigrations()
+    _      <- flyway.runMigrations()
       .catchSome {
         case e => ZIO.logError(s"Error running migrations: ${e.getMessage()}")
             *> flyway.runRepair() *> flyway.runMigrations()
       }
   } yield ()
 
+  private val webJarRoutes = staticResourcesGetServerEndpoint[Task]("")(
+    this.getClass.getClassLoader,
+    "public"
+  )
+
+  private val webJarRoutesAssets = staticResourcesGetServerEndpoint[Task]("assets")(
+    this.getClass.getClassLoader,
+    "public/assets"
+  )
+
   val startServer =
     for
-      _         <- ZIO.logWarning("Running the server")
+      _ <- ZIO.logWarning("Running the server")
+
       endpoints <- HttpApi.endpointsZIO
-      _ <- Server.serve(
+      _         <- Server.serve(
         ZioHttpInterpreter(ZioHttpServerOptions
           .customiseInterceptors.serverLog(serverLOg).options
           .appendInterceptor(
             CORSInterceptor.default
-          )).toHttp(endpoints)
+          )).toHttp(endpoints :+ webJarRoutesAssets :+ webJarRoutes)
       )
     yield ()
 

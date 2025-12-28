@@ -31,6 +31,8 @@ local.sbt
 .metals/
 metals.sbt
 
+.scala-build/
+
 # IDEA
 .idea
 .idea_modules
