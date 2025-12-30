@@ -11,10 +11,10 @@ import java.time.Instant
 import os.*
 import scala.math.Ordered.orderingToOrdered
 
-val buildSbt = os.pwd / "build.sbt"
-val buildEnv = os.pwd / "scripts" / "target" / "build-env.sh"
+val buildSbt     = os.pwd / "build.sbt"
+val buildEnv     = os.pwd / "scripts" / "target" / "build-env.sh"
 val devMarker    = os.pwd / "target" / "dev-server-running.marker"
-val npmDevMarker    = os.pwd / "target" / "npm-dev-server-running.marker"
+val npmDevMarker = os.pwd / "target" / "npm-dev-server-running.marker"
 
 val client          = os.pwd / "modules" / "app"
 val nodeModule      = client / "node_modules" / ".package-lock.json"
@@ -29,7 +29,7 @@ if buildSbt isYoungerThan buildEnv then
   os.proc("sbt", "projects")
     .call(
       cwd = os.pwd,
-      env = Map("INIT" -> buildEnv.toString),
+      env = Map("INIT" -> "setup"),
       stdout = os.ProcessOutput.Readlines(line => println(s"  $line"))
     )
 

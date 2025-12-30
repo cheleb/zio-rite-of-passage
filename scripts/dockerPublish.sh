@@ -4,4 +4,4 @@ set -e
 
 ./scripts/setup.sc
 
-MOD=Docker sbt -mem 4096 "server/Docker/publish"
+INIT=Docker sbt -mem 4096 "server/Docker/publish"

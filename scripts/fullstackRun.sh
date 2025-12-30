@@ -8,4 +8,4 @@ set -e
 
 # Import the project environment variables
 
-MOD=FullStack sbt -mem 4096 "server/run"
+INIT=FullStack sbt -mem 4096 "server/run"

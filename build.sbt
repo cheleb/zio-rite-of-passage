@@ -1,3 +1,5 @@
+import dev.cheleb.sbt.fullstackjs.OnLoad
+
 val scala3 = "3.7.4"
 ThisBuild / version      := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := scala3
@@ -101,9 +103,8 @@ lazy val common = crossProject(JVMPlatform, JSPlatform)
 // )
 
 lazy val server = (project in file("modules/server"))
-  .settings(
-    DeploymentSettings.staticGenerationSettings(app)
-  )
+  .enablePlugins(FullstackJsPlugin)
+  .settings(scalaJsProject := app)
   .settings(
     libraryDependencies ++= serverDependencies
   )
@@ -137,13 +138,13 @@ lazy val root = (project in file("."))
   .aggregate(server, app)
   .dependsOn(server, app)
 
-//
-// This is a global setting that will generate a build-env.sh file in the target directory.
-// This file will contain the SCALA_VERSION variable that can be used in the build process
-//
-Global / onLoad := {
+// //
+// // This is a global setting that will generate a build-env.sh file in the target directory.
+// // This file will contain the SCALA_VERSION variable that can be used in the build process
+// //
+// Global / onLoad := {
 
-  OnLoad.apply((app / scalaVersion).value, root, app)
+//   OnLoad.apply((app / scalaVersion).value, root, app)
 
-  (Global / onLoad).value
-}
+//   (Global / onLoad).value
+// }

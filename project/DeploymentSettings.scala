@@ -35,44 +35,6 @@ object DeploymentSettings {
 
   val overrideDockerRegistry = sys.env.get("LOCAL_DOCKER_REGISTRY").isDefined
 
-  val publicFolder = "public"
-
-//
-// On dev mode, server will only serve API and static files.
-//
-
-  def staticGenerationSettings(client: Project) = mode match {
-    case "FullStack" | "Docker" =>
-      Seq(
-        (Compile / resourceGenerators) += Def
-          .taskDyn[Seq[File]] {
-            val rootFolder = (Compile / resourceManaged).value / publicFolder
-            rootFolder.mkdirs()
-
-            Def.task {
-              if(scala.sys.process
-                  .Process(
-                    List("npm", "run", "build", "--", "--emptyOutDir", "--outDir", rootFolder.getAbsolutePath),
-                    (client / baseDirectory).value
-                  )
-                  .! == 0
-              ) {
-                println(s"Generated static files in ${rootFolder}")
-                (rootFolder ** "*.*").get
-              } else {
-                println(s"Failed to generate static files in ${rootFolder}")
-                throw new IllegalStateException("Vite build failed")
-              }
-
-            }
-
-          }
-          .taskValue
-      )
-    case _ =>
-      Seq()
-  }
-
   def nexusNpmSettings =
     sys.env
       .get("NEXUS")

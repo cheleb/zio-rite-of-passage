@@ -4,4 +4,4 @@ set -e
 
 ./scripts/setup.sc
 
-MOD=Docker sbt "server/Docker/publishLocal"
+INIT=Docker sbt "server/Docker/publishLocal"
