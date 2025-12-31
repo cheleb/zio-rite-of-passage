@@ -5,18 +5,19 @@ import zio.*
 import javax.sql.DataSource
 
 import org.postgresql.ds.PGSimpleDataSource
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
+import org.testcontainers.utility.DockerImageName
 
 /** A trait that provides a PostgreSQL container for integration tests.
   */
 trait RepositorySpec(init: String) {
-  private def postgres(): PostgreSQLContainer[Nothing] =
-    val container: PostgreSQLContainer[Nothing] = PostgreSQLContainer("postgres")
-      .withInitScript(init)
+  private def postgres() =
+    val container = new PostgreSQLContainer(DockerImageName.parse("postgres:18-alpine"))
+    container.withInitScript(init)
     container.start()
     container
 
-  private def createDataSource(container: PostgreSQLContainer[Nothing]): DataSource =
+  private def createDataSource(container: PostgreSQLContainer): DataSource =
     val dataSource = new PGSimpleDataSource()
     dataSource.setUrl(container.getJdbcUrl)
     dataSource.setUser(container.getUsername)

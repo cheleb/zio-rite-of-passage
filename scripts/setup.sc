@@ -3,42 +3,43 @@
 //> using scala "3.8.0-RC4"
 // using javaOptions "--sun-misc-unsafe-memory-access=allow" // Example option to set maximum heap size
 //> using dep "com.lihaoyi::os-lib:0.11.6"
-import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
-import java.util.concurrent.TimeUnit
-import java.time.Instant
 
 import os.*
-import scala.math.Ordered.orderingToOrdered
 
-val buildSbt = os.pwd / "build.sbt"
-val buildEnv = os.pwd / "scripts" / "target" / "build-env.sh"
-val devMarker    = os.pwd / "target" / "dev-server-running.marker"
-val npmDevMarker    = os.pwd / "target" / "npm-dev-server-running.marker"
+// First we remove started marked semaphor file.
+// This allows to avoid confict when many (3) instances of sbt starts in the same time in the same folder:
+//
+// - server
+// - vite init
+// - fastLink
+//
+removeStartedMarker()
 
-val client          = os.pwd / "modules" / "app"
-val nodeModule      = client / "node_modules" / ".package-lock.json"
-val packageJson     = client / "package.json"
-val packageLockJson = client / "package-lock.json"
+//
+//Expected the project id of the ScalaJs application.
+//
+args.headOption match
+  case Some(app) =>
+    given client: Path = os.pwd / "modules" / app
 
-os.remove(devMarker)
-os.remove(npmDevMarker)
+    if buildSbt isYoungerThan buildEnv then
+      println(s"Importing project settings into build-env.sh ($buildEnv)...")
+      os.proc("sbt", "projects")
+        .call(
+          cwd = os.pwd,
+          env = Map("INIT" -> "setup"),
+          stdout = os.ProcessOutput.Readlines(line => println(s"  $line"))
+        )
 
-if buildSbt isYoungerThan buildEnv then
-  println(s"Importing project settings into build-env.sh ($buildEnv)...")
-  os.proc("sbt", "projects")
-    .call(
-      cwd = os.pwd,
-      env = Map("INIT" -> buildEnv.toString),
-      stdout = os.ProcessOutput.Readlines(line => println(s"  $line"))
-    )
+    npmCommand foreach: command =>
+      println(s"✨ Installing ($command) node modules...")
+      os.proc("npm", command).call(cwd = client)
+      println("Node modules installation complete.")
 
-npmCommand foreach: command =>
-  println(s"✨ Installing ($command) node modules...")
-  os.proc("npm", command).call(cwd = client)
-  println("Node modules installation complete.")
-
-def npmCommand: Option[String] =
+  case None =>
+    System.err.println(s"\t-💥 Usage setup.sc -- <scalajs_project_id> !")
+// Utils && Helpers
+def npmCommand(using client: Path): Option[String] =
   if packageLockJson.isMissing then
     println("✨\t- First install")
     Some("install")
@@ -53,9 +54,25 @@ def npmCommand: Option[String] =
     println("🟢 CI")
     Some("ci")
   } else {
-    println("✅ uptodate.")
+    println("\t- ✅ npm are deps uptodate.")
     None
   }
+
+def buildSbt                            = os.pwd / "build.sbt"
+def buildEnv                            = os.pwd / "scripts" / "target" / "build-env.sh"
+def devMarker                           = os.pwd / "target" / "dev-server-running.marker"
+def npmDevMarker                        = os.pwd / "target" / "npm-dev-server-running.marker"
+def nodeModule(using client: Path)      = client / "node_modules" / ".package-lock.json"
+def packageJson(using client: Path)     = client / "package.json"
+def packageLockJson(using client: Path) = client / "package-lock.json"
+
+/** Delete semaphore files to sync multiple sbt launchs.
+  */
+def removeStartedMarker() =
+  os.remove(devMarker)
+  os.remove(npmDevMarker)
+
+import scala.math.Ordered.orderingToOrdered
 
 extension (path: Path)
   /** True if something must be reprocessed.
@@ -70,4 +87,7 @@ extension (path: Path)
   def isMissing: Boolean = !os.exists(path)
 
   def isOlderThanAWeek: Boolean =
-    os.exists(path) && os.stat(path).mtime.toInstant < Instant.now().minus(7, ChronoUnit.DAYS)
+    os.exists(path) && os.stat(path).mtime.toInstant < java.time.Instant.now().minus(
+      7,
+      java.time.temporal.ChronoUnit.DAYS
+    )

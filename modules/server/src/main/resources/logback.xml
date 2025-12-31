@@ -21,10 +21,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.rockthejvm" level="DEBUG">
-        <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
-    </logger>
+    <logger name="com.rockthejvm" level="DEBUG" />
     <root level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />

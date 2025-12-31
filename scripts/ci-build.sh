@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -e
-# Import the project environment variables
 
-./scripts/setup.sc
+./scripts/setup.sc -- app
 
-MOD=Docker sbt -mem 4096 "server/compile"
+INIT=Docker sbt -mem 4096 "server/compile"
 
 cd modules/app
 

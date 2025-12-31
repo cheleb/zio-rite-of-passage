@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-. ./scripts/target/build-env.sh
+if [ -e ./scripts/target/build-env.sh ]; then
+ . ./scripts/target/build-env.sh
+else
+ echo "Error: build-env.sh not found. Please run ./scripts/setup.sc first."
+ exit 1
+fi
 
 echo -n "Waiting for dev server to start."
 
