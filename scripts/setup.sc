@@ -6,14 +6,21 @@
 
 import os.*
 
-/** Expect the project id of the ScalaJs application.
-  */
+// First we remove started marked semaphor file.
+// This allows to avoid confict when many (3) instances of sbt starts in the same time in the same folder:
+//
+// - server
+// - vite init
+// - fastLink
+//
+removeStartedMarker()
 
+//
+//Expected the project id of the ScalaJs application.
+//
 args.headOption match
   case Some(app) =>
     given client: Path = os.pwd / "modules" / app
-
-    removeStartedMarker()
 
     if buildSbt isYoungerThan buildEnv then
       println(s"Importing project settings into build-env.sh ($buildEnv)...")
