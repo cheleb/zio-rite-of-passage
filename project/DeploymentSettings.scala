@@ -31,7 +31,6 @@ object DeploymentSettings {
 //
 // Default is "dev" mode, because the vite build does not take parameters.
 //   (see vite.config.js)
-  val mode = sys.env.getOrElse("MOD", "dev")
 
   val overrideDockerRegistry = sys.env.get("LOCAL_DOCKER_REGISTRY").isDefined
 
@@ -45,31 +44,29 @@ object DeploymentSettings {
       )
       .toSeq
 
-  lazy val dockerSettings = mode match {
-    case "Docker" =>
-      import DockerPlugin.autoImport.*
-      import DockerPlugin.globalSettings.*
-      import sbt.Keys.*
-      Seq(
-        Docker / maintainer     := "Joh doe",
-        Docker / dockerUsername := Some("cheleb"),
-        Docker / packageName    := "world-of-scala",
-        dockerBaseImage         := "azul/zulu-openjdk-alpine:23-latest",
-        dockerUpdateLatest      := true,
-        dockerExposedPorts      := Seq(8000)
-      ) ++ (overrideDockerRegistry match {
-        case true =>
-          Seq(
-            Docker / dockerRepository := Some("registry.orb.local"),
-            Docker / dockerUsername   := Some("world-of-scala")
-          ) :+ sys.env
-            .get("VERSION")
-            .map(v => ThisBuild / version := v)
-            .getOrElse(throw new NoVersionException)
-        case false =>
-          Seq()
-      })
-    case _ => Seq()
+  lazy val dockerSettings = {
+    import DockerPlugin.autoImport.*
+    import DockerPlugin.globalSettings.*
+    import sbt.Keys.*
+    Seq(
+      Docker / maintainer     := "Joh doe",
+      Docker / dockerUsername := Some("cheleb"),
+      Docker / packageName    := "zio-rite-of-passage",
+      dockerBaseImage         := "azul/zulu-openjdk-alpine:23-latest",
+      dockerUpdateLatest      := true,
+      dockerExposedPorts      := Seq(8000)
+    ) ++ (overrideDockerRegistry match {
+      case true =>
+        Seq(
+          Docker / dockerRepository := Some("registry.orb.local"),
+          Docker / dockerUsername   := Some("cheleb")
+        ) :+ sys.env
+          .get("VERSION")
+          .map(v => ThisBuild / version := v)
+          .getOrElse(throw new NoVersionException)
+      case false =>
+        Seq()
+    })
   }
 
 }

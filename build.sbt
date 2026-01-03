@@ -21,10 +21,13 @@ inThisBuild(Seq(
     "-Wunused:all",
     "-Xfatal-warnings"
   ),
+  fullstackJsProject                      := app,
+  fullstackJvmProject                     := Some(server),
   dependencyOverrides += "org.scala-lang" %% "scala3-library" % scala3, // ScalaJS workaround
   Test / scalacOptions ~= filterConsoleScalacOptions,
   console / scalacOptions ~= filterConsoleScalacOptions,
   run / fork := true,
+  run / javaOptions += "-Dlogfile=true",
   testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
 ))
 
@@ -98,10 +101,14 @@ lazy val common = crossProject(JVMPlatform, JSPlatform)
   )
 
 lazy val server = (project in file("modules/server"))
-  .enablePlugins(FullstackJsPlugin)
-  .settings(scalaJsProject := app)
+  .enablePlugins(FullstackPlugin, JavaAppPackaging, DockerPlugin, AshScriptPlugin)
+  .settings(
+    fullstackJsProject := app
+  )
   .settings(
     libraryDependencies ++= serverDependencies
+  ).settings(
+    DeploymentSettings.dockerSettings: _*
   )
   .dependsOn(common.jvm)
 
