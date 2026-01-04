@@ -26,4 +26,6 @@ jobs:
       - name: Install sbt
         uses: sbt/setup-sbt@v1
       - name: Compile Scala code
-        run: ./scripts/ci-build.sh
+        run: |
+          sbt fullstackInit
+          ./scripts-managed/ci-build.sh
