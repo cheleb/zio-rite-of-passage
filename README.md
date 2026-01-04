@@ -41,7 +41,7 @@ THis project is intended to be run with vscode / metals
 
 ```bash
 git clone git@github.com:cheleb/zio-rite-of-passage.git
-code .
+./init.sh
 ```
 
 This will open the project in vscode and setup everything.
