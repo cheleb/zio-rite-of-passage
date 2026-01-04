@@ -63,7 +63,7 @@ docker-compose up -d
 To start the backend:
 
 ```bash
-./scripts/fullstackRun.sh
+./scripts-managed/fullstackRun.sh
 ```
 
 Application will be available at `http://localhost:8080`
