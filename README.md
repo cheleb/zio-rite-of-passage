@@ -39,8 +39,14 @@ Sbt project using docker to run the database.
 
 THis project is intended to be run with vscode / metals
 
+In this project PostgreSQL is deployed as Docker container during development, hence:
+
+* Docker must be available.
+* PostgreSQL port must be free.
+
 ```bash
 git clone git@github.com:cheleb/zio-rite-of-passage.git
+cd zio-rite-of-passage
 ./init.sh
 ```
 
@@ -66,4 +72,4 @@ To start the backend:
 ./scripts-managed/fullstackRun.sh
 ```
 
-Application will be available at `http://localhost:8080`
+Application will be available at `http://localhost:4041`
