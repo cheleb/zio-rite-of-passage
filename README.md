@@ -46,8 +46,7 @@ In this project PostgreSQL is deployed as Docker container during development, h
 
 ```bash
 git clone git@github.com:cheleb/zio-rite-of-passage.git
-cd zio-rite-of-passage
-./init.sh
+code zio-rite-of-passage
 ```
 
 This will open the project in vscode and setup everything.
