@@ -47,14 +47,12 @@ object Application extends ZIOAppDefault:
       }
   } yield ()
 
-  private val webJarRoutes = staticResourcesGetServerEndpoint[Task]("")(
+  //
+  // Serve static resources
+  //
+  private val staticResources = staticResourcesGetServerEndpoint[Task](emptyInput)(
     this.getClass.getClassLoader,
     "public"
-  )
-
-  private val webJarRoutesAssets = staticResourcesGetServerEndpoint[Task]("assets")(
-    this.getClass.getClassLoader,
-    "public/assets"
   )
 
   val startServer =
@@ -67,7 +65,7 @@ object Application extends ZIOAppDefault:
           .customiseInterceptors.serverLog(serverLOg).options
           .appendInterceptor(
             CORSInterceptor.default
-          )).toHttp(endpoints :+ webJarRoutesAssets :+ webJarRoutes)
+          )).toHttp(endpoints :+ staticResources)
       )
     yield ()
 
