@@ -19,8 +19,9 @@ inThisBuild(Seq(
     "-deprecation",
     "-feature",
     "-Wunused:all",
-    "-Xfatal-warnings"
+    "-Werror"
   ),
+  fullstackJsPackageManager               := "bun",
   fullstackJsProject                      := app,
   fullstackJvmProject                     := Some(server),
   dependencyOverrides += "org.scala-lang" %% "scala3-library" % scala3, // ScalaJS workaround
@@ -127,7 +128,7 @@ lazy val app = (project in file("modules/app"))
     semanticdbEnabled               := true,
     autoAPIMappings                 := true,
     scalaJSUseMainModuleInitializer := true,
-    Compile / mainClass             := Some("com.rockthejvm.reviewboard.App")
+    Compile / mainClass             := Some("com.rockthejvm.reviewboard.main")
   )
   .enablePlugins(ScalaJSPlugin)
   .dependsOn(common.js)
