@@ -25,6 +25,10 @@ jobs:
           jvm: "zulu:23.0.2"
       - name: Install sbt
         uses: sbt/setup-sbt@v1
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
       - name: Compile Scala code
         run: |
           sbt fullstackInit
