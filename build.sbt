@@ -1,4 +1,4 @@
-val scala3                     = "3.8.0"
+val scala3                     = "3.8.1"
 val filterConsoleScalacOptions = { options: Seq[String] =>
   options.filterNot(Set(
     "-Xfatal-warnings",
