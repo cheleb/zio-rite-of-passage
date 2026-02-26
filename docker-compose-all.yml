@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:18.2-alpine3.23
+    image: postgres:18.3-alpine3.23
     restart: always
     volumes:
       - "./sql:/docker-entrypoint-initdb.d"
