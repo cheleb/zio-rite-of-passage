@@ -23,6 +23,5 @@ object Time {
     MomentLib.unix(millis / 1000).fromNow()
   }
 
-  def pastDay(instant: Instant, n: Int) =
-    (new Date().getTime.toLong - instant.toEpochMilli()) < n * 24 * 3600000
+  def pastDay(instant: Instant, n: Int) = (new Date().getTime().toLong - instant.toEpochMilli()) < n * 24 * 3600000
 }
