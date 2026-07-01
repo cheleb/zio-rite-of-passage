@@ -33,7 +33,7 @@ inThisBuild(Seq(
 ))
 
 val Versions = new {
-  val flywaydb       = "12.9.0"
+  val flywaydb       = "12.10.0"
   val frontroute     = "0.19.0"
   val javaJWT        = "4.5.2"
   val javaMail       = "1.6.2"
