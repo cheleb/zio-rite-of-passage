@@ -49,7 +49,7 @@ val Versions = new {
   val zioJson        = "0.7.44"
   val zioLogging     = "2.5.3"
   val zioMock        = "1.0.0-RC12"
-  val zioPrelude     = "1.0.0-RC47"
+  val zioPrelude     = "1.0.0-RC48"
   val zioQuill       = "4.8.6"
 }
 
